@@ -1,0 +1,140 @@
+% two-column-photo — narrow sidebar with an ID photo, wide main column.
+%
+% Trade-off, stated plainly: a photo and a two-column layout are conventional
+% in Vietnam and fine for a person to read, but they are harder on automated
+% CV parsers than ats-single-column. Use this where a human reads the CV
+% first; use ats-single-column where it goes through an applicant portal.
+%
+% The two columns are minipages, so the sidebar's text is emitted before the
+% main column's. Extraction therefore reads sidebar-then-main rather than
+% interleaving the two, which is what keeps it parseable at all.
+%
+% Compiles with Tectonic using bundled resources only: TeX Gyre Heros loaded
+% by file name, no system font required.
+%
+% Markers: PDFMETA in the preamble, SIDEBAR and BODY inside the document.
+% Macro contract: see PLACEHOLDERS.md.
+
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[a4paper,top=1.1cm,bottom=1.1cm,left=1.2cm,right=1.2cm]{geometry}
+\usepackage{fontspec}
+\setmainfont{texgyreheros}[
+  Extension      = .otf,
+  UprightFont    = *-regular,
+  BoldFont       = *-bold,
+  ItalicFont     = *-italic,
+  BoldItalicFont = *-bolditalic,
+]
+\usepackage{xcolor}
+\usepackage{enumitem}
+\usepackage{titlesec}
+\usepackage{graphicx}
+\usepackage{paracol}
+\usepackage{microtype}
+\usepackage[hidelinks]{hyperref}
+
+\definecolor{rulegray}{gray}{0.60}
+\definecolor{muted}{gray}{0.30}
+\definecolor{accent}{HTML}{1F4E79}
+
+\pagestyle{empty}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0pt}
+\linespread{1.0}
+\raggedright
+\frenchspacing
+\hyphenpenalty=10000
+\exhyphenpenalty=10000
+\sloppy
+\raggedbottom
+
+% paracol rather than two minipages: a minipage cannot break, so content one
+% line too long shunts BOTH columns onto page two and leaves page one holding
+% nothing but the header. paracol fills the page first and breaks normally.
+\columnratio{0.315}
+\setlength{\columnsep}{0.85cm}
+
+% --- section heading --------------------------------------------------------
+% \linewidth adapts to whichever minipage the heading sits in, so one macro
+% serves both columns.
+\titleformat{\section}
+  {\normalfont\large\bfseries\color{accent}}{}{0em}{}
+  [\vspace{-0.5em}{\color{rulegray}\rule{\linewidth}{0.5pt}}]
+\titlespacing*{\section}{0pt}{0.6em}{0.3em}
+
+% ===========================================================================
+% Macro contract consumed by render_cv.py — see PLACEHOLDERS.md
+% ===========================================================================
+
+% Presence of this macro is what tells the renderer to stage the profile photo.
+\newcommand{\cvphoto}[1]{\includegraphics[width=\linewidth]{#1}}
+
+% Identity band: photo beside the name, running the full page width. The name
+% must NOT sit in the narrow column — see the note at the top of this file.
+\newcommand{\cvheaderwithphoto}[2]{%
+  \begin{minipage}[c]{2.7cm}\cvphoto{#1}\end{minipage}%
+  \hspace{0.75cm}%
+  \begin{minipage}[c]{\dimexpr\textwidth-3.45cm\relax}#2\end{minipage}%
+}
+\newcommand{\cvheaderplain}[1]{#1}
+
+\newcommand{\cvname}[1]{{\fontsize{19}{21}\selectfont\bfseries #1}\par\vspace{0.15em}}
+\newcommand{\cvheadline}[1]{{\large\color{accent}#1}\par\vspace{0.35em}}
+\newcommand{\cvcontact}[1]{{\footnotesize\color{muted}#1}\par}
+
+% Present so a plan written for a sidebar-identity template still renders.
+\newcommand{\cvcontactline}[1]{{\footnotesize\color{muted}#1}\par\vspace{0.15em}}
+
+\newcommand{\cvsection}[1]{\section*{#1}}
+\newcommand{\cvsummary}[1]{#1\par\vspace{0.1em}}
+
+% \cvitem{headline}{metadata} — flush left, metadata on its own line, so PDF
+% text extraction cannot detach a date from its entry.
+\newcommand{\cvitem}[2]{%
+  \vspace{0.3em}%
+  #1\par
+  {\small\color{muted}#2}\par
+}
+\newcommand{\cvitemplain}[1]{\vspace{0.3em}#1\par}
+
+\newcommand{\cvmeta}[1]{{\small\itshape #1}\par}
+\newcommand{\cvlinks}[1]{{\small\color{muted}#1}\par\vspace{0.1em}}
+
+\newlist{cvbullets}{itemize}{1}
+\setlist[cvbullets]{
+  leftmargin = 1.15em,
+  labelsep   = 0.45em,
+  itemsep    = 0.05em,
+  parsep     = 0pt,
+  topsep     = 0.12em,
+  partopsep  = 0pt,
+  label      = \textbullet,
+}
+
+% Wide-column form: label and a comma-separated run.
+\newcommand{\cvskill}[2]{\vspace{0.2em}{\bfseries #1:} #2\par}
+
+% Narrow-column form: label, then one item per line. Stacking keeps each
+% keyword whole when the PDF's text is extracted.
+\newcommand{\cvskilllabel}[1]{\vspace{0.3em}{\bfseries #1}\par\vspace{0.1em}}
+\newcommand{\cvskillitem}[1]{{\small #1}\par}
+
+\newcommand{\cvplain}[1]{\vspace{0.15em}#1\par}
+
+%%PDFMETA%%
+
+\begin{document}
+\noindent
+%%HEADER%%
+
+\vspace{0.55em}
+{\color{rulegray}\rule{\textwidth}{0.6pt}}
+\vspace{0.35em}
+
+\begin{paracol}{2}
+%%SIDEBAR%%
+\switchcolumn
+%%BODY%%
+\end{paracol}
+\end{document}

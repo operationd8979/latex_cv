@@ -252,6 +252,109 @@ class RenderGuards(unittest.TestCase):
             render_cv.build_match_report(self.profile, plan)
 
 
+class TwoColumnLayout(unittest.TestCase):
+    SIDEBAR_TEMPLATE = (
+        "%%PDFMETA%%\n"
+        r"\newcommand{\cvphoto}[1]{#1}" "\n"
+        "\\begin{document}\n%%HEADER%%\n%%SIDEBAR%%\n%%BODY%%\n\\end{document}\n"
+    )
+
+    def setUp(self):
+        self.profile = load_profile(FIXTURE)
+
+    def test_marker_detection_requires_a_line_of_its_own(self):
+        self.assertTrue(render_cv.declares_marker("a\n%%SIDEBAR%%\nb", "%%SIDEBAR%%"))
+        self.assertFalse(
+            render_cv.declares_marker("% mentions %%SIDEBAR%% inline", "%%SIDEBAR%%")
+        )
+
+    def test_sections_split_by_default_type(self):
+        plan = base_plan()
+        side, main = render_cv.split_columns(plan)
+        self.assertEqual([s["type"] for s in side], ["skills"])
+        self.assertEqual([s["type"] for s in main], ["experience"])
+
+    def test_explicit_column_overrides_the_default(self):
+        plan = base_plan()
+        plan["sections"][1]["column"] = "main"  # skills into the main column
+        side, main = render_cv.split_columns(plan)
+        self.assertEqual(side, [])
+        self.assertEqual(len(main), 2)
+
+    def test_bad_column_value_is_refused(self):
+        plan = base_plan()
+        plan["sections"][0]["column"] = "middle"
+        with self.assertRaisesRegex(render_cv.PlanError, "not 'side' or 'main'"):
+            render_cv.split_columns(plan)
+
+    def test_sidebar_skills_are_stacked_one_per_line(self):
+        values = render_cv.render_marked(
+            self.profile, base_plan(), self.SIDEBAR_TEMPLATE, "avatar.jpg"
+        )
+        self.assertIn(r"\cvskilllabel{Core}", values["%%SIDEBAR%%"])
+        self.assertIn(r"\cvskillitem{C\#}", values["%%SIDEBAR%%"])
+        self.assertNotIn(r"\cvskill{", values["%%SIDEBAR%%"])
+
+    def test_name_goes_in_the_full_width_header_not_the_sidebar(self):
+        values = render_cv.render_marked(
+            self.profile, base_plan(), self.SIDEBAR_TEMPLATE, "avatar.jpg"
+        )
+        self.assertIn("Alex Sample", values["%%HEADER%%"])
+        self.assertNotIn("Alex Sample", values["%%SIDEBAR%%"])
+        self.assertIn(r"\cvheaderwithphoto{avatar.jpg}", values["%%HEADER%%"])
+
+    def test_single_column_template_gets_one_body_and_no_photo(self):
+        plain = "%%PDFMETA%%\n\\begin{document}\n%%BODY%%\n\\end{document}\n"
+        values = render_cv.render_marked(self.profile, base_plan(), plain, None)
+        self.assertEqual(set(values), {"%%PDFMETA%%", "%%BODY%%"})
+        self.assertIn("Alex Sample", values["%%BODY%%"])
+        self.assertNotIn(r"\cvphoto", values["%%BODY%%"])
+
+
+class PhotoStaging(unittest.TestCase):
+    def setUp(self):
+        self.profile = load_profile(FIXTURE)
+
+    def test_template_without_cvphoto_gets_no_photo(self):
+        self.profile["personal"]["photo"] = "avatar.jpg"
+        with tempfile.TemporaryDirectory() as tmp:
+            got = render_cv.stage_photo(
+                self.profile, FIXTURE, Path(tmp), "no photo macro here"
+            )
+            self.assertIsNone(got)
+            self.assertEqual(list(Path(tmp).iterdir()), [])
+
+    def test_missing_file_is_reported_not_silently_skipped(self):
+        self.profile["personal"]["photo"] = "nope.jpg"
+        with tempfile.TemporaryDirectory() as tmp:
+            with self.assertRaisesRegex(render_cv.PlanError, "does not exist"):
+                render_cv.stage_photo(
+                    self.profile, FIXTURE, Path(tmp), r"\newcommand{\cvphoto}[1]{#1}"
+                )
+
+    def test_path_traversal_out_of_the_profile_is_refused(self):
+        self.profile["personal"]["photo"] = "../../secret.jpg"
+        with tempfile.TemporaryDirectory() as tmp:
+            with self.assertRaisesRegex(render_cv.PlanError, "outside the profile"):
+                render_cv.stage_photo(
+                    self.profile, FIXTURE, Path(tmp), r"\newcommand{\cvphoto}[1]{#1}"
+                )
+
+    def test_photo_is_copied_next_to_the_tex(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            src = FIXTURE / "fixture-photo.jpg"
+            src.write_bytes(b"\xff\xd8\xff\xe0 not a real jpeg")
+            try:
+                self.profile["personal"]["photo"] = "fixture-photo.jpg"
+                got = render_cv.stage_photo(
+                    self.profile, FIXTURE, Path(tmp), r"\newcommand{\cvphoto}[1]{#1}"
+                )
+                self.assertEqual(got, "fixture-photo.jpg")
+                self.assertTrue((Path(tmp) / "fixture-photo.jpg").is_file())
+            finally:
+                src.unlink()
+
+
 class ReadingOrder(unittest.TestCase):
     """The check that guards against right-aligned dates drifting away from
     their entry when a PDF's text layer is extracted."""

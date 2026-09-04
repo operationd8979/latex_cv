@@ -97,6 +97,11 @@
 % Skills line: {group label}{comma-separated items}
 \newcommand{\cvskill}[2]{\vspace{0.08em}{\bfseries #1:} #2\par}
 
+% Narrow-column forms, part of the macro contract. This template has no
+% sidebar, so the renderer never emits them here.
+\newcommand{\cvskilllabel}[1]{\vspace{0.2em}{\bfseries #1}\par}
+\newcommand{\cvskillitem}[1]{{\small #1}\par}
+
 % Single-line row, flush left (see the note on \cvitem above)
 \newcommand{\cvplain}[1]{\vspace{0.1em}#1\par}
 

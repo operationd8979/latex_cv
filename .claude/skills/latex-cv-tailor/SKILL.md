@@ -26,6 +26,19 @@ stop the others.
 asks for one — "with a cover letter", "kèm thư ngỏ", `--cover-letter`, or an
 equivalent request. Do not produce one just because the posting mentions it.
 
+## Templates
+
+| Template | Use it when |
+|---|---|
+| `ats-single-column` *(default)* | The CV goes through an applicant portal or a large company's ATS. One column, no photo, maximum parseability. |
+| `two-column-photo` | A person reads it first: a small company, a direct email, a referral, or a Vietnamese employer expecting an ID photo. Sidebar plus photo. |
+
+Pick `ats-single-column` unless the user asks otherwise or the posting is
+clearly a direct-to-human application. If you choose `two-column-photo`, say in
+your report that it parses less reliably in automated screening. Its main
+column holds roughly 15% less than the single-column one, so budget a bullet
+fewer.
+
 ## Rules that are not negotiable
 
 - **Never invent.** No skill, employer, title, date, certification, degree,

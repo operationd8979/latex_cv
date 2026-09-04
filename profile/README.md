@@ -34,6 +34,10 @@ Skills are keyed by their exact name (unique within `skills.md`), not by ID.
   an invented number is not.
 - `<!-- ... -->` comments are notes to the human owner. They are never rendered
   into a CV and never treated as facts.
+- **Photo** in `personal.md` is a filename relative to this directory. Only a
+  template that declares a `\cvphoto` macro uses it, so `ats-single-column`
+  stays image-free while `two-column-photo` shows it. The renderer copies the
+  file into the job directory rather than linking to it.
 
 ## Skill proficiency tiers
 

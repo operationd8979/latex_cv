@@ -24,6 +24,7 @@ from __future__ import annotations
 import argparse
 import json
 import re
+import shutil
 import sys
 from datetime import date
 from pathlib import Path
@@ -90,6 +91,35 @@ def substitute_markers(doc: str, values: dict[str, str]) -> str:
     if leftover:
         raise PlanError("placeholders left unresolved: " + ", ".join(sorted(leftover)))
     return rendered
+
+
+def declares_marker(doc: str, marker: str) -> bool:
+    """True when the template gives `marker` a line of its own."""
+    return any(line.strip() == marker for line in doc.splitlines())
+
+
+def stage_photo(
+    profile: dict, profile_root: Path, raw: Path, template_text: str
+) -> str | None:
+    """Copy the profile photo next to cv.tex, if the template can show one.
+
+    Copied rather than referenced so a job directory stays self-contained and
+    keeps working after the profile moves. A template without a \\cvphoto macro
+    gets no photo, which is how ats-single-column stays image-free.
+    """
+    name = profile["personal"].get("photo", "")
+    if is_empty(name) or r"\newcommand{\cvphoto}" not in template_text:
+        return None
+
+    source = (profile_root / name).resolve()
+    if profile_root.resolve() not in source.parents:
+        raise PlanError(f"photo {name!r} resolves outside the profile directory")
+    if not source.is_file():
+        raise PlanError(f"personal.md lists photo {name!r}, but {source} does not exist")
+
+    raw.mkdir(parents=True, exist_ok=True)
+    shutil.copy2(source, raw / source.name)
+    return source.name
 
 
 def tex(value: str) -> str:
@@ -208,14 +238,8 @@ def cv_item(headline: str, meta_parts: list[str]) -> str:
     return r"\cvitem{%s}{%s}" % (headline, meta)
 
 
-def render_header(profile: dict, plan: dict) -> list[str]:
+def contact_bits(profile: dict) -> list[str]:
     p = profile["personal"]
-    out = [rf"\cvname{{{tex(p['full_name'])}}}"]
-    headline = plan.get("headline") or profile["preferences"].get("target_roles", "")
-    headline = headline.split(",")[0].strip()
-    if headline:
-        out.append(rf"\cvheadline{{{tex(headline)}}}")
-
     bits = []
     if not is_empty(p.get("email")):
         bits.append(rf"\href{{mailto:{tex_url(p['email'])}}}{{{tex(p['email'])}}}")
@@ -225,7 +249,23 @@ def render_header(profile: dict, plan: dict) -> list[str]:
     for key in ("linkedin", "github", "portfolio"):
         if not is_empty(p.get(key)):
             bits.append(link(p[key]))
-    out.append(r"\cvcontact{" + r" $\cdot$ ".join(bits) + "}")
+    return bits
+
+
+def render_header(profile: dict, plan: dict, stacked: bool = False) -> list[str]:
+    """`stacked` puts each contact detail on its own line, for a narrow column."""
+    p = profile["personal"]
+    out = [rf"\cvname{{{tex(p['full_name'])}}}"]
+    headline = plan.get("headline") or profile["preferences"].get("target_roles", "")
+    headline = headline.split(",")[0].strip()
+    if headline:
+        out.append(rf"\cvheadline{{{tex(headline)}}}")
+
+    bits = contact_bits(profile)
+    if stacked:
+        out += [rf"\cvcontactline{{{bit}}}" for bit in bits]
+    else:
+        out.append(r"\cvcontact{" + r" $\cdot$ ".join(bits) + "}")
     return out
 
 
@@ -279,14 +319,27 @@ def render_projects(profile: dict, section: dict) -> list[str]:
     return out
 
 
-def render_skills(profile: dict, section: dict) -> list[str]:
+def render_skills(profile: dict, section: dict, narrow: bool = False) -> list[str]:
+    """`narrow` stacks one skill per line, for a sidebar.
+
+    A comma-run in a narrow column wraps mid-phrase, and PDF text extraction
+    then reports "Tailwind" and "CSS," as separate blocks — so a parser
+    searching for "Tailwind CSS" finds nothing. One item per line keeps each
+    keyword whole.
+    """
     groups = section.get("groups", [])
     _check_skills(profile, groups)
-    return [
-        r"\cvskill{%s}{%s}" % (tex(g["label"]), tex(", ".join(g["items"])))
-        for g in groups
-        if g.get("items")
-    ]
+    out: list[str] = []
+    for g in groups:
+        items = g.get("items") or []
+        if not items:
+            continue
+        if narrow:
+            out.append(rf"\cvskilllabel{{{tex(g['label'])}}}")
+            out += [rf"\cvskillitem{{{tex(item)}}}" for item in items]
+        else:
+            out.append(r"\cvskill{%s}{%s}" % (tex(g["label"]), tex(", ".join(items))))
+    return out
 
 
 def render_education(profile: dict, section: dict) -> list[str]:
@@ -332,31 +385,113 @@ RENDERERS = {
 }
 
 
-def render_body(profile: dict, plan: dict) -> str:
-    out = render_header(profile, plan)
+# In a sidebar template these go beside the main column unless the plan says
+# otherwise: they are short, self-contained lists rather than narrative.
+# Override per section with "column": "side" or "main".
+SIDEBAR_TYPES = ("skills", "education", "certifications")
 
+
+def render_summary(profile: dict, plan: dict) -> list[str]:
     summary = plan.get("summary")
-    if summary:
-        variant = _resolve(profile, summary["source"], "summary")
-        if variant["status"] != "approved":
-            raise PlanError(
-                f"summary {variant['id']} has status {variant['status']!r};"
-                " only 'approved' variants may be used"
-            )
-        out.append(r"\cvsection{Summary}")
-        out.append(rf"\cvsummary{{{tex(summary['text'])}}}")
+    if not summary:
+        return []
+    variant = _resolve(profile, summary["source"], "summary")
+    if variant["status"] != "approved":
+        raise PlanError(
+            f"summary {variant['id']} has status {variant['status']!r};"
+            " only 'approved' variants may be used"
+        )
+    return [r"\cvsection{Summary}", rf"\cvsummary{{{tex(summary['text'])}}}"]
 
-    for section in plan.get("sections", []):
+
+def render_sections(profile: dict, sections: list[dict], narrow: bool = False) -> list[str]:
+    out: list[str] = []
+    for section in sections:
         kind = section.get("type")
         if kind not in RENDERERS:
             raise PlanError(f"unknown section type {kind!r}")
-        lines = RENDERERS[kind](profile, section)
+        if kind == "skills":
+            lines = render_skills(profile, section, narrow=narrow)
+        else:
+            lines = RENDERERS[kind](profile, section)
         if not lines:
             continue
         out.append(rf"\cvsection{{{tex(section.get('heading', kind.title()))}}}")
         out += lines
+    return out
 
+
+def split_columns(plan: dict) -> tuple[list[dict], list[dict]]:
+    """Sort sections into (sidebar, main), honouring an explicit `column`."""
+    side, main = [], []
+    for section in plan.get("sections", []):
+        column = section.get("column")
+        if column not in (None, "side", "main"):
+            raise PlanError(
+                f"section column {column!r} is not 'side' or 'main'"
+            )
+        if column == "side" or (column is None and section.get("type") in SIDEBAR_TYPES):
+            side.append(section)
+        else:
+            main.append(section)
+    return side, main
+
+
+def render_body(profile: dict, plan: dict) -> str:
+    """Single-column: header, summary and every section in one flow."""
+    out = render_header(profile, plan)
+    out += render_summary(profile, plan)
+    out += render_sections(profile, plan.get("sections", []))
     return "\n".join(out) + "\n"
+
+
+def render_photo_header(profile: dict, plan: dict, photo: str | None) -> str:
+    """Full-width identity band: photo beside name, headline and contacts.
+
+    The name goes here rather than in the sidebar because a narrow column
+    breaks it across lines, and PDF text extraction then reports the pieces out
+    of order — "Nguyen Thi Hang ... Dieu". A parser reading that gets the
+    candidate's name wrong, which is the one field it must not get wrong.
+    """
+    text = "\n".join(render_header(profile, plan))
+    if photo:
+        return r"\cvheaderwithphoto{%s}{%s}" % (photo, text)
+    return r"\cvheaderplain{%s}" % text
+
+
+def render_marked(
+    profile: dict, plan: dict, template_text: str, photo: str | None
+) -> dict[str, str]:
+    """Build content for whichever markers this template declares."""
+    values = {"%%PDFMETA%%": render_pdfmeta(profile, plan)}
+    has_header = declares_marker(template_text, "%%HEADER%%")
+    has_sidebar = declares_marker(template_text, "%%SIDEBAR%%")
+
+    if not (has_header or has_sidebar):
+        values["%%BODY%%"] = render_body(profile, plan)
+        return values
+
+    side_sections, main_sections = split_columns(plan)
+
+    sidebar: list[str] = []
+    if has_header:
+        values["%%HEADER%%"] = render_photo_header(profile, plan, photo)
+    else:
+        if photo:
+            sidebar.append(rf"\cvphoto{{{photo}}}")
+        sidebar += render_header(profile, plan, stacked=True)
+
+    if has_sidebar:
+        sidebar += render_sections(profile, side_sections, narrow=True)
+        values["%%SIDEBAR%%"] = "\n".join(sidebar) + "\n"
+        main = render_summary(profile, plan) + render_sections(profile, main_sections)
+    else:
+        main = sidebar + render_summary(profile, plan) + render_sections(
+            profile, plan.get("sections", [])
+        )
+
+    values["%%BODY%%"] = "\n".join(main) + "\n"
+    return values
 
 
 def render_pdfmeta(profile: dict, plan: dict) -> str:
@@ -479,14 +614,13 @@ def main() -> int:
                                     if p.is_dir())) or "none")
             )
 
-        doc = substitute_markers(
-            template_file.read_text(encoding="utf-8"),
-            {
-                "%%PDFMETA%%": render_pdfmeta(profile, plan),
-                "%%BODY%%": render_body(profile, plan),
-            },
-        )
+        template_text = template_file.read_text(encoding="utf-8")
+        raw = args.out / "raw"
 
+        photo = stage_photo(profile, args.profile, raw, template_text)
+        doc = substitute_markers(
+            template_text, render_marked(profile, plan, template_text, photo)
+        )
         report = build_match_report(profile, plan)
     except (PlanError, ProfileError) as exc:
         print(f"render failed: {exc}", file=sys.stderr)

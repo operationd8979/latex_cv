@@ -95,6 +95,10 @@ ignored — which is the point: a date cannot drift.
 
 - **`sections`** render in the order you list them. Put what the posting cares
   about first. A section whose content renders empty is skipped.
+- **`column`** is `"side"` or `"main"`, and applies only to a template with a
+  sidebar (`two-column-photo`). Omit it and skills, education and
+  certifications go to the sidebar while summary, experience and projects go to
+  the main column. Single-column templates ignore it entirely.
 - **`type`** is one of `experience`, `projects`, `skills`, `education`,
   `certifications`.
 - **`bullets[].source`** is a list because you may legitimately merge two

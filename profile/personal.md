@@ -9,6 +9,12 @@ Contact and identity facts. One canonical value per field.
 - **LinkedIn:** https://www.linkedin.com/in/hangnguyen118
 - **GitHub:** https://github.com/hangnguyen118
 - **Portfolio:** https://browsermind-profile.vercel.app
+- **Photo:** avatar.jpg
+
+<!-- Photo is a path relative to this directory. Only templates that declare a
+     \cvphoto macro use it; ats-single-column deliberately ignores it, since a
+     photo interferes with ATS parsing. -->
+
 
 <!-- Target role and job-search preferences live in preferences.md, not here. -->
 <!-- The AZ-900 credential link uses the handle `hangnguyen1108` while LinkedIn

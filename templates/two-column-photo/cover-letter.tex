@@ -1,0 +1,51 @@
+% two-column-photo — matching cover letter.
+%
+% Deliberately single-column and photo-free: a letter is prose, and the
+% sidebar exists to hold lists the CV needs, not paragraphs.
+% The renderer substitutes %%PDFMETA%%, %%HEADER%% and %%BODY%%.
+
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[a4paper,top=1.8cm,bottom=1.8cm,left=1.9cm,right=1.9cm]{geometry}
+\usepackage{fontspec}
+\setmainfont{texgyreheros}[
+  Extension      = .otf,
+  UprightFont    = *-regular,
+  BoldFont       = *-bold,
+  ItalicFont     = *-italic,
+  BoldItalicFont = *-bolditalic,
+]
+\usepackage{xcolor}
+\usepackage{microtype}
+\usepackage[hidelinks]{hyperref}
+
+\definecolor{rulegray}{gray}{0.60}
+\definecolor{accent}{HTML}{1F4E79}
+\definecolor{muted}{gray}{0.30}
+
+\pagestyle{empty}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.75em}
+\linespread{1.08}
+
+% Match the CV: ragged right avoids the stretched word spacing justification
+% produces at this measure. \frenchspacing removes the extra gap LaTeX puts
+% after a full stop, which reads as a typo in a short letter.
+\raggedright
+\frenchspacing
+\hyphenpenalty=10000
+\exhyphenpenalty=10000
+\sloppy
+
+\newcommand{\clname}[1]{{\fontsize{17}{19}\selectfont\bfseries #1}\par\vspace{0.2em}}
+\newcommand{\clcontact}[1]{{\small\color{muted}#1}\par\vspace{0.3em}%
+  {\color{rulegray}\rule{\linewidth}{0.5pt}}\par}
+\newcommand{\cldate}[1]{{\small\color{muted}#1}\par}
+
+%%PDFMETA%%
+
+\begin{document}
+%%HEADER%%
+
+%%BODY%%
+\end{document}
