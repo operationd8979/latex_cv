@@ -1,0 +1,200 @@
+% two-column-photo — narrow sidebar with an ID photo, wide main column.
+%
+% Trade-off, stated plainly: a photo and a two-column layout are conventional
+% in Vietnam and fine for a person to read, but they are harder on automated
+% CV parsers than ats-single-column. Use this where a human reads the CV
+% first; use ats-single-column where it goes through an applicant portal.
+%
+% The two columns are minipages, so the sidebar's text is emitted before the
+% main column's. Extraction therefore reads sidebar-then-main rather than
+% interleaving the two, which is what keeps it parseable at all.
+%
+% Compiles with Tectonic using bundled resources only: TeX Gyre Heros loaded
+% by file name, no system font required.
+%
+% Markers: PDFMETA in the preamble, SIDEBAR and BODY inside the document.
+% Macro contract: see PLACEHOLDERS.md.
+
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[a4paper,top=1.1cm,bottom=1.1cm,left=1.2cm,right=1.2cm]{geometry}
+\usepackage{fontspec}
+\setmainfont{texgyreheros}[
+  Extension      = .otf,
+  UprightFont    = *-regular,
+  BoldFont       = *-bold,
+  ItalicFont     = *-italic,
+  BoldItalicFont = *-bolditalic,
+]
+\usepackage{xcolor}
+\usepackage{enumitem}
+\usepackage{titlesec}
+\usepackage{graphicx}
+\usepackage{paracol}
+\usepackage{microtype}
+\usepackage[hidelinks]{hyperref}
+
+\definecolor{rulegray}{gray}{0.60}
+\definecolor{muted}{gray}{0.30}
+\definecolor{accent}{HTML}{1F4E79}
+
+\pagestyle{empty}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0pt}
+\linespread{1.0}
+\raggedright
+\frenchspacing
+\hyphenpenalty=10000
+\exhyphenpenalty=10000
+\sloppy
+\raggedbottom
+
+% paracol rather than two minipages: a minipage cannot break, so content one
+% line too long shunts BOTH columns onto page two and leaves page one holding
+% nothing but the header. paracol fills the page first and breaks normally.
+\columnratio{0.315}
+\setlength{\columnsep}{0.85cm}
+
+% --- section heading --------------------------------------------------------
+% \linewidth adapts to whichever minipage the heading sits in, so one macro
+% serves both columns.
+\titleformat{\section}
+  {\normalfont\large\bfseries\color{accent}}{}{0em}{}
+  [\vspace{-0.5em}{\color{rulegray}\rule{\linewidth}{0.5pt}}]
+\titlespacing*{\section}{0pt}{0.6em}{0.3em}
+
+% ===========================================================================
+% Macro contract consumed by render_cv.py — see PLACEHOLDERS.md
+% ===========================================================================
+
+% Presence of this macro is what tells the renderer to stage the profile photo.
+\newcommand{\cvphoto}[1]{\includegraphics[width=\linewidth]{#1}}
+
+% Identity band: photo beside the name, running the full page width. The name
+% must NOT sit in the narrow column — see the note at the top of this file.
+\newcommand{\cvheaderwithphoto}[2]{%
+  \begin{minipage}[c]{2.7cm}\cvphoto{#1}\end{minipage}%
+  \hspace{0.75cm}%
+  \begin{minipage}[c]{\dimexpr\textwidth-3.45cm\relax}#2\end{minipage}%
+}
+\newcommand{\cvheaderplain}[1]{#1}
+
+\newcommand{\cvname}[1]{{\fontsize{19}{21}\selectfont\bfseries #1}\par\vspace{0.15em}}
+\newcommand{\cvheadline}[1]{{\large\color{accent}#1}\par\vspace{0.35em}}
+\newcommand{\cvcontact}[1]{{\footnotesize\color{muted}#1}\par}
+
+% Present so a plan written for a sidebar-identity template still renders.
+\newcommand{\cvcontactline}[1]{{\footnotesize\color{muted}#1}\par\vspace{0.15em}}
+
+\newcommand{\cvsection}[1]{\section*{#1}}
+\newcommand{\cvsummary}[1]{#1\par\vspace{0.1em}}
+
+% \cvitem{headline}{metadata} — flush left, metadata on its own line, so PDF
+% text extraction cannot detach a date from its entry.
+\newcommand{\cvitem}[2]{%
+  \vspace{0.3em}%
+  #1\par
+  {\small\color{muted}#2}\par
+}
+\newcommand{\cvitemplain}[1]{\vspace{0.3em}#1\par}
+
+\newcommand{\cvmeta}[1]{{\small\itshape #1}\par}
+\newcommand{\cvlinks}[1]{{\small\color{muted}#1}\par\vspace{0.1em}}
+
+\newlist{cvbullets}{itemize}{1}
+\setlist[cvbullets]{
+  leftmargin = 1.15em,
+  labelsep   = 0.45em,
+  itemsep    = 0.05em,
+  parsep     = 0pt,
+  topsep     = 0.12em,
+  partopsep  = 0pt,
+  label      = \textbullet,
+}
+
+% Wide-column form: label and a comma-separated run.
+\newcommand{\cvskill}[2]{\vspace{0.2em}{\bfseries #1:} #2\par}
+
+% Narrow-column form: label, then one item per line. Stacking keeps each
+% keyword whole when the PDF's text is extracted.
+\newcommand{\cvskilllabel}[1]{\vspace{0.3em}{\bfseries #1}\par\vspace{0.1em}}
+\newcommand{\cvskillitem}[1]{{\small #1}\par}
+
+\newcommand{\cvplain}[1]{\vspace{0.15em}#1\par}
+
+\hypersetup{
+  pdftitle={Nguyen Thi Dieu Hang — CV — Junior Frontend Engineer},
+  pdfauthor={Nguyen Thi Dieu Hang},
+  pdfcreator={},
+}
+
+\begin{document}
+\noindent
+\cvheaderwithphoto{avatar.jpg}{\cvname{Nguyen Thi Dieu Hang}
+\cvheadline{Frontend Developer}
+\cvcontact{\href{mailto:ntdieuhang192@gmail.com}{ntdieuhang192@gmail.com} $\cdot$ +84 327 840 518 $\cdot$ Ho Chi Minh City, Vietnam $\cdot$ \href{https://www.linkedin.com/in/hangnguyen118}{linkedin.com/in/hangnguyen118} $\cdot$ \href{https://github.com/hangnguyen118}{github.com/hangnguyen118} $\cdot$ \href{https://browsermind-profile.vercel.app}{browsermind-profile.vercel.app}}}
+
+\vspace{0.55em}
+{\color{rulegray}\rule{\textwidth}{0.6pt}}
+\vspace{0.35em}
+
+\begin{paracol}{2}
+\cvsection{Technical Skills}
+\cvskilllabel{AI-assisted development}
+\cvskillitem{Claude / Claude Code}
+\cvskillitem{Spec-Driven Development}
+\cvskillitem{Playwright MCP}
+\cvskilllabel{Frontend}
+\cvskillitem{React.js}
+\cvskillitem{Next.js (App Router, Server Components)}
+\cvskillitem{TypeScript}
+\cvskillitem{JavaScript}
+\cvskillitem{HTML5}
+\cvskillitem{CSS3}
+\cvskillitem{Responsive design}
+\cvskilllabel{UI and data}
+\cvskillitem{Tailwind CSS}
+\cvskillitem{shadcn/ui}
+\cvskillitem{TanStack Query}
+\cvskillitem{TanStack Table}
+\cvskillitem{Figma-to-code implementation}
+\cvskilllabel{Testing and verification}
+\cvskillitem{Playwright (end-to-end)}
+\cvskillitem{Cross-browser and parallel test execution}
+\cvskillitem{Page Object Model (POM)}
+\cvsection{Education}
+\cvitem{\textbf{Engineer's Degree, Information Technology}, Ho Chi Minh City University of Technology (HUTECH)}{Jan 2025 $\cdot$ Ho Chi Minh City, Vietnam $\cdot$ GPA 3.35 / 4.0 $\cdot$ Very Good}
+\cvsection{Certifications}
+\cvplain{\href{https://learn.microsoft.com/api/credentials/share/vi-vn/hangnguyen1108/306DA7D144E07FF7?sharingId=C357452C5EB8224A}{Microsoft Certified: Azure Fundamentals (AZ-900)}}
+\cvplain{English, CEFR level B1}
+
+\switchcolumn
+\cvsection{Summary}
+\cvsummary{Frontend Developer and Information Technology graduate (HUTECH) with hands-on experience building responsive web and mobile applications using Next.js, React.js and React Native, and translating product and design requirements into reusable, maintainable frontend code.}
+\cvsection{Experience}
+\cvitem{\textbf{Frontend Developer}, VILIHA PTE. LTD.}{Ho Chi Minh City, Vietnam $\cdot$ Jul 2026 – Present $\cdot$ Full-time}
+\begin{cvbullets}
+  \item Build production interfaces with Next.js App Router and Server Components, using TanStack Query and TanStack Table for client-side data, with Tailwind CSS and shadcn/ui.
+  \item Translate detailed Figma designs into clean, responsive, semantic code, and build reusable components and libraries with maintainability and DRY principles in mind.
+  \item Collaborate in an Agile/Scrum environment and communicate in English with project stakeholders.
+\end{cvbullets}
+\cvitem{\textbf{Frontend Developer \& Testing}, Chip Nova}{Ho Chi Minh City, Vietnam $\cdot$ Aug 2025 – Mar 2026}
+\begin{cvbullets}
+  \item Clarified product requirements, designed the user experience, and implemented the frontend for web and mobile.
+  \item Wrote end-to-end tests with Playwright to ensure product quality.
+\end{cvbullets}
+\cvsection{Selected Projects}
+\cvitem{\textbf{Portfolio Website (BrowserMind)}}{Frontend Developer \& Testing $\cdot$ Jun 2026}
+\cvlinks{\href{https://browsermind-profile.vercel.app}{browsermind-profile.vercel.app}}
+\begin{cvbullets}
+  \item Used Spec-Driven Development to turn product requirements into a fully functional 23-component application, with clear specifications and automated validation.
+  \item Designed and built the interface with Claude Design and Claude Code, running AI-assisted development and testing workflows through Playwright MCP.
+\end{cvbullets}
+\cvitem{\textbf{Shopee UI Test Automation}}{Test Automation Engineer $\cdot$ Jul 2026}
+\cvlinks{\href{https://github.com/hangnguyen118/agentic-test-framework-playwright-ai}{github.com/hangnguyen118/agentic-test-framework-playwright-ai}}
+\begin{cvbullets}
+  \item Built a Playwright end-to-end framework in TypeScript on the Page Object Model, covering 21 test cases across 4 browser and device targets.
+\end{cvbullets}
+
+\end{paracol}
+\end{document}
