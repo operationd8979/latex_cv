@@ -22,6 +22,10 @@ One or more job URLs, or pasted job-description text. Optionally a template
 name and a profile path. Process each job independently — one failure must not
 stop the others.
 
+**Default output is the CV alone.** Generate a cover letter only when the user
+asks for one — "with a cover letter", "kèm thư ngỏ", `--cover-letter`, or an
+equivalent request. Do not produce one just because the posting mentions it.
+
 ## Rules that are not negotiable
 
 - **Never invent.** No skill, employer, title, date, certification, degree,
@@ -67,8 +71,11 @@ python .claude/skills/latex-cv-tailor/scripts/new_job_dir.py \
   --output-root ./applications --company "<company>" --role "<title>" [--job-id <id>]
 ```
 
-It prints the path it created. Write the retrieved description verbatim to
-`job.md` in that directory, with the source URL and today's date.
+It prints the job directory and creates `raw/` inside it. Write the retrieved
+description verbatim to `raw/job.md`, with the source URL and today's date.
+
+**Everything you write goes in `raw/`.** Only `cv.pdf` and `cover-letter.pdf`
+belong at the top level — that folder is what the user opens and sends out.
 
 ### 4. Match evidence to the posting
 
@@ -81,8 +88,8 @@ Pick one summary variant marked `status: approved`; you may trim it to fit.
 
 ### 5. Write the plan
 
-Write `plan.json` in the job directory. Its schema, with a worked example, is
-in `references/plan-schema.md` — read that file before writing your first plan.
+Write `raw/plan.json`. Its schema, with a worked example, is in
+`references/plan-schema.md` — read that file before writing your first plan.
 
 Every bullet cites the profile IDs it came from. The renderer rejects a bullet
 citing an ID that does not belong to its entry, so cite accurately rather than
@@ -92,19 +99,20 @@ approximately.
 
 ```bash
 S=.claude/skills/latex-cv-tailor/scripts
-python $S/render_cv.py --plan <dir>/plan.json --profile ./profile \
+python $S/render_cv.py --plan <dir>/raw/plan.json --profile ./profile \
   --template-root ./templates --out <dir>
 python $S/build_and_validate.py --dir <dir> --profile ./profile --max-pages 1
 ```
 
-Write `cover-letter.md` (see below), then:
+`render_cv.py` writes `raw/cv.tex` and `raw/match-report.md`;
+`build_and_validate.py` puts `cv.pdf` at the top level.
+
+**Only if a cover letter was asked for**, write `raw/cover-letter.md`, then:
 
 ```bash
 python $S/render_cover_letter.py --dir <dir> --profile ./profile --template-root ./templates
 python $S/build_and_validate.py --dir <dir> --target cover-letter --max-pages 1
 ```
-
-`render_cv.py` also writes `match-report.md`.
 
 ### 7. Handle failures rather than working around them
 
@@ -122,25 +130,53 @@ python $S/build_and_validate.py --dir <dir> --target cover-letter --max-pages 1
 A failed build deletes its PDF. Never report success without a passing
 `build_and_validate.py`.
 
-## Cover letter
+## Cover letter — only on request
 
-Three or four short paragraphs, built only from the job description, profile
-evidence, and what the user explicitly told you. Do not invent a hiring
-manager, company address, company mission, referral, or personal reason for
-applying. Use "Dear Hiring Team" when the recipient is unknown.
+**Short.** Three paragraphs, **under 200 words total**. A recruiter reads it in
+twenty seconds; length costs you attention rather than buying credibility.
+
+Structure:
+
+1. **The role, and the single strongest reason you fit it.** Name the position.
+   Then give the one match that is most specific to *this* posting — the
+   methodology they name, the stack they run, the problem they say is hardest.
+   One reason, chosen well, beats four listed.
+2. **Concrete evidence, mostly from the current role.** What you do now and what
+   you have shipped, with a number where the profile has one. Two or three
+   sentences.
+3. **A one-line close.** Availability or interest in talking. Nothing more.
+
+Write it about the job, not about yourself in general. Every sentence should be
+one the candidate could not paste into an application for a different company.
+
+Do **not**:
+
+- restate the CV bullet by bullet — it is attached
+- open with "I am writing to apply for..." or similar filler
+- list gaps and shortcomings; the match report already records them, and a
+  letter is not the place to argue against yourself
+- invent a hiring manager, company address, company mission, referral, or
+  personal reason for applying
+
+Use "Dear Hiring Team" when the recipient is unknown.
 
 ## Output contract
 
 ```text
 applications/<YYYY-MM-DD>_<company>_<role>/
-├── job.md            # the posting, verbatim
-├── plan.json         # what you selected, with citations
-├── cv.tex
-├── cv.pdf
-├── cover-letter.md
-├── cover-letter.pdf
-└── match-report.md   # evidence trail, gaps, withheld skills
+├── cv.pdf                  # what gets sent
+├── cover-letter.pdf        # only when a cover letter was requested
+└── raw/
+    ├── job.md              # the posting, verbatim
+    ├── plan.json           # what you selected, with citations
+    ├── cv.tex
+    ├── cover-letter.md
+    ├── cover-letter.tex
+    └── match-report.md     # evidence trail, gaps, withheld skills
 ```
+
+The top level holds only what the user sends to an employer. Everything that
+exists to produce or audit those PDFs lives in `raw/`.
 
 ## What to report back
 

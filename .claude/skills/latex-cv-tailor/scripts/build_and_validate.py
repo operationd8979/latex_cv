@@ -46,9 +46,11 @@ def find_engine(name: str = "tectonic") -> str:
     return found
 
 
-def compile_tex(tex_path: Path, engine: str) -> str:
-    """Compile in place. Shell escape stays off — Tectonic's default."""
-    out_dir = tex_path.parent
+def compile_tex(tex_path: Path, engine: str, out_dir: Path) -> str:
+    """Compile raw/<name>.tex, landing the PDF in the job directory itself.
+
+    Shell escape stays off — Tectonic's default.
+    """
     proc = subprocess.run(
         [engine, "-X", "compile", str(tex_path), "--outdir", str(out_dir), "--keep-logs"],
         capture_output=True,
@@ -244,7 +246,7 @@ def main() -> int:
     ap.add_argument("--max-pages", type=int, default=1)
     args = ap.parse_args()
 
-    tex_path = args.dir / f"{args.target}.tex"
+    tex_path = args.dir / "raw" / f"{args.target}.tex"
     pdf_path = args.dir / f"{args.target}.pdf"
 
     try:
@@ -263,7 +265,7 @@ def main() -> int:
         if stale:
             pdf_path.unlink()
 
-        log = compile_tex(tex_path, engine)
+        log = compile_tex(tex_path, engine, args.dir)
         errors, warnings = validate(tex_path, pdf_path, log, profile, args.max_pages)
 
     except (BuildError, ProfileError) as exc:

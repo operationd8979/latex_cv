@@ -14,3 +14,6 @@ applications/*/cover-letter.pdf
 node_modules/
 __pycache__/
 *.pyc
+
+# Inspection renders, not part of the pipeline
+applications/*/*.png

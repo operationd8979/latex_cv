@@ -1,6 +1,7 @@
-# plan.json — the content plan
+# raw/plan.json — the content plan
 
-The plan is your selection, in structured form. You choose *what* goes on the
+The plan lives at `<job dir>/raw/plan.json`. It is your selection, in
+structured form. You choose *what* goes on the
 page and *how it is worded*; the renderer supplies every hard fact from the
 profile and refuses anything the profile does not support.
 

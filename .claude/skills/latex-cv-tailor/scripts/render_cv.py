@@ -495,11 +495,12 @@ def main() -> int:
         print(f"render failed: {exc!r}", file=sys.stderr)
         return 1
 
-    args.out.mkdir(parents=True, exist_ok=True)
-    (args.out / "cv.tex").write_text(doc, encoding="utf-8")
-    (args.out / "match-report.md").write_text(report, encoding="utf-8")
-    print(f"wrote {args.out / 'cv.tex'}")
-    print(f"wrote {args.out / 'match-report.md'}")
+    raw = args.out / "raw"
+    raw.mkdir(parents=True, exist_ok=True)
+    (raw / "cv.tex").write_text(doc, encoding="utf-8")
+    (raw / "match-report.md").write_text(report, encoding="utf-8")
+    print(f"wrote {raw / 'cv.tex'}")
+    print(f"wrote {raw / 'match-report.md'}")
     return 0
 
 

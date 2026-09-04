@@ -91,7 +91,9 @@ def main() -> int:
         return 1
 
     if not args.print_only:
-        target.mkdir(parents=True, exist_ok=False)
+        # Working files live in raw/; only the two PDFs sit at the top level,
+        # so the folder a person opens contains exactly what they send out.
+        (target / "raw").mkdir(parents=True, exist_ok=False)
     print(target)
     return 0
 

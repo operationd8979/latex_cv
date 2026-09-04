@@ -10,7 +10,17 @@ language: en
 latex_engine: tectonic
 max_pages: 1
 overwrite_policy: create-new-version
+
+# A cover letter is generated ONLY when the user asks for one. Default is the
+# CV alone. Set to `always` to bring back the old behaviour.
+cover_letter: on_request
 cover_letter_formats: [markdown, pdf]
+cover_letter_max_words: 200
+
+# Only the two PDFs sit at the top of a job directory. Everything else - the
+# job description, the plan, the .tex sources, the match report - goes in raw/,
+# so the folder a person opens holds exactly what they send out.
+keep_working_files_in: raw
 
 # Contact fields that must be readable in the compiled PDF text layer.
 # build_and_validate.py fails the build if any of these is missing.

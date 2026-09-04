@@ -31,17 +31,25 @@ from render_cv import (  # noqa: E402
 
 
 def md_to_tex(markdown: str) -> str:
-    """Blank-line separated blocks become paragraphs. Inline markup is stripped
-    rather than interpreted — a cover letter needs no formatting, and stripping
-    keeps injected markup out of the LaTeX."""
+    """Blank-line separated blocks become paragraphs; a single newline inside a
+    block becomes a real line break, so a sign-off stays on two lines.
+
+    Write each paragraph as one line and break only where a break is wanted.
+
+    Inline markup is stripped rather than interpreted — a cover letter needs no
+    formatting, and stripping keeps injected markup out of the LaTeX.
+    """
     body = re.sub(r"^#.*$", "", markdown, flags=re.MULTILINE)  # drop headings
     blocks = [b.strip() for b in re.split(r"\n\s*\n", body) if b.strip()]
     out = []
     for block in blocks:
-        flat = " ".join(line.strip() for line in block.splitlines())
-        flat = re.sub(r"\*\*(.+?)\*\*", r"\1", flat)
-        flat = re.sub(r"(?<!\w)[*_](.+?)[*_](?!\w)", r"\1", flat)
-        out.append(tex(flat))
+        lines = []
+        for line in block.splitlines():
+            flat = line.strip()
+            flat = re.sub(r"\*\*(.+?)\*\*", r"\1", flat)
+            flat = re.sub(r"(?<!\w)[*_](.+?)[*_](?!\w)", r"\1", flat)
+            lines.append(tex(flat))
+        out.append(" \\\\\n".join(lines))
     return "\n\n".join(out)
 
 
@@ -73,7 +81,8 @@ def main() -> int:
     ap.add_argument("--template", default="ats-single-column")
     args = ap.parse_args()
 
-    source = args.dir / "cover-letter.md"
+    raw = args.dir / "raw"
+    source = raw / "cover-letter.md"
     template_file = args.template_root / args.template / "cover-letter.tex"
 
     try:
@@ -101,7 +110,8 @@ def main() -> int:
         print(f"render failed: {exc}", file=sys.stderr)
         return 1
 
-    target = args.dir / "cover-letter.tex"
+    raw.mkdir(parents=True, exist_ok=True)
+    target = raw / "cover-letter.tex"
     target.write_text(doc, encoding="utf-8")
     print(f"wrote {target}")
     return 0

@@ -1,0 +1,62 @@
+% ats-single-column — matching cover letter.
+% The renderer substitutes %%PDFMETA%%, %%HEADER%% and %%BODY%%.
+
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[a4paper,top=1.8cm,bottom=1.8cm,left=1.9cm,right=1.9cm]{geometry}
+\usepackage{fontspec}
+\setmainfont{texgyreheros}[
+  Extension      = .otf,
+  UprightFont    = *-regular,
+  BoldFont       = *-bold,
+  ItalicFont     = *-italic,
+  BoldItalicFont = *-bolditalic,
+]
+\usepackage{xcolor}
+\usepackage{microtype}
+\usepackage[hidelinks]{hyperref}
+
+\definecolor{rulegray}{gray}{0.60}
+\definecolor{muted}{gray}{0.30}
+
+\pagestyle{empty}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.75em}
+\linespread{1.08}
+
+% Match the CV: ragged right avoids the stretched word spacing justification
+% produces at this measure. \frenchspacing removes the extra gap LaTeX puts
+% after a full stop, which reads as a typo in a short letter.
+\raggedright
+\frenchspacing
+\hyphenpenalty=10000
+\exhyphenpenalty=10000
+\sloppy
+
+\newcommand{\clname}[1]{{\fontsize{17}{19}\selectfont\bfseries #1}\par\vspace{0.2em}}
+\newcommand{\clcontact}[1]{{\small\color{muted}#1}\par\vspace{0.3em}%
+  {\color{rulegray}\rule{\linewidth}{0.5pt}}\par}
+\newcommand{\cldate}[1]{{\small\color{muted}#1}\par}
+
+\hypersetup{
+  pdftitle={Nguyen Thi Dieu Hang - Cover letter},
+  pdfauthor={Nguyen Thi Dieu Hang},
+  pdfcreator={},
+}
+
+\begin{document}
+\clname{Nguyen Thi Dieu Hang}
+\clcontact{\href{mailto:ntdieuhang192@gmail.com}{ntdieuhang192@gmail.com} $\cdot$ +84 327 840 518 $\cdot$ Ho Chi Minh City, Vietnam $\cdot$ \href{https://www.linkedin.com/in/hangnguyen118}{linkedin.com/in/hangnguyen118} $\cdot$ \href{https://github.com/hangnguyen118}{github.com/hangnguyen118}}
+\cldate{05 September 2026}
+
+Dear Hiring Team,
+
+I am applying for the Junior Frontend Engineer role. Nexlab runs its whole pipeline on Spec-Driven Development, and that is how I built my portfolio site: the specification first, Claude Code building to it, and validation automated rather than done by eye. It is how I have chosen to work, not something I would be picking up here.
+
+At VILIHA PTE. LTD. I build production interfaces in Next.js — App Router and Server Components, with TanStack Query and TanStack Table for client-side data — written in TypeScript from detailed Figma designs. Verification is the part I have most practice in: I wrote end-to-end Playwright tests at Chip Nova, and built a Playwright framework on the Page Object Model covering 21 test cases across four browser and device targets. An interface that looks right can still be wrong in the state nobody opened.
+
+I would be glad to talk about how I work and what the team is building.
+
+Sincerely, \\
+Nguyen Thi Dieu Hang
+\end{document}

@@ -135,6 +135,33 @@ class JobDirectories(unittest.TestCase):
                 new_job_dir.resolve_dir(Path(tmp), ".")
 
 
+class OutputLayout(unittest.TestCase):
+    """Only the two PDFs belong at the top of a job directory."""
+
+    def test_render_writes_into_raw(self):
+        profile = load_profile(FIXTURE)
+        with tempfile.TemporaryDirectory() as tmp:
+            job = Path(tmp) / "job"
+            raw = job / "raw"
+            raw.mkdir(parents=True)
+            (raw / "cv.tex").write_text(
+                render_cv.render_body(profile, base_plan()), encoding="utf-8"
+            )
+            (raw / "match-report.md").write_text(
+                render_cv.build_match_report(profile, base_plan()), encoding="utf-8"
+            )
+            top = sorted(p.name for p in job.iterdir())
+            self.assertEqual(top, ["raw"])
+
+    def test_build_reads_from_raw_and_writes_pdf_to_the_top(self):
+        # the path contract, without invoking LaTeX
+        import inspect
+
+        source = inspect.getsource(build_and_validate.main)
+        self.assertIn('args.dir / "raw" / f"{args.target}.tex"', source)
+        self.assertIn('args.dir / f"{args.target}.pdf"', source)
+
+
 class ProfileContract(unittest.TestCase):
     def setUp(self):
         self.profile = load_profile(FIXTURE)
@@ -278,6 +305,16 @@ class CoverLetter(unittest.TestCase):
     def test_inline_markup_is_stripped_not_interpreted(self):
         out = render_cover_letter.md_to_tex("I am **very** good and _fast_.")
         self.assertEqual(out, "I am very good and fast.")
+
+    def test_sign_off_keeps_its_line_break(self):
+        out = render_cover_letter.md_to_tex("Body.\n\nSincerely,\nAlex Sample\n")
+        self.assertIn("Sincerely, \\\\\nAlex Sample", out)
+
+    def test_no_trailing_line_break_at_a_paragraph_end(self):
+        # a stray \\ before a blank line is a LaTeX error
+        out = render_cover_letter.md_to_tex("One line.\n\nAnother.\n")
+        for para in out.split("\n\n"):
+            self.assertFalse(para.rstrip().endswith("\\\\"))
 
 
 if __name__ == "__main__":
