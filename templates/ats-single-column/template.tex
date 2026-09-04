@@ -1,0 +1,106 @@
+% ats-single-column — a plain, single-column, ATS-safe CV.
+%
+% Compiles with Tectonic using bundled resources only: the font is TeX Gyre
+% Heros, loaded by file name so no system font install is required.
+%
+% The renderer substitutes %%PDFMETA%% and %%BODY%%. Everything else is design.
+% The macro contract this template must provide is in PLACEHOLDERS.md.
+
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[a4paper,top=1.1cm,bottom=1.1cm,left=1.4cm,right=1.4cm]{geometry}
+\usepackage{fontspec}
+\setmainfont{texgyreheros}[
+  Extension      = .otf,
+  UprightFont    = *-regular,
+  BoldFont       = *-bold,
+  ItalicFont     = *-italic,
+  BoldItalicFont = *-bolditalic,
+]
+\usepackage{xcolor}
+\usepackage{enumitem}
+\usepackage{titlesec}
+\usepackage{microtype}
+\usepackage[hidelinks]{hyperref}
+
+\definecolor{rulegray}{gray}{0.60}
+\definecolor{muted}{gray}{0.30}
+
+\pagestyle{empty}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0pt}
+\linespread{1.0}
+\raggedbottom
+
+% Ragged right, not justified: a CV column is narrow enough that justification
+% forces mid-word hyphenation ("main-tainability"), which reads badly and can
+% split a keyword an ATS is looking for. \sloppy keeps lines from overflowing
+% the margin now that they cannot be stretched.
+\raggedright
+\hyphenpenalty=10000
+\exhyphenpenalty=10000
+\sloppy
+
+% --- section heading: bold, sentence case, thin rule underneath -------------
+\titleformat{\section}
+  {\normalfont\large\bfseries}{}{0em}{}
+  [\vspace{-0.55em}{\color{rulegray}\rule{\linewidth}{0.5pt}}]
+\titlespacing*{\section}{0pt}{0.55em}{0.25em}
+
+% ===========================================================================
+% Macro contract consumed by render_cv.py — see PLACEHOLDERS.md
+% ===========================================================================
+
+% Header
+\newcommand{\cvname}[1]{\begin{center}{\fontsize{18}{20}\selectfont\bfseries #1}\end{center}\vspace{0.1em}}
+\newcommand{\cvheadline}[1]{\begin{center}{\large #1}\end{center}\vspace{0.25em}}
+\newcommand{\cvcontact}[1]{\begin{center}{\small\color{muted}#1}\end{center}\vspace{0.1em}}
+
+% Sections
+\newcommand{\cvsection}[1]{\section*{#1}}
+\newcommand{\cvsummary}[1]{#1\par\vspace{0.1em}}
+
+% Every entry is laid out linearly: headline on one line, metadata on the next,
+% both flush left. Right-aligned dates via \hfill look tidier but land in a
+% separate column when a PDF's text is extracted, which detaches a date from
+% its job — measured, not assumed. Keep this linear.
+%
+% \cvitem{headline}{metadata}
+\newcommand{\cvitem}[2]{%
+  \vspace{0.3em}%
+  #1\par
+  {\small\color{muted}#2}\par
+}
+
+% \cvitemplain{headline} — same, for entries with no metadata line
+\newcommand{\cvitemplain}[1]{\vspace{0.3em}#1\par}
+
+% Italic metadata line (tech stack, etc.)
+\newcommand{\cvmeta}[1]{{\small\itshape #1}\par}
+
+% Small line of links, emitted only when links exist
+\newcommand{\cvlinks}[1]{{\small\color{muted}#1}\par\vspace{0.1em}}
+
+% Achievement bullets
+\newlist{cvbullets}{itemize}{1}
+\setlist[cvbullets]{
+  leftmargin = 1.15em,
+  labelsep   = 0.45em,
+  itemsep    = 0.05em,
+  parsep     = 0pt,
+  topsep     = 0.12em,
+  partopsep  = 0pt,
+  label      = \textbullet,
+}
+
+% Skills line: {group label}{comma-separated items}
+\newcommand{\cvskill}[2]{\vspace{0.08em}{\bfseries #1:} #2\par}
+
+% Single-line row, flush left (see the note on \cvitem above)
+\newcommand{\cvplain}[1]{\vspace{0.1em}#1\par}
+
+%%PDFMETA%%
+
+\begin{document}
+%%BODY%%
+\end{document}

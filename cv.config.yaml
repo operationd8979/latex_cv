@@ -1,0 +1,17 @@
+# Workspace configuration for the latex-cv-tailor skill.
+# Paths are relative to this file.
+
+profile_root: ./profile
+template_root: ./templates
+default_template: ats-single-column
+output_root: ./applications
+
+language: en
+latex_engine: tectonic
+max_pages: 1
+overwrite_policy: create-new-version
+cover_letter_formats: [markdown, pdf]
+
+# Contact fields that must be readable in the compiled PDF text layer.
+# build_and_validate.py fails the build if any of these is missing.
+required_pdf_fields: [full_name, email, phone]

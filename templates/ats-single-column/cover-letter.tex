@@ -1,0 +1,38 @@
+% ats-single-column — matching cover letter.
+% The renderer substitutes %%PDFMETA%%, %%HEADER%% and %%BODY%%.
+
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[a4paper,top=1.8cm,bottom=1.8cm,left=1.9cm,right=1.9cm]{geometry}
+\usepackage{fontspec}
+\setmainfont{texgyreheros}[
+  Extension      = .otf,
+  UprightFont    = *-regular,
+  BoldFont       = *-bold,
+  ItalicFont     = *-italic,
+  BoldItalicFont = *-bolditalic,
+]
+\usepackage{xcolor}
+\usepackage{microtype}
+\usepackage[hidelinks]{hyperref}
+
+\definecolor{rulegray}{gray}{0.60}
+\definecolor{muted}{gray}{0.30}
+
+\pagestyle{empty}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.75em}
+\linespread{1.08}
+
+\newcommand{\clname}[1]{{\fontsize{17}{19}\selectfont\bfseries #1}\par\vspace{0.2em}}
+\newcommand{\clcontact}[1]{{\small\color{muted}#1}\par\vspace{0.3em}%
+  {\color{rulegray}\rule{\linewidth}{0.5pt}}\par}
+\newcommand{\cldate}[1]{{\small\color{muted}#1}\par}
+
+%%PDFMETA%%
+
+\begin{document}
+%%HEADER%%
+
+%%BODY%%
+\end{document}
