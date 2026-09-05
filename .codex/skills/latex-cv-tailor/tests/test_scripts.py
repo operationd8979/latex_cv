@@ -19,8 +19,8 @@ from uuid import uuid4
 TESTS = Path(__file__).resolve().parent
 SKILL_ROOT = TESTS.parent
 WORKSPACE_ROOT = SKILL_ROOT.parents[2]
-SCRIPTS = TESTS.parent / "scripts"
-FIXTURE = TESTS / "fixtures" / "profile"
+SCRIPTS = WORKSPACE_ROOT / "scripts"
+FIXTURE = WORKSPACE_ROOT / "tests" / "fixtures" / "profile"
 sys.path.insert(0, str(SCRIPTS))
 
 import build_and_validate  # noqa: E402
@@ -42,7 +42,7 @@ def workspace_tempdir():
 
 
 class SkillIsolation(unittest.TestCase):
-    def test_all_runtime_scripts_are_bundled(self):
+    def test_all_runtime_scripts_are_present(self):
         expected = {
             "build_and_validate.py",
             "new_job_dir.py",
@@ -52,7 +52,7 @@ class SkillIsolation(unittest.TestCase):
         }
         self.assertEqual({path.name for path in SCRIPTS.glob("*.py")}, expected)
 
-    def test_runtime_imports_resolve_to_this_skill(self):
+    def test_runtime_imports_resolve_to_shared_scripts(self):
         for module in (
             build_and_validate,
             new_job_dir,
@@ -66,7 +66,7 @@ class SkillIsolation(unittest.TestCase):
         checked.extend((SKILL_ROOT / "references").glob("*.md"))
         checked.extend(SCRIPTS.glob("*.py"))
         for path in checked:
-            with self.subTest(path=path.relative_to(SKILL_ROOT)):
+            with self.subTest(path=path.relative_to(WORKSPACE_ROOT)):
                 self.assertNotIn(".claude", path.read_text(encoding="utf-8"))
 
 

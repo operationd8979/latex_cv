@@ -15,8 +15,9 @@ import unittest
 from pathlib import Path
 
 TESTS = Path(__file__).resolve().parent
-SCRIPTS = TESTS.parent / "scripts"
-FIXTURE = TESTS / "fixtures" / "profile"
+WORKSPACE_ROOT = TESTS.parents[3]
+SCRIPTS = WORKSPACE_ROOT / "scripts"
+FIXTURE = WORKSPACE_ROOT / "tests" / "fixtures" / "profile"
 sys.path.insert(0, str(SCRIPTS))
 
 import build_and_validate  # noqa: E402

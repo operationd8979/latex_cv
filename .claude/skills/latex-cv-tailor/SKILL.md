@@ -63,7 +63,7 @@ fewer.
 ### 1. Check the profile is sound
 
 ```bash
-python .claude/skills/latex-cv-tailor/scripts/parse_profile.py --profile ./profile --check
+python scripts/parse_profile.py --profile ./profile --check
 ```
 
 Fix nothing yourself — if it reports violations, tell the user and stop.
@@ -80,7 +80,7 @@ preferred qualifications, domain, tools, keywords.
 ### 3. Create the output directory
 
 ```bash
-python .claude/skills/latex-cv-tailor/scripts/new_job_dir.py \
+python scripts/new_job_dir.py \
   --output-root ./applications --company "<company>" --role "<title>" [--job-id <id>]
 ```
 
@@ -111,10 +111,9 @@ approximately.
 ### 6. Render and build
 
 ```bash
-S=.claude/skills/latex-cv-tailor/scripts
-python $S/render_cv.py --plan <dir>/raw/plan.json --profile ./profile \
+python scripts/render_cv.py --plan <dir>/raw/plan.json --profile ./profile \
   --template-root ./templates --out <dir>
-python $S/build_and_validate.py --dir <dir> --profile ./profile --max-pages 1
+python scripts/build_and_validate.py --dir <dir> --profile ./profile --max-pages 1
 ```
 
 `render_cv.py` writes `raw/cv.tex` and `raw/match-report.md`;
@@ -123,8 +122,8 @@ python $S/build_and_validate.py --dir <dir> --profile ./profile --max-pages 1
 **Only if a cover letter was asked for**, write `raw/cover-letter.md`, then:
 
 ```bash
-python $S/render_cover_letter.py --dir <dir> --profile ./profile --template-root ./templates
-python $S/build_and_validate.py --dir <dir> --target cover-letter --max-pages 1
+python scripts/render_cover_letter.py --dir <dir> --profile ./profile --template-root ./templates
+python scripts/build_and_validate.py --dir <dir> --target cover-letter --max-pages 1
 ```
 
 ### 7. Handle failures rather than working around them

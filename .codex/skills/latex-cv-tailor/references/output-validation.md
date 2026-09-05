@@ -1,8 +1,8 @@
 # What the build checks, and what to do when it fails
 
 ```text
-python .codex/skills/latex-cv-tailor/scripts/build_and_validate.py --dir <job dir> --profile ./profile --max-pages 1
-python .codex/skills/latex-cv-tailor/scripts/build_and_validate.py --dir <job dir> --target cover-letter --max-pages 1
+python scripts/build_and_validate.py --dir <job dir> --profile ./profile --max-pages 1
+python scripts/build_and_validate.py --dir <job dir> --target cover-letter --max-pages 1
 ```
 
 Compilation runs Tectonic with **shell escape off** (its default — never turn

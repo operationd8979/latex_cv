@@ -17,9 +17,8 @@ Command and project paths below are relative to the workspace root. Resource
 links are relative to this skill directory. Settings come from `cv.config.yaml`;
 read it first and prefer its values over the defaults here.
 
-This Codex skill is self-contained. Run only the scripts bundled under
-`.codex/skills/latex-cv-tailor/scripts/`; do not import or fall back to another
-agent's skill tree.
+Run only the shared scripts under `scripts/` at the workspace root; do not
+import or fall back to another agent's skill tree.
 
 ## Inputs
 
@@ -68,7 +67,7 @@ fewer.
 ### 1. Check the profile is sound
 
 ```text
-python .codex/skills/latex-cv-tailor/scripts/parse_profile.py --profile ./profile --check
+python scripts/parse_profile.py --profile ./profile --check
 ```
 
 Fix nothing yourself — if it reports violations, tell the user and stop.
@@ -85,7 +84,7 @@ preferred qualifications, domain, tools, keywords.
 ### 3. Create the output directory
 
 ```text
-python .codex/skills/latex-cv-tailor/scripts/new_job_dir.py --output-root ./applications --company "<company>" --role "<title>" [--job-id <id>]
+python scripts/new_job_dir.py --output-root ./applications --company "<company>" --role "<title>" [--job-id <id>]
 ```
 
 It prints the job directory and creates `raw/` inside it. Write the retrieved
@@ -115,8 +114,8 @@ approximately.
 ### 6. Render and build
 
 ```text
-python .codex/skills/latex-cv-tailor/scripts/render_cv.py --plan <dir>/raw/plan.json --profile ./profile --template-root ./templates --out <dir>
-python .codex/skills/latex-cv-tailor/scripts/build_and_validate.py --dir <dir> --profile ./profile --max-pages 1
+python scripts/render_cv.py --plan <dir>/raw/plan.json --profile ./profile --template-root ./templates --out <dir>
+python scripts/build_and_validate.py --dir <dir> --profile ./profile --max-pages 1
 ```
 
 `render_cv.py` writes `raw/cv.tex` and `raw/match-report.md`;
@@ -125,8 +124,8 @@ python .codex/skills/latex-cv-tailor/scripts/build_and_validate.py --dir <dir> -
 **Only if a cover letter was asked for**, write `raw/cover-letter.md`, then:
 
 ```text
-python .codex/skills/latex-cv-tailor/scripts/render_cover_letter.py --dir <dir> --profile ./profile --template-root ./templates
-python .codex/skills/latex-cv-tailor/scripts/build_and_validate.py --dir <dir> --target cover-letter --max-pages 1
+python scripts/render_cover_letter.py --dir <dir> --profile ./profile --template-root ./templates
+python scripts/build_and_validate.py --dir <dir> --target cover-letter --max-pages 1
 ```
 
 ### 7. Handle failures rather than working around them

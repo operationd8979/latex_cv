@@ -74,7 +74,7 @@ citation must justify the whole sentence, not just its first half.
 ## Validating the profile
 
 ```bash
-python .claude/skills/latex-cv-tailor/scripts/parse_profile.py --profile ./profile --check
+python scripts/parse_profile.py --profile ./profile --check
 ```
 
 Reports duplicate IDs, malformed dates, unknown tiers, evidence that resolves
