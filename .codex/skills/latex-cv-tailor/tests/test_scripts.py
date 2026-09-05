@@ -204,6 +204,23 @@ class OutputLayout(unittest.TestCase):
         source = inspect.getsource(build_and_validate.main)
         self.assertIn('args.dir / "raw" / f"{args.target}.tex"', source)
         self.assertIn('args.dir / f"{args.target}.pdf"', source)
+        self.assertIn("args.dir / output_pdf_name(profile, args.target)", source)
+
+    def test_the_pdf_is_named_after_the_candidate(self):
+        profile = load_profile(FIXTURE)
+        self.assertEqual(
+            build_and_validate.output_pdf_name(profile, "cv"), "AlexSample_CV.pdf"
+        )
+        self.assertEqual(
+            build_and_validate.output_pdf_name(profile, "cover-letter"),
+            "AlexSample_CoverLetter.pdf",
+        )
+
+    def test_diacritics_are_folded_out_of_the_filename(self):
+        profile = {"personal": {"full_name": "Nguyễn Thị Diệu Hằng"}}
+        self.assertEqual(
+            build_and_validate.output_pdf_name(profile, "cv"), "NguyenThiDieuHang_CV.pdf"
+        )
 
 
 class ProfileContract(unittest.TestCase):

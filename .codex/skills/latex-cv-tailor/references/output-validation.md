@@ -71,7 +71,8 @@ visible defect, so mention it.
 
 ## Verifying by eye
 
-`pdftotext -enc UTF-8 <dir>/cv.pdf -` shows exactly what an ATS reads. Check
+`pdftotext -enc UTF-8 <dir>/<FullName>_CV.pdf -` shows exactly what an ATS
+reads. Check
 that each job's dates sit next to that job, that section headings are intact,
 and that no placeholder text survived. This is the cheapest way to catch a
 layout problem that compiles cleanly.

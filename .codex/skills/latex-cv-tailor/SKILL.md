@@ -90,8 +90,9 @@ python scripts/new_job_dir.py --output-root ./applications --company "<company>"
 It prints the job directory and creates `raw/` inside it. Write the retrieved
 description verbatim to `raw/job.md`, with the source URL and today's date.
 
-**Everything you write goes in `raw/`.** Only `cv.pdf` and `cover-letter.pdf`
-belong at the top level — that folder is what the user opens and sends out.
+**Everything you write goes in `raw/`.** Only the two finished PDFs —
+`<FullName>_CV.pdf` and `<FullName>_CoverLetter.pdf` — belong at the top level;
+that folder is what the user opens and sends out.
 
 ### 4. Match evidence to the posting
 
@@ -119,13 +120,16 @@ python scripts/build_and_validate.py --dir <dir> --profile ./profile --max-pages
 ```
 
 `render_cv.py` writes `raw/cv.tex` and `raw/match-report.md`;
-`build_and_validate.py` puts `cv.pdf` at the top level.
+`build_and_validate.py` puts `<FullName>_CV.pdf` at the top level. The
+filename comes from `full_name` in `personal.md` (diacritics folded, spaces
+removed), not from the `.tex` stem — so `--profile` is required for both
+targets.
 
 **Only if a cover letter was asked for**, write `raw/cover-letter.md`, then:
 
 ```text
 python scripts/render_cover_letter.py --dir <dir> --profile ./profile --template-root ./templates
-python scripts/build_and_validate.py --dir <dir> --target cover-letter --max-pages 1
+python scripts/build_and_validate.py --dir <dir> --profile ./profile --target cover-letter --max-pages 1
 ```
 
 ### 7. Handle failures rather than working around them
@@ -178,8 +182,8 @@ Use "Dear Hiring Team" when the recipient is unknown.
 
 ```text
 applications/<YYYY-MM-DD>_<company>_<role>/
-├── cv.pdf                  # what gets sent
-├── cover-letter.pdf        # only when a cover letter was requested
+├── <FullName>_CV.pdf           # what gets sent
+├── <FullName>_CoverLetter.pdf  # only when a cover letter was requested
 └── raw/
     ├── job.md              # the posting, verbatim
     ├── plan.json           # what you selected, with citations

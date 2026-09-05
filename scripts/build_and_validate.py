@@ -16,6 +16,7 @@ import re
 import shutil
 import subprocess
 import sys
+import unicodedata
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
@@ -27,6 +28,7 @@ MISSING_GLYPH_RE = re.compile(r"Missing character: There is no (.+?) in font", r
 OVERFULL_RE = re.compile(r"Overfull \\[hv]box \((\d+(?:\.\d+)?)pt too wide\)")
 OVERFULL_LIMIT_PT = 5.0
 TEX_COMMENT_RE = re.compile(r"(?<!\\)%.*$", re.MULTILINE)
+TARGET_LABEL = {"cv": "CV", "cover-letter": "CoverLetter"}
 INSTALL_HINT = (
     "Tectonic is not installed or not on PATH. Install it with one of:\n"
     "    scoop install tectonic\n"
@@ -44,6 +46,25 @@ def find_engine(name: str = "tectonic") -> str:
     if not found:
         raise BuildError(INSTALL_HINT)
     return found
+
+
+def output_pdf_name(profile: dict, target: str) -> str:
+    """The deliverable's filename, e.g. `AlexSample_CV.pdf`.
+
+    An employer's inbox fills with attachments called cv.pdf, so the name comes
+    from `personal.md` rather than from the .tex stem. Diacritics are folded and
+    everything but letters and digits dropped, because the file travels through
+    mail clients and portals that mangle both.
+    """
+    folded = unicodedata.normalize("NFKD", profile["personal"]["full_name"])
+    stem = re.sub(r"[^A-Za-z0-9]", "", folded.encode("ascii", "ignore").decode())
+    return f"{stem}_{TARGET_LABEL[target]}.pdf" if stem else f"{target}.pdf"
+
+
+def discard(*paths: Path) -> None:
+    """A failed build must leave no PDF behind - a stale one reads as success."""
+    for path in paths:
+        path.unlink(missing_ok=True)
 
 
 def compile_tex(tex_path: Path, engine: str, out_dir: Path) -> str:
@@ -241,41 +262,47 @@ def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--dir", required=True, type=Path, help="job output directory")
     ap.add_argument("--target", default="cv", choices=("cv", "cover-letter"))
-    ap.add_argument("--profile", type=Path, help="required for --target cv")
+    ap.add_argument(
+        "--profile", required=True, type=Path,
+        help="supplies the candidate name the PDF is named after, and the "
+             "contact fields the CV build verifies",
+    )
     ap.add_argument("--engine", default="tectonic")
     ap.add_argument("--max-pages", type=int, default=1)
     args = ap.parse_args()
 
     tex_path = args.dir / "raw" / f"{args.target}.tex"
-    pdf_path = args.dir / f"{args.target}.pdf"
+    # Tectonic names its output after the .tex stem; the deliverable is renamed
+    # once the profile has supplied the candidate's name.
+    compiled_path = args.dir / f"{args.target}.pdf"
+    pdf_path = compiled_path
 
     try:
         if not tex_path.exists():
             raise BuildError(f"{tex_path} does not exist - render it first")
         engine = find_engine(args.engine)
 
-        profile = None
-        if args.target == "cv":
-            if not args.profile:
-                raise BuildError("--profile is required when building the CV")
-            profile = load_profile(args.profile)
+        profile = load_profile(args.profile)
+        pdf_path = args.dir / output_pdf_name(profile, args.target)
 
         # A previous run's PDF must never survive into a failed build.
-        stale = pdf_path.exists()
-        if stale:
-            pdf_path.unlink()
+        discard(compiled_path, pdf_path)
 
         log = compile_tex(tex_path, engine, args.dir)
-        errors, warnings = validate(tex_path, pdf_path, log, profile, args.max_pages)
+        if compiled_path.exists() and compiled_path != pdf_path:
+            compiled_path.replace(pdf_path)
+        errors, warnings = validate(
+            tex_path, pdf_path, log,
+            profile if args.target == "cv" else None,
+            args.max_pages,
+        )
 
     except (BuildError, ProfileError) as exc:
-        if pdf_path.exists():
-            pdf_path.unlink()
+        discard(compiled_path, pdf_path)
         print(f"BUILD FAILED\n{exc}", file=sys.stderr)
         return 1
     except subprocess.TimeoutExpired:
-        if pdf_path.exists():
-            pdf_path.unlink()
+        discard(compiled_path, pdf_path)
         print("BUILD FAILED\ncompilation timed out after 600s", file=sys.stderr)
         return 1
 
@@ -283,7 +310,7 @@ def main() -> int:
         print(f"warning: {w}")
 
     if errors:
-        pdf_path.unlink(missing_ok=True)
+        discard(compiled_path, pdf_path)
         print(f"\nVALIDATION FAILED - {pdf_path.name} was discarded:", file=sys.stderr)
         for e in errors:
             print(f"  - {e}", file=sys.stderr)
