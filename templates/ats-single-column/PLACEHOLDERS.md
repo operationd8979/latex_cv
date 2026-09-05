@@ -28,10 +28,10 @@ documentation and left alone.
 | `\cvitemplain` | headline | An entry with no metadata line |
 | `\cvsubline` | text | One continuation line under an entry headline |
 | `\cvmeta` | text | Tech stack line under a project |
-| `\cvlinks` | labelled link | One project URL, e.g. `Demo: …` — emitted once per link |
+| `\cvlinks` | labelled URL | One project address, e.g. `Demo: https://…` — emitted once per link |
 | `cvbullets` | *(environment)* | Achievement bullets |
 | `\cvskill` | label, value | One skill group row, or one language row |
-| `\cvplain` | text | Single-line row (certifications) |
+| `\cvplain` | text | One certification row, ending in its verification URL |
 
 ## Cover-letter macros
 
@@ -56,6 +56,17 @@ extra goes on that same line, not on another one.
 
 `build_and_validate.py` re-checks both on every build, and fails the build if
 an entry's metadata drifts past a section heading **or** past the next entry.
+
+**Every URL is typeset in full, and must be able to wrap.** The renderer emits
+the whole address — scheme included — as the visible text of `\cvlinks` and of
+a certification's `Verify:`, rather than the words "Demo" or "Verify
+Credential" over a hidden `\href`. A label is a dead end on paper: it tells the
+reader a demo exists and gives them no way to reach it, because the target
+survives only in the PDF's link annotation. The cost is length — the Azure
+credential URL is 118 characters — so `render_cv.py` inserts `\allowbreak`
+after each path separator, and a template must give these two macros a hanging
+indent (and, where the column is tight, a smaller size) so a wrapped address
+stays visibly attached to its label instead of reading as a new field.
 
 **Depend only on Tectonic's bundle.** The font is TeX Gyre Heros, loaded by
 file name through `fontspec`, so no system font install is required. Do not

@@ -20,8 +20,8 @@ Each must appear **alone on its own line**, exactly once.
 |---|---|---|
 | `%%PDFMETA%%` | preamble | `\hypersetup` |
 | `%%HEADER%%` | document | photo, name, headline, contacts |
-| `%%SIDEBAR%%` | left column | skills, education, certifications |
-| `%%BODY%%` | right column | summary, experience, projects |
+| `%%SIDEBAR%%` | left column | skills, education, languages |
+| `%%BODY%%` | right column | summary, experience, projects, certifications |
 
 Declaring `%%SIDEBAR%%` is what tells `render_cv.py` to split sections into two
 columns. Declaring `%%HEADER%%` moves identity out of the sidebar. Defining a
@@ -40,7 +40,7 @@ Everything in `ats-single-column`, plus:
 | `\cvskilllabel` | group label | Narrow-column skills: the group heading |
 | `\cvskillitem` | one skill | Narrow-column skills: one item per line |
 
-## Three findings that shaped this template
+## Four findings that shaped this template
 
 Each was measured on a rendered PDF, not assumed.
 
@@ -60,8 +60,20 @@ one holding only the header. paracol fills page one and breaks normally. It
 also fixed a fragmentation problem the minipage version had, where sidebar
 entries extracted a word or two per line.
 
+**Certifications belong in the main column.** They used to sit in the sidebar,
+and stopped fitting there the moment a credential row began printing its
+verification address in full: the Azure URL is 118 characters, which is six
+lines at 5.9cm, and the sidebar is the taller of the two columns, so those
+lines decided where the page broke. In the main column the same row takes two.
+A plan that wants the old placement can still ask for it with
+`"column": "side"`.
+
 ## Capacity
 
 The main column is about 64% of the text width, so it holds roughly 15% less
 than `ats-single-column` at the same page count. A plan tuned for the
 single-column template usually needs one bullet removed here.
+
+Spelling URLs out costs height that a `Demo` label did not — one extra line per
+project, plus one for a credential URL. `\cvlinks` and `\cvplain` are set at
+`\footnotesize` to pay part of that back; the rest comes out of the plan.

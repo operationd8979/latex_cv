@@ -28,8 +28,15 @@ Skills are keyed by their exact name (unique within `skills.md`), not by ID.
 ## Field conventions
 
 - **Dates** use `YYYY-MM` in separate `Start:` / `End:` fields. `End: present`
-  for anything ongoing. No free-text dates — the renderer formats them.
+  for anything ongoing. No free-text dates — the renderer formats them. This
+  covers `projects.md` as well as `experience.md`: a project used to carry a
+  single `Month:`, which says when it was touched but not how long it ran, and
+  that is what a reader weighs it by. `parse_profile.py --check` fails a
+  project without both. A legacy `Month:`/`Year:` still renders, as one date.
 - **URLs** are absolute and include `https://`. Never store a bare domain.
+  The CV prints them in full, so what is stored here is what a person reads off
+  a printed page and types into a browser — a repo URL that only works through
+  a GitHub rename redirect should be replaced with the name it redirects to.
 - **Tech** lists concrete, nameable technologies only, comma-separated.
 - **Metrics** holds quantified outcomes. `none recorded` is an honest value;
   an invented number is not.
@@ -83,8 +90,8 @@ These are gaps that block a stronger CV. A generator may not fill them in.
    `EXP-VILIHA`. Decide how to account for it factually.
 3. **Certification dates missing** for `CERT-AZ900` and `CERT-ENG-B1`; issuer
    and credential ID missing for `CERT-ENG-B1`. Without a credential URL there
-   is nothing for the CV's `Verify Credential` link to point at, so that
-   certification prints as plain text.
+   is no address for the CV's `Verify:` line to print, so that certification
+   appears as a bare claim a reader cannot check.
 4. **`unverified` skills**: Angular, .NET, Java, Bitbucket, Jira, GitHub Actions,
    GitHub Copilot, Codex. Either add evidence or accept that they are excluded
    from every generated CV.

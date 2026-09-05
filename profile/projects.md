@@ -1,18 +1,21 @@
 # Projects
 
-<!-- Months and metrics below were derived from the public repositories on
-     2026-09-04 (first-commit month; counts read from the committed source).
-     They are measured facts, not estimates. -->
+<!-- Start/End and metrics below were derived from the public repositories:
+     Start is the month of the first commit on the default branch, End the
+     month of the last, read from the GitHub API on 2026-09-05; counts were
+     read from the committed source on 2026-09-04. They are measured facts,
+     not estimates. Where Start and End are the same month the work was
+     done inside that month - that is what the repository records. -->
 
 ## PRJ-SHOPEE-QA — Shopee UI Test Automation
 
 - **Category:** Personal / portfolio
 - **Role:** Test Automation Engineer
-- **Year:** 2026
-- **Month:** 2026-07
+- **Start:** 2026-07
+- **End:** 2026-07
 - **Tech:** Playwright, Playwright Test, TypeScript, Node.js, Page Object Model (POM), fixtures, HTML + JUnit reporters
 - **Demo:** https://drive.google.com/file/d/1xEd1TGLR-qQI-rIlX9Uxb1QKpmFzpfDZ/view?usp=sharing
-- **Repo:** https://github.com/hangnguyen118/agentic-test-framework-playwright-ai
+- **Repo:** https://github.com/hangnguyen118/Shopee-UI-Test-Automation
 - **Metrics:** 21 automated test cases across 5 test groups; 4 browser and
   device targets (Chromium, Firefox, WebKit, Pixel 7); fully parallel execution
   with 2 retries and 2 workers on CI; 3 report formats (list, HTML, JUnit XML)
@@ -32,8 +35,8 @@
 
 - **Category:** Personal / portfolio
 - **Role:** Frontend Developer & Testing
-- **Year:** 2026
-- **Month:** 2026-06
+- **Start:** 2026-06
+- **End:** 2026-06
 - **Tech:** React.js, TypeScript, Vite, Tailwind CSS, AI bot, Claude, Claude Code, Playwright MCP, Spec-Driven Development
 - **Demo:** https://browsermind-profile.vercel.app
 - **Repo:** https://github.com/hangnguyen118/browsermind-profile
@@ -51,8 +54,8 @@
 
 - **Category:** Personal / portfolio
 - **Role:** Full-stack Developer
-- **Year:** 2026
-- **Month:** 2026-03
+- **Start:** 2026-03
+- **End:** 2026-06
 - **Tech:** React.js, TypeScript, Node.js, OpenAI API, ElevenLabs
 - **Repo:** https://github.com/hangnguyen118/Esme-Chatbot
 - **Metrics:** Separate Node.js backend and React frontend; 4 backend service
@@ -71,8 +74,8 @@
 
 - **Category:** Personal / hobby
 - **Role:** Game Developer
-- **Year:** 2026
-- **Month:** 2026-03
+- **Start:** 2026-03
+- **End:** 2026-06
 - **Tech:** Cocos Creator, JavaScript, TypeScript
 - **Demo:** https://fruit-catcher-cc2d.vercel.app
 - **Repo:** https://github.com/hangnguyen118/fruit-catcher-cc2d
@@ -89,8 +92,8 @@
 
 - **Category:** Personal / hobby
 - **Role:** Game Developer
-- **Year:** 2026
-- **Month:** 2026-03
+- **Start:** 2026-03
+- **End:** 2026-06
 - **Tech:** React.js, TypeScript, JavaScript, Vite, HTML5, CSS3
 - **Demo:** https://flip-card-game-seven.vercel.app
 - **Repo:** https://github.com/hangnguyen118/flip-card-game

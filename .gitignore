@@ -15,5 +15,5 @@ node_modules/
 __pycache__/
 *.pyc
 
-# Inspection renders, not part of the pipeline
-applications/*/*.png
+# Output files
+applications

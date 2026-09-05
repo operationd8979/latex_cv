@@ -18,17 +18,25 @@ section is omitted. Additional sections, such as Languages, follow Project.
 Headings may still be customized through the plan's `heading` field.
 
 Education retains the degree, institution, graduation date, location, GPA and
-classification. Certifications retain issuer/date when known and the credential
-verification link. Jobs retain title, employer, dates, location, employment type
-when recorded, and selected bullets.
+classification. Certifications retain issuer/date when known, and end in the
+credential's verification address written out in full after `Verify:`. Jobs
+retain title, employer, dates, location, employment type when recorded, and
+selected bullets.
 
-Projects always show both recorded links in this template, including when an
-older plan selects only `repo`. The clickable labels are **GitHub** and **Demo**;
-the complete original URLs are stored in the PDF links. Role appears on its own
-labelled line. `show_tech` still controls the tech stack. Missing links or roles
-are omitted, with no placeholder or fabricated value. In the current profile,
-Esme Chatbot has no demo URL; the example uses BrowserMind and Shopee UI Test
-Automation, which each have both destinations.
+Projects are dated by a range — `Start:` to `End:` from the profile — like every
+other entry on the page, and show every destination they record. Each address
+gets its own line, labelled **Demo:** or **GitHub:**, with the whole URL as the
+visible text rather than a one-word label over a hidden link: printed, a label
+tells the reader a demo exists and gives them no way to reach it. Role appears
+on its own labelled line. `show_tech` still controls the tech stack. Missing
+links or roles are omitted, with no placeholder or fabricated value. In the
+current profile, Esme Chatbot has no demo URL; the example uses BrowserMind and
+Shopee UI Test Automation, which each have both destinations.
+
+A spelled-out URL costs height a label did not — two lines per project, and a
+second line for the Azure credential. `\cvlinks` is set at `\footnotesize`,
+`\cvplain` at `\small`, and the leading and section spacing are a little
+tighter than they were, which is what keeps `example-plan.json` on one page.
 
 ## Markers
 
@@ -58,7 +66,7 @@ cropping is performed by LaTeX without changing the source image.
 
 The optional `\cvlocation{text}` macro moves a job's location and employment
 type below its headline, leaving the date next to the title. The optional
-`\cvprojectrole{role}` macro opts into labelled project roles and both links.
+`\cvprojectrole{role}` macro opts into labelled project roles.
 These options are detected by the shared renderer for named-section templates.
 
 Fonts and LaTeX packages come from the Tectonic bundle. Text remains selectable,

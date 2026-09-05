@@ -219,7 +219,11 @@ def check_profile(profile: dict) -> list[str]:
     if not any(s["status"] == "approved" for s in profile["summaries"]):
         problems.append("summary.md has no variant with status 'approved'")
 
-    for entry in profile["experience"]:
+    # Employment and projects are dated the same way. A project used to carry
+    # a single `Month:`, which tells a reader when it was touched but not how
+    # long it ran — the one thing they compare it against a job by. Both now
+    # take a range.
+    for entry in profile["experience"] + profile["projects"]:
         for field in ("start", "end"):
             value = entry.get(field, "")
             if not DATE_RE.match(value):

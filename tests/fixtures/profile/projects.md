@@ -4,8 +4,8 @@
 
 - **Category:** Personal
 - **Role:** Developer
-- **Year:** 2025
-- **Month:** 2025-04
+- **Start:** 2025-04
+- **End:** 2025-09
 - **Tech:** Python, C++
 - **Repo:** https://github.com/alexsample/widget_tool
 - **Metrics:** 42 tests

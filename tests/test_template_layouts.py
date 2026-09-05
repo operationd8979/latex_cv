@@ -39,26 +39,38 @@ class BlueBannerLayout(unittest.TestCase):
         self.assertEqual(re.findall(r"\\cvsection\{([^}]+)\}", doc), [
             "Summary", "Education", "Skills", "Certifications", "Experience", "Projects",
         ])
-        for fact in ("Test University", "GPA 3.9 / 4.0", "Verify Credential",
-                     r"\cvskill{Core}{C\#, Python}", "Acme", "Apr 2025"):
+        for fact in ("Test University", "GPA 3.9 / 4.0", "Verify: ",
+                     r"\cvskill{Core}{C\#, Python}", "Acme",
+                     # A project is dated by a range, like every other entry.
+                     r"\cvitem{\textbf{Widget\_Tool}}{Apr 2025 – Sep 2025}"):
             self.assertIn(fact, doc)
         self.assertEqual(self.plan, before)
 
     def test_project_role_and_both_real_destinations_are_visible(self):
         doc = self.render()
         self.assertIn(r"\cvprojectrole{Developer}", doc)
-        self.assertIn(r"\href{https://github.com/alexsample/widget_tool}{GitHub}", doc)
-        self.assertIn(r"\href{https://example.test/widget?x=1&y=2}{Demo}", doc)
         self.assertIn(r"\cvmeta{Python, C++}", doc)
+        # The address is the visible text, not a "GitHub"/"Demo" label whose
+        # target survives only as a PDF link annotation. Printed, a label is a
+        # dead end, so what is typeset has to be the whole URL.
+        self.assertIn(
+            r"\cvlinks{GitHub: \href{https://github.com/alexsample/widget_tool}"
+            r"{https://\allowbreak{}github.\allowbreak{}com/\allowbreak{}alexsample"
+            r"/\allowbreak{}widget\_\allowbreak{}tool}}",
+            doc,
+        )
+        # `//` is never split down the middle, and `&`/`_` stay escaped in the
+        # visible text while the href argument keeps them raw.
+        self.assertNotIn(r"https:/\allowbreak{}/", doc)
 
     def test_missing_optional_project_fields_are_not_invented(self):
         project = self.profile["projects"][0]
         project.pop("demo")
         project.pop("role")
         doc = self.render()
-        self.assertNotIn("{Demo}", doc)
+        self.assertNotIn("Demo: ", doc)
         self.assertNotIn(r"\cvprojectrole{", doc)
-        self.assertIn("{GitHub}", doc)
+        self.assertIn("GitHub: ", doc)
 
     def test_show_tech_false_is_respected(self):
         self.plan["sections"][0]["entries"][0]["show_tech"] = False
@@ -93,9 +105,35 @@ class BlueBannerLayout(unittest.TestCase):
                 values = render_marked(self.profile, self.plan, template, None)
                 body = values["%%BODY%%"]
                 self.assertLess(body.index(r"\cvsection{Projects}"), body.index(r"\cvsection{Experience}"))
-                self.assertNotIn("{Demo}", body)
+                # The plan names only `repo`, so the demo stays off the page —
+                # an explicit narrowing still wins over "show what exists".
+                self.assertNotIn("Demo: ", body)
+                self.assertIn(r"\cvlinks{GitHub: \href{https://github.com/alexsample/widget_tool}", body)
                 self.assertNotIn(r"\cvprojectrole{", body)
                 self.assertIn("Developer", body)
+
+    def test_a_silent_plan_shows_every_destination_the_project_records(self):
+        self.plan["sections"][0]["entries"][0].pop("links", None)
+        for name in ("ats-single-column", "two-column-photo", "blue-banner-photo"):
+            with self.subTest(template=name):
+                template = (ROOT / f"templates/{name}/template.tex").read_text(encoding="utf-8")
+                doc = substitute_markers(
+                    template, render_marked(self.profile, self.plan, template, None)
+                )
+                self.assertIn(
+                    r"\cvlinks{Demo: \href{https://example.test/widget?x=1&y=2}"
+                    r"{https://\allowbreak{}example.\allowbreak{}test"
+                    r"/\allowbreak{}widget?\allowbreak{}x=\allowbreak{}1"
+                    r"\&\allowbreak{}y=\allowbreak{}2}}",
+                    doc,
+                )
+                self.assertIn("GitHub: ", doc)
+
+    def test_a_project_without_start_and_end_still_renders_its_legacy_month(self):
+        project = self.profile["projects"][0]
+        project.pop("start"), project.pop("end")
+        project["month"] = "2025-04"
+        self.assertIn(r"{Apr 2025}", self.render())
 
 
 if __name__ == "__main__":

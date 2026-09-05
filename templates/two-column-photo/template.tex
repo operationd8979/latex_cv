@@ -106,18 +106,33 @@
 % \cvitem{headline}{metadata} — flush left, metadata on its own line, so PDF
 % text extraction cannot detach a date from its entry.
 \newcommand{\cvitem}[2]{%
-  \vspace{0.3em}%
+  \vspace{0.24em}%
   #1\par
   {\small\color{muted}#2}\par
 }
-\newcommand{\cvitemplain}[1]{\vspace{0.3em}#1\par}
+\newcommand{\cvitemplain}[1]{\vspace{0.24em}#1\par}
 
 % \cvsubline{text} — one continuation line under an entry headline. One is
 % the limit; see the note on \cvsubline in ats-single-column/template.tex.
 \newcommand{\cvsubline}[1]{#1\par}
 
 \newcommand{\cvmeta}[1]{{\small\itshape #1}\par}
-\newcommand{\cvlinks}[1]{{\small\color{muted}#1}\par\vspace{0.1em}}
+
+% One labelled project URL per line, printed in full so a paper copy keeps a
+% reachable address. The main column is narrower than a full page, so a repo
+% or demo URL routinely wraps; the hanging indent holds the continuation under
+% the address rather than flush with the label, where it would read as a
+% separate field.
+%
+% \footnotesize, a step below everything around it: two spelled-out addresses
+% per project is where this layout's page budget went, and a URL is the one
+% thing on a CV nobody reads through — it is looked at once, by someone who
+% has already decided to follow it.
+% No trailing gap: the links now stack, one address per line, and a space
+% between them only makes two lines of the same field look like two fields.
+\newcommand{\cvlinks}[1]{%
+  {\footnotesize\color{muted}\hangindent=1.2em\hangafter=1 #1\par}%
+}
 
 \newlist{cvbullets}{itemize}{1}
 \setlist[cvbullets]{
@@ -135,10 +150,24 @@
 
 % Narrow-column form: label, then one item per line. Stacking keeps each
 % keyword whole when the PDF's text is extracted.
-\newcommand{\cvskilllabel}[1]{\vspace{0.3em}{\bfseries #1}\par\vspace{0.1em}}
+%
+% The gaps around a group label are tighter than they look like they should
+% be, and deliberately: the sidebar is the tall column, so it decides where
+% the page breaks. A six-group skill list spends more height on the space
+% around its labels than a spelled-out credential URL does on its own text,
+% and that space is the cheapest thing on the page to give back.
+\newcommand{\cvskilllabel}[1]{\vspace{0.22em}{\bfseries #1}\par\vspace{0.06em}}
 \newcommand{\cvskillitem}[1]{{\small #1}\par}
 
-\newcommand{\cvplain}[1]{\vspace{0.15em}#1\par}
+% Certifications land in the sidebar, where a full verification URL wraps over
+% several lines — a 118-character credential link is six of them at 5.9cm.
+% \footnotesize is what keeps that from costing the page: it fits half again
+% as many characters per line, and it keeps the longest unbreakable run (a
+% credential hash) inside the column. The hanging indent marks where one row
+% ends and the next begins.
+\newcommand{\cvplain}[1]{%
+  \vspace{0.15em}{\footnotesize\hangindent=0.9em\hangafter=1 #1\par}%
+}
 
 %%PDFMETA%%
 
