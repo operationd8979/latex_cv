@@ -11,7 +11,7 @@
 
 - **Category:** Personal / portfolio
 - **Role:** Test Automation Engineer
-- **Start:** 2026-07
+- **Start:** 2026-06
 - **End:** 2026-07
 - **Tech:** Playwright, Playwright Test, TypeScript, Node.js, Page Object Model (POM), fixtures, HTML + JUnit reporters
 - **Demo:** https://drive.google.com/file/d/1xEd1TGLR-qQI-rIlX9Uxb1QKpmFzpfDZ/view?usp=sharing
@@ -35,7 +35,7 @@
 
 - **Category:** Personal / portfolio
 - **Role:** Frontend Developer & Testing
-- **Start:** 2026-06
+- **Start:** 2026-05
 - **End:** 2026-06
 - **Tech:** React.js, TypeScript, Vite, Tailwind CSS, AI bot, Claude, Claude Code, Playwright MCP, Spec-Driven Development
 - **Demo:** https://browsermind-profile.vercel.app
@@ -54,8 +54,8 @@
 
 - **Category:** Personal / portfolio
 - **Role:** Full-stack Developer
-- **Start:** 2026-03
-- **End:** 2026-06
+- **Start:** 2026-04
+- **End:** 2026-05
 - **Tech:** React.js, TypeScript, Node.js, OpenAI API, ElevenLabs
 - **Repo:** https://github.com/hangnguyen118/Esme-Chatbot
 - **Metrics:** Separate Node.js backend and React frontend; 4 backend service
@@ -74,7 +74,7 @@
 
 - **Category:** Personal / hobby
 - **Role:** Game Developer
-- **Start:** 2026-03
+- **Start:** 2026-04
 - **End:** 2026-06
 - **Tech:** Cocos Creator, JavaScript, TypeScript
 - **Demo:** https://fruit-catcher-cc2d.vercel.app
@@ -92,7 +92,7 @@
 
 - **Category:** Personal / hobby
 - **Role:** Game Developer
-- **Start:** 2026-03
+- **Start:** 2026-04
 - **End:** 2026-06
 - **Tech:** React.js, TypeScript, JavaScript, Vite, HTML5, CSS3
 - **Demo:** https://flip-card-game-seven.vercel.app
