@@ -27,7 +27,7 @@ one. Never claim a CV is ready without a passing run.
 | Placeholders | A `%%MARKER%%` survived into the rendered text |
 | Section headings | A heading in `cv.tex` is unreadable in the PDF |
 | Contact details | Name, email or phone unreadable in the text layer |
-| Reading order | An entry's dates or location drifted past a section heading |
+| Reading order | An entry's dates or location drifted past a section heading or the next entry |
 | Missing glyphs | The font lacks a character the document uses |
 | Overfull boxes | *(warning)* a line exceeds the text block by more than 5pt |
 
@@ -43,11 +43,16 @@ shrink margins, reduce the font, or raise `--max-pages` to force a fit: the
 template's spacing is already tuned, and a cramped CV reads worse than a
 shorter one.
 
-**`entry '...': its 'Jan 2025' is separated from it by the 'Education'
-heading`** — this is the right-aligned-dates regression. PDF text extraction
-has pulled a right-hand column into its own block, so an ATS would attach that
-date to the wrong entry. It means the template has regressed to `\hfill`
-layout. Report it; do not disable the check.
+**`entry '...': its 'Jan 2025' is separated from it by ...`** — the
+right-margin-dates regression. Poppler groups a page into blocks before it
+reads them; something on the page has made it treat an entry as two columns, so
+it emitted the left side in full and the date landed later — past a section
+heading, or past the next entry, where an ATS would attach it to the wrong job.
+
+The usual cause is a second `\cvsubline` stacked under a `\cvitem`. One
+continuation line extracts in order and two do not, which is why the templates
+document a limit of one and fold anything extra onto that same line. Report it;
+do not disable the check.
 
 **`entry '...' is not readable in the PDF`** — the entry compiled but its text
 cannot be extracted. Usually a font or encoding problem. Report it.

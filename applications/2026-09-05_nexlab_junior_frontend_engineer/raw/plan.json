@@ -1,58 +1,336 @@
 {
-  "job": {"company": "Nexlab", "title": "Junior Frontend Engineer", "url": ""},
+  "job": {
+    "company": "Nexlab",
+    "title": "Junior Frontend Engineer",
+    "url": ""
+  },
   "template": "ats-single-column",
   "headline": "Frontend Developer",
-  "summary": {"source": "SUM-01", "text": "Frontend Developer and Information Technology graduate from Ho Chi Minh City University of Technology (HUTECH) with hands-on experience building responsive web and mobile applications using Next.js, React.js, and React Native."},
+  "summary": {
+    "source": "SUM-01",
+    "text": "Frontend Developer and Information Technology graduate from Ho Chi Minh City University of Technology (HUTECH) with hands-on experience building responsive web and mobile applications using Next.js, React.js, and React Native."
+  },
   "sections": [
-    {"type": "projects", "heading": "Projects", "entries": [
-      {"source": "PRJ-BROWSERMIND", "links": ["demo", "repo"], "show_tech": false, "bullets": [
-        {"source": ["PRJ-BROWSERMIND-01", "PRJ-BROWSERMIND-02"], "text": "Built a React/TypeScript portfolio with Spec-Driven Development and Claude Code; captured requirements in SPEC.md and developed 23 React components."},
-        {"source": ["PRJ-BROWSERMIND-04"], "text": "Used AI-powered development and testing workflows with Playwright MCP for automated validation."}
-      ]},
-      {"source": "PRJ-SHOPEE-QA", "links": ["repo"], "show_tech": false, "bullets": [
-        {"source": ["PRJ-SHOPEE-QA-01", "PRJ-SHOPEE-QA-02", "PRJ-SHOPEE-QA-05"], "text": "Built a Playwright/TypeScript framework with Page Object Model: 21 test cases across 4 browser and device targets, with traces and screenshots for debugging."}
-      ]}
-    ]},
-    {"type": "experience", "heading": "Experience", "entries": [
-      {"source": "EXP-VILIHA", "bullets": [
-        {"source": ["EXP-VILIHA-02", "EXP-VILIHA-03"], "text": "Translate detailed Figma designs into responsive, semantic frontend code and reusable components."},
-        {"source": ["EXP-VILIHA-04"], "text": "Develop with Next.js App Router, Server Components, TanStack Query, Tailwind CSS, and shadcn/ui."},
-        {"source": ["EXP-VILIHA-05"], "text": "Collaborate in Agile/Scrum and communicate in English with project stakeholders."}
-      ]},
-      {"source": "EXP-CHIPNOVA", "bullets": [
-        {"source": ["EXP-CHIPNOVA-01", "EXP-CHIPNOVA-04"], "text": "Clarified requirements, designed user experiences, and shipped frontend features across web and mobile."},
-        {"source": ["EXP-CHIPNOVA-03"], "text": "Wrote Playwright end-to-end tests to verify product quality."}
-      ]},
-      {"source": "EXP-VJP", "bullets": [
-        {"source": ["EXP-VJP-01", "EXP-VJP-02"], "text": "Developed web interfaces, integrated APIs, and collaborated on feature development and testing."}
-      ]}
-    ]},
-    {"type": "skills", "heading": "Technical Skills", "groups": [
-      {"label": "Frontend", "items": ["React.js", "TypeScript", "JavaScript", "HTML5", "CSS3", "Responsive design"]},
-      {"label": "AI workflows", "items": ["Claude / Claude Code", "Spec-Driven Development", "Playwright MCP"]},
-      {"label": "Data & delivery", "items": ["TanStack Query", "REST API integration", "Git", "Vercel"]}
-    ]},
-    {"type": "education", "heading": "Education", "entries": [{"source": "EDU-HUTECH"}]},
-    {"type": "certifications", "heading": "Certifications", "entries": [{"source": "CERT-AZ900"}, {"source": "CERT-ENG-B1"}]}
+    {
+      "type": "education",
+      "heading": "Education",
+      "entries": [
+        {
+          "source": "EDU-HUTECH"
+        }
+      ]
+    },
+    {
+      "type": "skills",
+      "heading": "Technical Skills",
+      "groups": [
+        {
+          "label": "Frontend",
+          "items": [
+            "React.js",
+            "TypeScript",
+            "JavaScript",
+            "HTML5",
+            "CSS3",
+            "Responsive design"
+          ]
+        },
+        {
+          "label": "AI workflows",
+          "items": [
+            "Claude / Claude Code",
+            "Spec-Driven Development",
+            "Playwright MCP"
+          ]
+        },
+        {
+          "label": "Data & delivery",
+          "items": [
+            "TanStack Query",
+            "REST API integration",
+            "Git",
+            "Vercel"
+          ]
+        }
+      ]
+    },
+    {
+      "type": "certifications",
+      "heading": "Certifications",
+      "entries": [
+        {
+          "source": "CERT-AZ900"
+        }
+      ]
+    },
+    {
+      "type": "languages",
+      "heading": "Languages",
+      "entries": [
+        {
+          "source": "LANG-EN"
+        },
+        {
+          "source": "LANG-VI"
+        }
+      ]
+    },
+    {
+      "type": "experience",
+      "heading": "Experience",
+      "entries": [
+        {
+          "source": "EXP-VILIHA",
+          "bullets": [
+            {
+              "source": [
+                "EXP-VILIHA-02",
+                "EXP-VILIHA-03"
+              ],
+              "text": "Translate detailed Figma designs into responsive, semantic frontend code and reusable components."
+            },
+            {
+              "source": [
+                "EXP-VILIHA-04"
+              ],
+              "text": "Develop with Next.js App Router, Server Components, TanStack Query, Tailwind CSS, and shadcn/ui."
+            },
+            {
+              "source": [
+                "EXP-VILIHA-05"
+              ],
+              "text": "Collaborate in Agile/Scrum and communicate in English with project stakeholders."
+            }
+          ]
+        },
+        {
+          "source": "EXP-CHIPNOVA",
+          "bullets": [
+            {
+              "source": [
+                "EXP-CHIPNOVA-01",
+                "EXP-CHIPNOVA-04"
+              ],
+              "text": "Clarified requirements, designed user experiences, and shipped frontend features across web and mobile."
+            },
+            {
+              "source": [
+                "EXP-CHIPNOVA-03"
+              ],
+              "text": "Wrote Playwright end-to-end tests to verify product quality."
+            }
+          ]
+        },
+        {
+          "source": "EXP-VJP",
+          "bullets": [
+            {
+              "source": [
+                "EXP-VJP-01",
+                "EXP-VJP-02"
+              ],
+              "text": "Developed web interfaces, integrated APIs, and collaborated on feature development and testing."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "projects",
+      "heading": "Projects",
+      "entries": [
+        {
+          "source": "PRJ-BROWSERMIND",
+          "links": [
+            "demo",
+            "repo"
+          ],
+          "show_tech": false,
+          "bullets": [
+            {
+              "source": [
+                "PRJ-BROWSERMIND-01",
+                "PRJ-BROWSERMIND-02"
+              ],
+              "text": "Built a React/TypeScript portfolio with Spec-Driven Development and Claude Code; captured requirements in SPEC.md and developed 23 React components."
+            },
+            {
+              "source": [
+                "PRJ-BROWSERMIND-04"
+              ],
+              "text": "Used AI-powered development and testing workflows with Playwright MCP for automated validation."
+            }
+          ]
+        },
+        {
+          "source": "PRJ-SHOPEE-QA",
+          "links": [
+            "repo"
+          ],
+          "show_tech": false,
+          "bullets": [
+            {
+              "source": [
+                "PRJ-SHOPEE-QA-01",
+                "PRJ-SHOPEE-QA-02",
+                "PRJ-SHOPEE-QA-05"
+              ],
+              "text": "Built a Playwright/TypeScript framework with Page Object Model: 21 test cases across 4 browser and device targets, with traces and screenshots for debugging."
+            }
+          ]
+        }
+      ]
+    }
   ],
   "requirements": [
-    {"requirement": "Junior frontend experience and deployed project links", "status": "met", "evidence": ["EXP-VILIHA", "EXP-CHIPNOVA", "EXP-VJP", "PRJ-BROWSERMIND"], "note": "Under two years of recorded frontend experience; public portfolio demo and repository available. Real-user counts are not recorded."},
-    {"requirement": "AI coding agents and Spec-Driven Development", "status": "met", "evidence": ["PRJ-BROWSERMIND-01", "PRJ-BROWSERMIND-02", "PRJ-BROWSERMIND-04"], "note": "Demonstrated in a personal project; daily use in paid work is not documented."},
-    {"requirement": "Constrained agent instructions, context management, incremental screen building and shared prompt rules", "status": "partial", "evidence": ["PRJ-BROWSERMIND-01", "PRJ-BROWSERMIND-02"], "note": "Committed specification and agent use supported; specific prompting patterns, token rules and correction feedback loops are not documented."},
-    {"requirement": "Semantic HTML, CSS layout and modern JavaScript", "status": "partial", "evidence": ["EXP-VILIHA-02", "EXP-CHIPNOVA", "PRJ-FLIPCARD", "PRJ-ESME-05"], "note": "Responsive semantic code and asynchronous integration supported; flex/grid and scope knowledge are not separately demonstrated."},
-    {"requirement": "React, TypeScript and Next.js", "status": "met", "evidence": ["EXP-VILIHA", "EXP-VILIHA-04", "PRJ-FLIPCARD-02"], "note": "Production stack and state management supported; effect-dependency and re-render analysis are not explicitly recorded."},
-    {"requirement": "Figma implementation, reusable components and visual accuracy", "status": "partial", "evidence": ["EXP-VILIHA-02", "EXP-VILIHA-03"], "note": "Figma-to-code work supported; pixel-level audits and design-token system ownership are not recorded."},
-    {"requirement": "Specific example catching a plausible but incorrect AI-generated interface", "status": "missing", "evidence": [], "note": "Add a factual example with the defect, verification method and correction. Loading/empty/error states, Vietnamese overflow, 360px and keyboard/contrast audits are not documented."},
-    {"requirement": "API integration, asynchronous states and client caching", "status": "partial", "evidence": ["EXP-VJP-01", "PRJ-ESME-05", "EXP-VILIHA-04"], "note": "API/asynchronous work and TanStack Query supported; explicit cache strategy and error-state ownership not recorded."},
-    {"requirement": "User-flow testing and debugging", "status": "met", "evidence": ["EXP-CHIPNOVA-03", "PRJ-SHOPEE-QA-01", "PRJ-SHOPEE-QA-05", "PRJ-SHOPEE-QA-07"]},
-    {"requirement": "Measured bundle size and Core Web Vitals", "status": "missing", "evidence": [], "note": "No LCP, INP, CLS or bundle measurements; employer delivery metrics also absent."},
-    {"requirement": "Client-data handling, incident response and RCA", "status": "missing", "evidence": []},
-    {"requirement": "English technical reading and conversation", "status": "partial", "evidence": ["CERT-ENG-B1", "EXP-VILIHA-05"], "note": "B1 and workplace English communication supported; fluent technical reading is not established."},
-    {"requirement": "Growth mindset and review discipline", "status": "partial", "evidence": ["EXP-VILIHA-05"], "note": "Team collaboration supported; asking early and full PR comprehension are not separately documented."},
-    {"requirement": "SSR versus CSR understanding", "status": "partial", "evidence": ["EXP-VILIHA-04", "PRJ-BROWSERMIND-03"], "note": "Server Components and client-side architecture supported; explicit architectural comparison not recorded."},
-    {"requirement": "Headless CMS, GraphQL, Astro, WCAG and SEO", "status": "missing", "evidence": []},
-    {"requirement": "CI/CD pipeline setup", "status": "missing", "evidence": [], "note": "GitHub Actions is unverified; CI-aware Playwright configuration does not establish a pipeline."},
-    {"requirement": "Open-source contributions or public technical writing", "status": "partial", "evidence": ["PRJ-BROWSERMIND", "PRJ-SHOPEE-QA"], "note": "Public personal repositories exist; external contributions and technical writing are not documented."},
-    {"requirement": "Withheld unverified skills", "status": "missing", "evidence": [], "note": "Excluded Angular, .NET, Java, Bitbucket, Jira, GitHub Actions (CI), GitHub Copilot and Codex; none has supporting profile evidence."}
+    {
+      "requirement": "Junior frontend experience and deployed project links",
+      "status": "met",
+      "evidence": [
+        "EXP-VILIHA",
+        "EXP-CHIPNOVA",
+        "EXP-VJP",
+        "PRJ-BROWSERMIND"
+      ],
+      "note": "Under two years of recorded frontend experience; public portfolio demo and repository available. Real-user counts are not recorded."
+    },
+    {
+      "requirement": "AI coding agents and Spec-Driven Development",
+      "status": "met",
+      "evidence": [
+        "PRJ-BROWSERMIND-01",
+        "PRJ-BROWSERMIND-02",
+        "PRJ-BROWSERMIND-04"
+      ],
+      "note": "Demonstrated in a personal project; daily use in paid work is not documented."
+    },
+    {
+      "requirement": "Constrained agent instructions, context management, incremental screen building and shared prompt rules",
+      "status": "partial",
+      "evidence": [
+        "PRJ-BROWSERMIND-01",
+        "PRJ-BROWSERMIND-02"
+      ],
+      "note": "Committed specification and agent use supported; specific prompting patterns, token rules and correction feedback loops are not documented."
+    },
+    {
+      "requirement": "Semantic HTML, CSS layout and modern JavaScript",
+      "status": "partial",
+      "evidence": [
+        "EXP-VILIHA-02",
+        "EXP-CHIPNOVA",
+        "PRJ-FLIPCARD",
+        "PRJ-ESME-05"
+      ],
+      "note": "Responsive semantic code and asynchronous integration supported; flex/grid and scope knowledge are not separately demonstrated."
+    },
+    {
+      "requirement": "React, TypeScript and Next.js",
+      "status": "met",
+      "evidence": [
+        "EXP-VILIHA",
+        "EXP-VILIHA-04",
+        "PRJ-FLIPCARD-02"
+      ],
+      "note": "Production stack and state management supported; effect-dependency and re-render analysis are not explicitly recorded."
+    },
+    {
+      "requirement": "Figma implementation, reusable components and visual accuracy",
+      "status": "partial",
+      "evidence": [
+        "EXP-VILIHA-02",
+        "EXP-VILIHA-03"
+      ],
+      "note": "Figma-to-code work supported; pixel-level audits and design-token system ownership are not recorded."
+    },
+    {
+      "requirement": "Specific example catching a plausible but incorrect AI-generated interface",
+      "status": "missing",
+      "evidence": [],
+      "note": "Add a factual example with the defect, verification method and correction. Loading/empty/error states, Vietnamese overflow, 360px and keyboard/contrast audits are not documented."
+    },
+    {
+      "requirement": "API integration, asynchronous states and client caching",
+      "status": "partial",
+      "evidence": [
+        "EXP-VJP-01",
+        "PRJ-ESME-05",
+        "EXP-VILIHA-04"
+      ],
+      "note": "API/asynchronous work and TanStack Query supported; explicit cache strategy and error-state ownership not recorded."
+    },
+    {
+      "requirement": "User-flow testing and debugging",
+      "status": "met",
+      "evidence": [
+        "EXP-CHIPNOVA-03",
+        "PRJ-SHOPEE-QA-01",
+        "PRJ-SHOPEE-QA-05",
+        "PRJ-SHOPEE-QA-07"
+      ]
+    },
+    {
+      "requirement": "Measured bundle size and Core Web Vitals",
+      "status": "missing",
+      "evidence": [],
+      "note": "No LCP, INP, CLS or bundle measurements; employer delivery metrics also absent."
+    },
+    {
+      "requirement": "Client-data handling, incident response and RCA",
+      "status": "missing",
+      "evidence": []
+    },
+    {
+      "requirement": "English technical reading and conversation",
+      "status": "partial",
+      "evidence": [
+        "CERT-ENG-B1",
+        "EXP-VILIHA-05"
+      ],
+      "note": "B1 and workplace English communication supported; fluent technical reading is not established."
+    },
+    {
+      "requirement": "Growth mindset and review discipline",
+      "status": "partial",
+      "evidence": [
+        "EXP-VILIHA-05"
+      ],
+      "note": "Team collaboration supported; asking early and full PR comprehension are not separately documented."
+    },
+    {
+      "requirement": "SSR versus CSR understanding",
+      "status": "partial",
+      "evidence": [
+        "EXP-VILIHA-04",
+        "PRJ-BROWSERMIND-03"
+      ],
+      "note": "Server Components and client-side architecture supported; explicit architectural comparison not recorded."
+    },
+    {
+      "requirement": "Headless CMS, GraphQL, Astro, WCAG and SEO",
+      "status": "missing",
+      "evidence": []
+    },
+    {
+      "requirement": "CI/CD pipeline setup",
+      "status": "missing",
+      "evidence": [],
+      "note": "GitHub Actions is unverified; CI-aware Playwright configuration does not establish a pipeline."
+    },
+    {
+      "requirement": "Open-source contributions or public technical writing",
+      "status": "partial",
+      "evidence": [
+        "PRJ-BROWSERMIND",
+        "PRJ-SHOPEE-QA"
+      ],
+      "note": "Public personal repositories exist; external contributions and technical writing are not documented."
+    },
+    {
+      "requirement": "Withheld unverified skills",
+      "status": "missing",
+      "evidence": [],
+      "note": "Excluded Angular, .NET, Java, Bitbucket, Jira, GitHub Actions (CI), GitHub Copilot and Codex; none has supporting profile evidence."
+    }
   ]
 }

@@ -32,11 +32,25 @@
 \usepackage{graphicx}
 \usepackage{paracol}
 \usepackage{microtype}
-\usepackage[hidelinks]{hyperref}
+\usepackage[normalem]{ulem}
+\usepackage{hyperref}
 
 \definecolor{rulegray}{gray}{0.60}
 \definecolor{muted}{gray}{0.30}
 \definecolor{accent}{HTML}{1F4E79}
+\definecolor{linkblue}{HTML}{0B57D0}
+
+% Blue and underlined, matching ats-single-column: on screen the underline is
+% the only signal that a line of text is clickable, and print keeps the rule
+% after it loses the colour.
+\hypersetup{
+  colorlinks = true,
+  urlcolor   = linkblue,
+  linkcolor  = linkblue,
+  breaklinks = true,
+}
+\let\cvhref\href
+\renewcommand{\href}[2]{\cvhref{#1}{\uline{#2}}}
 
 \pagestyle{empty}
 \setlength{\parindent}{0pt}
@@ -97,6 +111,10 @@
   {\small\color{muted}#2}\par
 }
 \newcommand{\cvitemplain}[1]{\vspace{0.3em}#1\par}
+
+% \cvsubline{text} — one continuation line under an entry headline. One is
+% the limit; see the note on \cvsubline in ats-single-column/template.tex.
+\newcommand{\cvsubline}[1]{#1\par}
 
 \newcommand{\cvmeta}[1]{{\small\itshape #1}\par}
 \newcommand{\cvlinks}[1]{{\small\color{muted}#1}\par\vspace{0.1em}}

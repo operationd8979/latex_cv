@@ -1,4 +1,6 @@
-% ats-single-column — matching cover letter.
+% blue-banner-photo — matching cover letter.
+%
+% Uses the CV's blue headings and orange rule for a simple prose layout.
 % The renderer substitutes %%PDFMETA%%, %%HEADER%% and %%BODY%%.
 
 \documentclass[11pt,a4paper]{article}
@@ -14,22 +16,11 @@
 ]
 \usepackage{xcolor}
 \usepackage{microtype}
-\usepackage[normalem]{ulem}
-\usepackage{hyperref}
+\usepackage[hidelinks]{hyperref}
 
-\definecolor{rulegray}{gray}{0.60}
+\definecolor{rulegray}{HTML}{F49B45}
+\definecolor{accent}{HTML}{124C80}
 \definecolor{muted}{gray}{0.30}
-\definecolor{linkblue}{HTML}{0B57D0}
-
-% Same treatment as the CV this letter travels with.
-\hypersetup{
-  colorlinks = true,
-  urlcolor   = linkblue,
-  linkcolor  = linkblue,
-  breaklinks = true,
-}
-\let\cvhref\href
-\renewcommand{\href}[2]{\cvhref{#1}{\uline{#2}}}
 
 \pagestyle{empty}
 \setlength{\parindent}{0pt}
@@ -45,7 +36,7 @@
 \exhyphenpenalty=10000
 \sloppy
 
-\newcommand{\clname}[1]{{\fontsize{17}{19}\selectfont\bfseries #1}\par\vspace{0.2em}}
+\newcommand{\clname}[1]{{\fontsize{20}{23}\selectfont\bfseries\color{accent} #1}\par\vspace{0.2em}}
 \newcommand{\clcontact}[1]{{\small\color{muted}#1}\par\vspace{0.3em}%
   {\color{rulegray}\rule{\linewidth}{0.5pt}}\par}
 \newcommand{\cldate}[1]{{\small\color{muted}#1}\par}

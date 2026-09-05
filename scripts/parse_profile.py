@@ -17,7 +17,7 @@ import re
 import sys
 from pathlib import Path
 
-ENTRY_PREFIXES = ("EXP", "PRJ", "EDU", "CERT", "SUM")
+ENTRY_PREFIXES = ("EXP", "PRJ", "EDU", "CERT", "LANG", "SUM")
 TIERS = ("professional", "working", "familiar", "unverified")
 
 COMMENT_RE = re.compile(r"<!--.*?-->", re.DOTALL)
@@ -44,8 +44,10 @@ def _strip_comments(text: str) -> str:
     return COMMENT_RE.sub("", text)
 
 
-def _read(path: Path) -> list[str]:
+def _read(path: Path, optional: bool = False) -> list[str]:
     if not path.exists():
+        if optional:
+            return []
         raise ProfileError(f"missing profile file: {path.name}")
     return _strip_comments(path.read_text(encoding="utf-8")).splitlines()
 
@@ -95,8 +97,9 @@ def _parse_bullets(lines: list[str], start: int, stop: int, parent: str) -> list
     return bullets
 
 
-def _parse_entry_file(path: Path, kind: str) -> list[dict]:
-    lines = _read(path)
+def _parse_entry_file(path: Path, kind: str, optional: bool = False) -> list[dict]:
+    """`optional` lets a profile predating a file still load, with no entries."""
+    lines = _read(path, optional=optional)
     entries = []
     for eid, title, start, stop in _split_entries(lines):
         ev_at = next(
@@ -176,6 +179,9 @@ def load_profile(root: Path) -> dict:
         "projects": _parse_entry_file(root / "projects.md", "project"),
         "education": _parse_entry_file(root / "education.md", "education"),
         "certifications": _parse_entry_file(root / "certifications.md", "certification"),
+        # Optional: a profile written before languages.md existed still loads,
+        # and simply renders no Languages section.
+        "languages": _parse_entry_file(root / "languages.md", "language", optional=True),
         "skills": _parse_skills(root / "skills.md"),
     }
     profile["index"] = _build_index(profile)
@@ -193,7 +199,7 @@ def _build_index(profile: dict) -> dict[str, str]:
 
     for s in profile["summaries"]:
         add(s["id"], "summary")
-    for group in ("experience", "projects", "education", "certifications"):
+    for group in ("experience", "projects", "education", "certifications", "languages"):
         for entry in profile[group]:
             add(entry["id"], entry["kind"])
             for b in entry.get("bullets", []):
@@ -222,6 +228,15 @@ def check_profile(profile: dict) -> list[str]:
                 )
         if not entry.get("bullets"):
             problems.append(f"{entry['id']}: has no evidence bullets")
+
+    for lang in profile["languages"]:
+        if not lang.get("proficiency"):
+            problems.append(f"{lang['id']}: has no proficiency")
+        cert = lang.get("certification", "")
+        if cert and cert not in index:
+            problems.append(
+                f"{lang['id']}: certification {cert!r} resolves to nothing"
+            )
 
     for skill in profile["skills"]:
         if skill["tier"] not in TIERS:

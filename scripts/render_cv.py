@@ -169,7 +169,7 @@ def _resolve(profile: dict, source: str, expect: str | None = None) -> dict:
         raise PlanError(
             f"source {source!r} is a {index[source]}, but a {expect} was expected"
         )
-    for group in ("experience", "projects", "education", "certifications"):
+    for group in ("experience", "projects", "education", "certifications", "languages"):
         for entry in profile[group]:
             if entry["id"] == source:
                 return entry
@@ -225,10 +225,13 @@ def _check_skills(profile: dict, groups: list[dict]) -> None:
 # --------------------------------------------------------------------------
 
 def cv_item(headline: str, meta_parts: list[str]) -> str:
-    """One entry: headline line plus a flush-left metadata line.
+    r"""One entry: a headline, with its dates and location at the right margin.
 
     Metadata is joined here rather than in the template so an absent location
-    or date leaves no dangling separator.
+    or date leaves no dangling separator. Where the pair sits on the page is
+    the template's business - \cvitem puts it on the same line as the
+    headline, which is what keeps a date attached to its own entry when the
+    PDF's text layer is extracted.
     """
     meta = " $\\cdot$ ".join(
         tex(part.strip()) for part in meta_parts if not is_empty(part)
@@ -239,13 +242,18 @@ def cv_item(headline: str, meta_parts: list[str]) -> str:
 
 
 def contact_bits(profile: dict) -> list[str]:
+    """Email, phone and links — deliberately no home address.
+
+    The header is the densest line on the page and a street-level location
+    earns none of that room: every employment and education entry already
+    carries its own location, so the city is on the CV either way.
+    """
     p = profile["personal"]
     bits = []
     if not is_empty(p.get("email")):
         bits.append(rf"\href{{mailto:{tex_url(p['email'])}}}{{{tex(p['email'])}}}")
-    for key in ("phone", "location"):
-        if not is_empty(p.get(key)):
-            bits.append(tex(p[key]))
+    if not is_empty(p.get("phone")):
+        bits.append(tex(p["phone"]))
     for key in ("linkedin", "github", "portfolio"):
         if not is_empty(p.get(key)):
             bits.append(link(p[key]))
@@ -278,7 +286,7 @@ def render_bullets(bullets: list[dict]) -> list[str]:
     return out
 
 
-def render_experience(profile: dict, section: dict) -> list[str]:
+def render_experience(profile: dict, section: dict, *, separate_details: bool = False) -> list[str]:
     out = []
     for item in section.get("entries", []):
         entry = _resolve(profile, item["source"], "experience")
@@ -286,16 +294,22 @@ def render_experience(profile: dict, section: dict) -> list[str]:
         _check_bullets(entry, bullets)
         role = entry.get("title_role") or entry.get("title", "").split(",")[0]
         headline = rf"\textbf{{{tex(role)}}}, {tex(entry.get('company', ''))}"
-        out.append(cv_item(headline, [
-            entry.get("location", ""),
-            fmt_range(entry.get("start", ""), entry.get("end", "")),
-            entry.get("employment", ""),
-        ]))
+        when = fmt_range(entry.get("start", ""), entry.get("end", ""))
+        if separate_details:
+            out.append(cv_item(headline, [when]))
+            details = [entry.get("location", ""), entry.get("employment", "")]
+            details = [tex(part) for part in details if not is_empty(part)]
+            if details:
+                out.append(r"\cvlocation{%s}" % r" $\cdot$ ".join(details))
+        else:
+            out.append(cv_item(headline, [
+                entry.get("location", ""), when, entry.get("employment", ""),
+            ]))
         out += render_bullets(bullets)
     return out
 
 
-def render_projects(profile: dict, section: dict) -> list[str]:
+def render_projects(profile: dict, section: dict, *, separate_details: bool = False) -> list[str]:
     out = []
     for item in section.get("entries", []):
         entry = _resolve(profile, item["source"], "project")
@@ -304,19 +318,40 @@ def render_projects(profile: dict, section: dict) -> list[str]:
         when = fmt_month(entry.get("month", "")) or entry.get("year", "")
         out.append(cv_item(
             rf"\textbf{{{tex(entry['title'])}}}",
-            [entry.get("role", ""), when],
+            [when] if separate_details else [entry.get("role", ""), when],
         ))
+        if separate_details and not is_empty(entry.get("role")):
+            out.append(rf"\cvprojectrole{{{tex(entry['role'])}}}")
         if item.get("show_tech", True) and not is_empty(entry.get("tech")):
             out.append(rf"\cvmeta{{{tex(entry['tech'])}}}")
-        links = [
-            link(entry[key], label)
-            for key, label in (("demo", None), ("repo", None))
-            if not is_empty(entry.get(key)) and key in item.get("links", ["repo"])
-        ]
-        if links:
-            out.append(r"\cvlinks{" + r" $\cdot$ ".join(links) + "}")
+        if separate_details:
+            # This layout always exposes both available destinations. Labels
+            # keep long repository/demo URLs from crowding out project facts.
+            links = [
+                link(entry[key], label)
+                for key, label in (("repo", "GitHub"), ("demo", "Demo"))
+                if not is_empty(entry.get(key))
+            ]
+            if links:
+                out.append(r"\cvlinks{%s}" % r" $\cdot$ ".join(links))
+        else:
+            out += render_project_links(entry, item.get("links", ["repo"]))
         out += render_bullets(bullets)
     return out
+
+
+# One labelled line per URL rather than a run of bare domains. "Demo" and
+# "Git" say what is on the other end before the reader clicks, and the whole
+# address - scheme included - is what a person retypes from a printed copy.
+PROJECT_LINKS = (("demo", "Demo"), ("repo", "Git"))
+
+
+def render_project_links(entry: dict, wanted: list[str]) -> list[str]:
+    return [
+        r"\cvlinks{%s: %s}" % (label, link(entry[key], entry[key]))
+        for key, label in PROJECT_LINKS
+        if key in wanted and not is_empty(entry.get(key))
+    ]
 
 
 def render_skills(profile: dict, section: dict, narrow: bool = False) -> list[str]:
@@ -343,16 +378,32 @@ def render_skills(profile: dict, section: dict, narrow: bool = False) -> list[st
 
 
 def render_education(profile: dict, section: dict) -> list[str]:
+    r"""The qualification, then the school and the grade it was earned at.
+
+    Reading order matters more here than compactness: the degree is what a
+    screener looks for, the school qualifies the degree, and the grade
+    qualifies the school. Graduation date and location go out to the right
+    margin with every other entry's.
+
+    School and grade share one continuation line rather than taking two. That
+    is \cvsubline's documented limit, and it is measured: a second stacked line
+    makes poppler read the entry as two columns and strand the date.
+    """
     out = []
     for item in section.get("entries", []):
         e = _resolve(profile, item["source"], "education")
-        headline = rf"\textbf{{{tex(e['title'])}}}, {tex(e.get('institution', ''))}"
-        meta = [fmt_month(e.get("graduated", "")), e.get("location", "")]
-        if not is_empty(e.get("gpa")):
-            meta.append(f"GPA {e['gpa']}")
-        if not is_empty(e.get("classification")):
-            meta.append(e["classification"])
-        out.append(cv_item(headline, meta))
+        out.append(cv_item(
+            rf"\textbf{{{tex(e['title'])}}}",
+            [fmt_month(e.get("graduated", "")), e.get("location", "")],
+        ))
+        below = [
+            e.get("institution", ""),
+            f"GPA {e['gpa']}" if not is_empty(e.get("gpa")) else "",
+            e.get("classification", ""),
+        ]
+        below = [tex(part) for part in below if not is_empty(part)]
+        if below:
+            out.append(r"\cvsubline{%s}" % r" $\cdot$ ".join(below))
     return out
 
 
@@ -360,10 +411,7 @@ def render_certifications(profile: dict, section: dict) -> list[str]:
     out = []
     for item in section.get("entries", []):
         c = _resolve(profile, item["source"], "certification")
-        name = tex(c["title"])
-        if not is_empty(c.get("credential_url")):
-            name = link(c["credential_url"], c["title"])
-        parts = [name]
+        parts = [tex(c["title"])]
         issuer = c.get("issuer", "")
         # "Microsoft Certified: Azure Fundamentals - Microsoft" reads badly;
         # skip the issuer when the certification name already carries it.
@@ -372,7 +420,33 @@ def render_certifications(profile: dict, section: dict) -> list[str]:
         issued = fmt_month(c.get("issued", ""))
         if issued:
             parts.append(tex(issued))
+        # The link gets its own visible words. Buried inside the certification
+        # name it is invisible on screen and gone entirely in print, so the one
+        # thing a reader can act on now carries a label that says so.
+        if not is_empty(c.get("credential_url")):
+            parts.append(link(c["credential_url"], "Verify Credential"))
         out.append(r"\cvplain{%s}" % r" $\cdot$ ".join(parts))
+    return out
+
+
+def render_languages(profile: dict, section: dict) -> list[str]:
+    """`English: Intermediate (Effective professional communication)`.
+
+    A language row has the same shape as a skills row - one bold label, one
+    value - so it reuses \\cvskill rather than adding a macro that every
+    template would then have to grow.
+    """
+    out = []
+    for item in section.get("entries", []):
+        lang = _resolve(profile, item["source"], "language")
+        value = lang.get("proficiency", "")
+        if is_empty(value):
+            raise PlanError(f"{lang['id']} has no proficiency to print")
+        descriptor = lang.get("descriptor", "")
+        if not is_empty(descriptor):
+            value = f"{value} ({descriptor})"
+        label = lang.get("language") or lang["title"]
+        out.append(r"\cvskill{%s}{%s}" % (tex(label), tex(value)))
     return out
 
 
@@ -382,13 +456,14 @@ RENDERERS = {
     "skills": render_skills,
     "education": render_education,
     "certifications": render_certifications,
+    "languages": render_languages,
 }
 
 
 # In a sidebar template these go beside the main column unless the plan says
 # otherwise: they are short, self-contained lists rather than narrative.
 # Override per section with "column": "side" or "main".
-SIDEBAR_TYPES = ("skills", "education", "certifications")
+SIDEBAR_TYPES = ("skills", "education", "certifications", "languages")
 
 
 def render_summary(profile: dict, plan: dict) -> list[str]:
@@ -404,7 +479,9 @@ def render_summary(profile: dict, plan: dict) -> list[str]:
     return [r"\cvsection{Summary}", rf"\cvsummary{{{tex(summary['text'])}}}"]
 
 
-def render_sections(profile: dict, sections: list[dict], narrow: bool = False) -> list[str]:
+def render_sections(
+    profile: dict, sections: list[dict], narrow: bool = False, *, template_text: str = ""
+) -> list[str]:
     out: list[str] = []
     for section in sections:
         kind = section.get("type")
@@ -412,6 +489,16 @@ def render_sections(profile: dict, sections: list[dict], narrow: bool = False) -
             raise PlanError(f"unknown section type {kind!r}")
         if kind == "skills":
             lines = render_skills(profile, section, narrow=narrow)
+        elif kind == "experience":
+            lines = render_experience(
+                profile, section,
+                separate_details=r"\newcommand{\cvlocation}" in template_text,
+            )
+        elif kind == "projects":
+            lines = render_projects(
+                profile, section,
+                separate_details=r"\newcommand{\cvprojectrole}" in template_text,
+            )
         else:
             lines = RENDERERS[kind](profile, section)
         if not lines:
@@ -466,6 +553,34 @@ def render_marked(
     values = {"%%PDFMETA%%": render_pdfmeta(profile, plan)}
     has_header = declares_marker(template_text, "%%HEADER%%")
     has_sidebar = declares_marker(template_text, "%%SIDEBAR%%")
+
+    # Named section slots let a single-column design own its reading order.
+    # Content still comes exclusively from the plan and validated profile.
+    section_slots = {
+        kind: f"%%{kind.upper()}%%" for kind in RENDERERS
+        if declares_marker(template_text, f"%%{kind.upper()}%%")
+    }
+    has_summary_slot = declares_marker(template_text, "%%SUMMARY%%")
+    if section_slots or has_summary_slot:
+        if has_sidebar:
+            raise PlanError("named section slots cannot be combined with a sidebar")
+        if has_header:
+            values["%%HEADER%%"] = render_photo_header(profile, plan, photo)
+        body = [] if has_header else render_header(profile, plan)
+        summary = render_summary(profile, plan)
+        if has_summary_slot:
+            values["%%SUMMARY%%"] = "\n".join(summary)
+        else:
+            body += summary
+        for kind, marker in section_slots.items():
+            selected = [s for s in plan.get("sections", []) if s.get("type") == kind]
+            values[marker] = "\n".join(render_sections(
+                profile, selected, template_text=template_text,
+            ))
+        remaining = [s for s in plan.get("sections", []) if s.get("type") not in section_slots]
+        body += render_sections(profile, remaining, template_text=template_text)
+        values["%%BODY%%"] = "\n".join(body) + "\n"
+        return values
 
     if not (has_header or has_sidebar):
         values["%%BODY%%"] = render_body(profile, plan)

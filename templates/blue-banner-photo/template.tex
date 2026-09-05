@@ -1,0 +1,117 @@
+% blue-banner-photo — one column, blue identity band and circular portrait.
+% Named section markers fix the reading order; BODY preserves extra sections.
+% All content is supplied by scripts/render_cv.py from the validated profile.
+\documentclass[10pt,a4paper]{article}
+
+\usepackage[a4paper,top=1.05cm,bottom=1.05cm,left=1.65cm,right=1.65cm]{geometry}
+\usepackage{fontspec}
+\setmainfont{texgyreheros}[
+  Extension=.otf, UprightFont=*-regular, BoldFont=*-bold,
+  ItalicFont=*-italic, BoldItalicFont=*-bolditalic,
+]
+\usepackage{xcolor}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usepackage{enumitem}
+\usepackage{titlesec}
+\usepackage{microtype}
+\usepackage[normalem]{ulem}
+\usepackage{hyperref}
+
+\definecolor{bannerleft}{HTML}{124C80}
+\definecolor{bannerright}{HTML}{206EB0}
+\definecolor{accent}{HTML}{064B80}
+\definecolor{orange}{HTML}{F49B45}
+\definecolor{ink}{HTML}{172A3B}
+\definecolor{muted}{HTML}{526173}
+\definecolor{skillbg}{HTML}{EDF5FC}
+\hypersetup{colorlinks=true,urlcolor=accent,linkcolor=accent,breaklinks=true}
+\let\cvhref\href
+\renewcommand{\href}[2]{\cvhref{#1}{\uline{#2}}}
+
+\pagestyle{empty}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0pt}
+\linespread{1.04}
+\raggedbottom
+\raggedright
+\frenchspacing
+\hyphenpenalty=10000
+\exhyphenpenalty=10000
+\sloppy
+
+% Keep the heading with the first lines of its section on longer plans.
+\titleformat{\section}
+  {\normalfont\normalsize\bfseries\color{accent}}{}{0em}{\MakeUppercase}
+  [\vspace{-0.65em}{\color{orange}\rule{\linewidth}{0.6pt}}]
+\titlespacing*{\section}{0pt}{0.65em}{0.25em}
+\newcommand{\cvsection}[1]{\section*{#1}}
+
+% The portrait is clipped in LaTeX; the original photo remains intact.
+\newcommand{\cvphoto}[1]{%
+  \begin{tikzpicture}
+    \clip (0,0) circle (1.16cm);
+    \node[inner sep=0pt] at (0,-0.25cm) {\includegraphics[width=2.38cm]{#1}};
+    \draw[white,line width=1.5pt] (0,0) circle (1.13cm);
+  \end{tikzpicture}%
+}
+\newcommand{\cvbanner}[1]{%
+  \noindent\makebox[\textwidth][c]{%
+  \begin{tikzpicture}
+    \node[inner xsep=0.7cm,inner ysep=0.55cm,
+      left color=bannerleft,right color=bannerright] {%
+      \begin{minipage}{\dimexpr\textwidth-0.3cm\relax}
+        \color{white}\hypersetup{urlcolor=white,linkcolor=white}#1
+      \end{minipage}%
+    };
+  \end{tikzpicture}}\par\vspace{0.3em}%
+}
+\newcommand{\cvheaderwithphoto}[2]{\cvbanner{%
+  \begin{minipage}[c]{\dimexpr\linewidth-3.15cm\relax}#2\end{minipage}%
+  \hfill\begin{minipage}[c]{2.4cm}\centering\cvphoto{#1}\end{minipage}%
+}}
+\newcommand{\cvheaderplain}[1]{\cvbanner{#1}}
+\newcommand{\cvname}[1]{{\fontsize{22}{25}\selectfont\bfseries #1}\par\vspace{0.25em}}
+\newcommand{\cvheadline}[1]{{\fontsize{11}{14}\selectfont #1}\par\vspace{0.4em}}
+\newcommand{\cvcontact}[1]{{\small\raggedright #1\par}}
+\newcommand{\cvcontactline}[1]{{\small #1}\par}
+
+\newcommand{\cvsummary}[1]{#1\par}
+\newcommand{\cvfill}{\hskip 0pt plus 1fill\relax}
+\newcommand{\cvitem}[2]{%
+  \vspace{0.28em}#1\cvfill{\small\bfseries #2}\par\nopagebreak[4]%
+}
+\newcommand{\cvitemplain}[1]{\vspace{0.28em}#1\par\nopagebreak[4]}
+\newcommand{\cvsubline}[1]{#1\par\nopagebreak[3]}
+\newcommand{\cvsubnote}[1]{{\small\color{muted}#1}\par}
+\newcommand{\cvlocation}[1]{{\small\itshape\color{muted}#1}\par\nopagebreak[3]}
+\newcommand{\cvprojectrole}[1]{{\small\textbf{Role:} #1}\par\nopagebreak[3]}
+\newcommand{\cvmeta}[1]{{\small\color{muted}\textbf{Tech:} #1}\par\nopagebreak[3]}
+\newcommand{\cvlinks}[1]{{\small #1}\par\nopagebreak[3]}
+\newcommand{\cvplain}[1]{\vspace{0.1em}#1\par}
+
+\newlist{cvbullets}{itemize}{1}
+\setlist[cvbullets]{leftmargin=1.15em,labelsep=0.45em,itemsep=0.05em,
+  parsep=0pt,topsep=0.12em,partopsep=0pt,label=\textbullet}
+
+% A shaded group label followed by its skills, never an unlabelled tag cloud.
+\newcommand{\cvskill}[2]{%
+  \vspace{0.16em}{\setlength{\fboxsep}{2pt}%
+  \colorbox{skillbg}{\color{accent}\small\bfseries\strut #1}}\enspace #2\par%
+}
+\newcommand{\cvskilllabel}[1]{\vspace{0.2em}{\color{accent}\bfseries #1}\par}
+\newcommand{\cvskillitem}[1]{{\small #1}\par}
+
+%%PDFMETA%%
+
+\begin{document}
+\color{ink}
+%%HEADER%%
+%%SUMMARY%%
+%%EDUCATION%%
+%%SKILLS%%
+%%CERTIFICATIONS%%
+%%EXPERIENCE%%
+%%PROJECTS%%
+%%BODY%%
+\end{document}

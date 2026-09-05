@@ -156,19 +156,36 @@ def balanced_args(source: str, macro: str, count: int) -> list[list[str]]:
     return results
 
 
+def entry_headlines(source: str) -> list[str]:
+    """Every entry headline in the document, dated or not."""
+    return [args[0] for args in balanced_args(source, "cvitem", 2)] + [
+        args[0] for args in balanced_args(source, "cvitemplain", 1)
+    ]
+
+
 def check_reading_order(source: str, text: str) -> list[str]:
     """Each entry's metadata must stay with its entry when text is extracted.
 
-    Right-aligned dates are pulled into their own column by PDF text
-    extraction, which silently reattaches a date to the wrong job. This
-    catches that regression rather than trusting the template.
+    Dates set at the right margin are the risk here: poppler groups a page
+    into blocks before it reads them, and a tall enough stack of flush-left
+    lines beside a lone right-hand cell turns the entry into two columns. It
+    then emits the whole left column first and the date lands somewhere later
+    in the document, attached to whatever it happens to follow.
+
+    Both kinds of somewhere-later count. A date that crosses a section heading
+    is the loud version; a date that merely crosses into the next entry of the
+    same section is the quiet one, and it is worse - a reader has no way to
+    tell that the dates on two adjacent jobs have swapped.
     """
     problems = []
     # Match on letters and digits only: the extracted text and the LaTeX source
     # disagree about spacing and punctuation, and comparing those differences
     # would make this check pass without ever testing anything.
     flat = squash(text)
-    headings = [(strip_tex(h), squash(h)) for h in SECTION_RE.findall(source)]
+    boundaries = [
+        (strip_tex(h), squash(h))
+        for h in SECTION_RE.findall(source) + entry_headlines(source)
+    ]
 
     for headline, meta in balanced_args(source, "cvitem", 2):
         label = strip_tex(headline)
@@ -185,12 +202,14 @@ def check_reading_order(source: str, text: str) -> list[str]:
                 )
                 continue
             between = flat[start + len(probe) : at]
-            drifted = [name for name, sq in headings if sq and sq in between]
+            drifted = [
+                name for name, sq in boundaries
+                if sq and sq != probe and sq in between
+            ]
             if drifted:
                 problems.append(
                     f"entry {label!r}: its {strip_tex(part)!r} is separated from it "
-                    f"by the {drifted[0]!r} heading - an ATS would attach it to the "
-                    "wrong entry"
+                    f"by {drifted[0]!r} - an ATS would attach it to the wrong entry"
                 )
     return problems
 

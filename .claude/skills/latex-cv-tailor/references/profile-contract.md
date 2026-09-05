@@ -14,7 +14,16 @@ who edits the files. This page is the version you need when generating a CV.
 | `projects.md` | Projects | `PRJ-<NAME>`, bullets `PRJ-<NAME>-01` |
 | `education.md` | Degrees | `EDU-<INST>` |
 | `certifications.md` | Certifications | `CERT-<NAME>` |
+| `languages.md` | Spoken languages and proficiency | `LANG-<CODE>` |
 | `skills.md` | Skills with tier + evidence | exact skill name |
+
+`languages.md` is optional and holds no technical skills. Each entry carries a
+`Proficiency:` (`Native`, `Advanced`, `Intermediate`, `Basic`) and an optional
+`Descriptor:` that the CV prints in parentheses after it — so `LANG-EN` renders
+as `English: Intermediate (Effective professional communication)`. Where a
+certification backs the level, the entry names it in `Certification:`; the
+credential itself stays in `certifications.md`. Never invent a level a
+certification does not support.
 
 IDs are permanent. A retired bullet leaves its number unused rather than
 renumbering, because past match reports reference it.

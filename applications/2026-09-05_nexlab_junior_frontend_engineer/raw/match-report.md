@@ -12,20 +12,7 @@ Every line on the CV and the profile ID it came from.
 | Section | CV line | Source |
 |---|---|---|
 | Summary | Frontend Developer and Information Technology graduate from Ho Chi Minh City University... | SUM-01 |
-| Projects | Portfolio Website (BrowserMind) | PRJ-BROWSERMIND |
-| Projects | Built a React/TypeScript portfolio with Spec-Driven Development and Claude Code; captur... | PRJ-BROWSERMIND-01, PRJ-BROWSERMIND-02 |
-| Projects | Used AI-powered development and testing workflows with Playwright MCP for automated val... | PRJ-BROWSERMIND-04 |
-| Projects | Shopee UI Test Automation | PRJ-SHOPEE-QA |
-| Projects | Built a Playwright/TypeScript framework with Page Object Model: 21 test cases across 4 ... | PRJ-SHOPEE-QA-01, PRJ-SHOPEE-QA-02, PRJ-SHOPEE-QA-05 |
-| Experience | Frontend Developer | EXP-VILIHA |
-| Experience | Translate detailed Figma designs into responsive, semantic frontend code and reusable c... | EXP-VILIHA-02, EXP-VILIHA-03 |
-| Experience | Develop with Next.js App Router, Server Components, TanStack Query, Tailwind CSS, and s... | EXP-VILIHA-04 |
-| Experience | Collaborate in Agile/Scrum and communicate in English with project stakeholders. | EXP-VILIHA-05 |
-| Experience | Frontend Developer & Testing | EXP-CHIPNOVA |
-| Experience | Clarified requirements, designed user experiences, and shipped frontend features across... | EXP-CHIPNOVA-01, EXP-CHIPNOVA-04 |
-| Experience | Wrote Playwright end-to-end tests to verify product quality. | EXP-CHIPNOVA-03 |
-| Experience | Web Developer Intern | EXP-VJP |
-| Experience | Developed web interfaces, integrated APIs, and collaborated on feature development and ... | EXP-VJP-01, EXP-VJP-02 |
+| Education | Engineer's Degree, Information Technology | EDU-HUTECH |
 | Technical Skills | React.js | EXP-VILIHA, EXP-CHIPNOVA, PRJ-BROWSERMIND, PRJ-ESME, PRJ-FLIPCARD |
 | Technical Skills | TypeScript | EXP-VILIHA, PRJ-SHOPEE-QA, PRJ-FRUIT, PRJ-FLIPCARD |
 | Technical Skills | JavaScript | EXP-CHIPNOVA, PRJ-SHOPEE-QA, PRJ-FRUIT, PRJ-FLIPCARD |
@@ -39,9 +26,23 @@ Every line on the CV and the profile ID it came from.
 | Technical Skills | REST API integration | EXP-VJP-01, PRJ-ESME-05 |
 | Technical Skills | Git | EXP-VILIHA, EXP-CHIPNOVA, PRJ-SHOPEE-QA |
 | Technical Skills | Vercel | PRJ-BROWSERMIND, PRJ-FRUIT, PRJ-FLIPCARD |
-| Education | Engineer's Degree, Information Technology | EDU-HUTECH |
 | Certifications | Microsoft Certified: Azure Fundamentals (AZ-900) | CERT-AZ900 |
-| Certifications | English, CEFR level B1 | CERT-ENG-B1 |
+| Languages | English | LANG-EN |
+| Languages | Vietnamese | LANG-VI |
+| Experience | Frontend Developer | EXP-VILIHA |
+| Experience | Translate detailed Figma designs into responsive, semantic frontend code and reusable c... | EXP-VILIHA-02, EXP-VILIHA-03 |
+| Experience | Develop with Next.js App Router, Server Components, TanStack Query, Tailwind CSS, and s... | EXP-VILIHA-04 |
+| Experience | Collaborate in Agile/Scrum and communicate in English with project stakeholders. | EXP-VILIHA-05 |
+| Experience | Frontend Developer & Testing | EXP-CHIPNOVA |
+| Experience | Clarified requirements, designed user experiences, and shipped frontend features across... | EXP-CHIPNOVA-01, EXP-CHIPNOVA-04 |
+| Experience | Wrote Playwright end-to-end tests to verify product quality. | EXP-CHIPNOVA-03 |
+| Experience | Web Developer Intern | EXP-VJP |
+| Experience | Developed web interfaces, integrated APIs, and collaborated on feature development and ... | EXP-VJP-01, EXP-VJP-02 |
+| Projects | Portfolio Website (BrowserMind) | PRJ-BROWSERMIND |
+| Projects | Built a React/TypeScript portfolio with Spec-Driven Development and Claude Code; captur... | PRJ-BROWSERMIND-01, PRJ-BROWSERMIND-02 |
+| Projects | Used AI-powered development and testing workflows with Playwright MCP for automated val... | PRJ-BROWSERMIND-04 |
+| Projects | Shopee UI Test Automation | PRJ-SHOPEE-QA |
+| Projects | Built a Playwright/TypeScript framework with Page Object Model: 21 test cases across 4 ... | PRJ-SHOPEE-QA-01, PRJ-SHOPEE-QA-02, PRJ-SHOPEE-QA-05 |
 
 ## Job requirements
 

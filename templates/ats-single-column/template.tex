@@ -21,10 +21,27 @@
 \usepackage{enumitem}
 \usepackage{titlesec}
 \usepackage{microtype}
-\usepackage[hidelinks]{hyperref}
+\usepackage[normalem]{ulem}
+\usepackage{hyperref}
 
 \definecolor{rulegray}{gray}{0.60}
 \definecolor{muted}{gray}{0.30}
+\definecolor{linkblue}{HTML}{0B57D0}
+
+% Links are blue and underlined: on screen that is the only signal that a line
+% of text is clickable, and a printed copy loses the colour but keeps the rule.
+\hypersetup{
+  colorlinks = true,
+  urlcolor   = linkblue,
+  linkcolor  = linkblue,
+  breaklinks = true,
+}
+
+% The renderer emits plain \href, so the underline is applied here, where the
+% design lives. \uline rather than \underline because it lets a long URL break
+% across a line instead of running into the margin.
+\let\cvhref\href
+\renewcommand{\href}[2]{\cvhref{#1}{\uline{#2}}}
 
 \pagestyle{empty}
 \setlength{\parindent}{0pt}
@@ -52,35 +69,62 @@
 % Macro contract consumed by render_cv.py — see PLACEHOLDERS.md
 % ===========================================================================
 
-% Header
-\newcommand{\cvname}[1]{\begin{center}{\fontsize{18}{20}\selectfont\bfseries #1}\end{center}\vspace{0.1em}}
-\newcommand{\cvheadline}[1]{\begin{center}{\large #1}\end{center}\vspace{0.25em}}
-\newcommand{\cvcontact}[1]{\begin{center}{\small\color{muted}#1}\end{center}\vspace{0.1em}}
+% Header. \centering inside a group rather than the center environment, which
+% would add \topsep above and below and loosen the block the name sits in.
+\newcommand{\cvname}[1]{{\centering\fontsize{18}{20}\selectfont\bfseries #1\par}\vspace{0.15em}}
+\newcommand{\cvheadline}[1]{{\centering\large #1\par}\vspace{0.2em}}
+\newcommand{\cvcontact}[1]{{\centering\small\color{muted}#1\par}\vspace{0.15em}}
 
 % Sections
 \newcommand{\cvsection}[1]{\section*{#1}}
 \newcommand{\cvsummary}[1]{#1\par\vspace{0.1em}}
 
-% Every entry is laid out linearly: headline on one line, metadata on the next,
-% both flush left. Right-aligned dates via \hfill look tidier but land in a
-% separate column when a PDF's text is extracted, which detaches a date from
-% its job — measured, not assumed. Keep this linear.
-%
+% \raggedright leaves \rightskip at 0pt plus 1fil, so a plain \hfill would
+% share the slack with it and stop halfway across the line. A second-order
+% fill outranks first-order fil and takes the whole gap.
+\newcommand{\cvfill}{\hskip 0pt plus 1fill\relax}
+
 % \cvitem{headline}{metadata}
+%
+% Dates and location sit at the right margin on the SAME line as the headline.
+% That is one paragraph, not a second column, and the distinction is the whole
+% point: a real column (minipage, tabular, paracol) is emitted as its own text
+% block, and PDF extraction then reattaches a date to the wrong entry. Inside
+% one line box the extractor reads "headline ... metadata" in order.
+% build_and_validate.py re-checks that on every build.
+%
+% The metadata is boxed, so it is this or nothing: where the pair does not fit
+% on one line TeX breaks at \cvfill and the whole of it drops to the next line
+% flush left — the old layout, still correct. Left unboxed it would instead
+% break wherever it ran out of room, stranding half a date range on a line of
+% its own. \footnotesize buys the width that keeps the longest rows out of
+% that fallback in the first place.
 \newcommand{\cvitem}[2]{%
   \vspace{0.3em}%
-  #1\par
-  {\small\color{muted}#2}\par
+  #1\cvfill\mbox{\footnotesize\color{muted}#2}\par
 }
 
 % \cvitemplain{headline} — same, for entries with no metadata line
 \newcommand{\cvitemplain}[1]{\vspace{0.3em}#1\par}
 
+% \cvsubline{text} — ONE continuation line under an entry headline, for a
+% fact that belongs to the entry but not on its headline (an institution and
+% its grade).
+%
+% One is the limit, and it is a measured one. With \cvitem's metadata at the
+% right margin, two or more flush-left lines beneath it turn the entry into a
+% block poppler reads as two columns: it emits the whole left column first,
+% and the metadata surfaces later — under the next section heading, or worse,
+% on the next entry, where nothing marks it as the wrong date. Anything extra
+% belongs on this line, not on another one.
+\newcommand{\cvsubline}[1]{#1\par}
+
 % Italic metadata line (tech stack, etc.)
 \newcommand{\cvmeta}[1]{{\small\itshape #1}\par}
 
-% Small line of links, emitted only when links exist
-\newcommand{\cvlinks}[1]{{\small\color{muted}#1}\par\vspace{0.1em}}
+% One project URL, already labelled by the renderer ("Demo: ...", "Git: ...").
+% Emitted once per link, so each gets its own line.
+\newcommand{\cvlinks}[1]{{\small\color{muted}#1}\par}
 
 % Achievement bullets
 \newlist{cvbullets}{itemize}{1}
@@ -94,7 +138,8 @@
   label      = \textbullet,
 }
 
-% Skills line: {group label}{comma-separated items}
+% Skills line: {group label}{comma-separated items}. Also carries a language
+% row, which has the same shape: a bold label and one value.
 \newcommand{\cvskill}[2]{\vspace{0.08em}{\bfseries #1:} #2\par}
 
 % Narrow-column forms, part of the macro contract. This template has no
@@ -102,7 +147,7 @@
 \newcommand{\cvskilllabel}[1]{\vspace{0.2em}{\bfseries #1}\par}
 \newcommand{\cvskillitem}[1]{{\small #1}\par}
 
-% Single-line row, flush left (see the note on \cvitem above)
+% Single-line row, flush left (certifications)
 \newcommand{\cvplain}[1]{\vspace{0.1em}#1\par}
 
 %%PDFMETA%%

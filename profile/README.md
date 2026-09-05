@@ -15,6 +15,7 @@ machine-usable is the **stable ID** on every fact.
 | `PRJ-`  | Project         | `PRJ-SHOPEE-QA`      |
 | `EDU-`  | Education       | `EDU-HUTECH`         |
 | `CERT-` | Certification   | `CERT-AZ900`         |
+| `LANG-` | Spoken language | `LANG-EN`            |
 | `SUM-`  | Summary variant | `SUM-01`             |
 
 Individual bullets are numbered under their entry: `EXP-VILIHA-01`,
@@ -56,9 +57,18 @@ evidence (an `EXP-`/`PRJ-` entry that demonstrates it).
 
 ## No duplication
 
-Each fact has exactly one home. Spoken-language certification lives in
-`certifications.md`, not `skills.md`. The portfolio URL lives in `personal.md`,
-not `projects.md`. Duplicated facts drift and produce contradictory CVs.
+Each fact has exactly one home. The portfolio URL lives in `personal.md`, not
+`projects.md`. Duplicated facts drift and produce contradictory CVs.
+
+Spoken languages are split along that line rather than duplicated:
+`certifications.md` records *which credential* proves a level (CEFR B1, and the
+URL that verifies it), `languages.md` records *the level you work at*, which is
+what the CV's Languages section prints. A `languages.md` entry names its
+credential in `Certification:` instead of restating it. `skills.md` holds
+neither — it is for technical skills.
+
+`languages.md` is optional. A profile without it simply renders no Languages
+section.
 
 ## Open items — need the owner's input
 
@@ -72,7 +82,9 @@ These are gaps that block a stronger CV. A generator may not fill them in.
 2. **Employment gap 2026-04 → 2026-06** between `EXP-CHIPNOVA` and
    `EXP-VILIHA`. Decide how to account for it factually.
 3. **Certification dates missing** for `CERT-AZ900` and `CERT-ENG-B1`; issuer
-   and credential ID missing for `CERT-ENG-B1`.
+   and credential ID missing for `CERT-ENG-B1`. Without a credential URL there
+   is nothing for the CV's `Verify Credential` link to point at, so that
+   certification prints as plain text.
 4. **`unverified` skills**: Angular, .NET, Java, Bitbucket, Jira, GitHub Actions,
    GitHub Copilot, Codex. Either add evidence or accept that they are excluded
    from every generated CV.

@@ -270,6 +270,115 @@ class RenderGuards(unittest.TestCase):
             render_cv.build_match_report(self.profile, plan)
 
 
+class EntryLayout(unittest.TestCase):
+    """Dates and location sit at the right margin, on the headline's own line."""
+
+    def setUp(self):
+        self.profile = load_profile(FIXTURE)
+
+    def render(self, plan):
+        return render_cv.render_body(self.profile, plan)
+
+    def test_metadata_is_the_second_argument_of_cvitem(self):
+        out = self.render(base_plan())
+        self.assertIn(
+            r"\cvitem{\textbf{Widget Engineer}, Acme \& Sons}"
+            r"{Testville $\cdot$ Mar 2024 – Present}",
+            out,
+        )
+
+    def test_the_header_carries_no_home_address(self):
+        # every entry states its own location; the header line is too dense to
+        # spend on repeating it
+        self.profile["personal"]["location"] = "Testville, Testland"
+        out = self.render(base_plan())
+        header = out.split(r"\cvsection")[0]
+        self.assertIn("alex@example.com", header)
+        self.assertNotIn("Testville, Testland", header)
+
+    def test_education_takes_one_continuation_line_not_two(self):
+        # two stacked lines under a right-aligned \cvitem make poppler read the
+        # entry as two columns and strand the graduation date
+        plan = base_plan(sections=[
+            {"type": "education", "heading": "Education",
+             "entries": [{"source": "EDU-TESTU"}]},
+        ])
+        out = self.render(plan)
+        self.assertEqual(out.count(r"\cvsubline{"), 1)
+        self.assertIn(r"\cvitem{\textbf{Bachelor of Widgets}}{Jan 2024}", out)
+        self.assertIn(r"\cvsubline{Test University $\cdot$ GPA 3.9 / 4.0}", out)
+
+    def test_certification_link_gets_its_own_visible_label(self):
+        plan = base_plan(sections=[
+            {"type": "certifications", "heading": "Certifications",
+             "entries": [{"source": "CERT-WIDGET"}]},
+        ])
+        out = self.render(plan)
+        self.assertIn(r"{Verify Credential}", out)
+        # the name must stay plain text, not become the link
+        self.assertIn(r"\cvplain{Certified Widget Pro $\cdot$", out)
+
+    def test_project_links_are_labelled_one_per_line(self):
+        plan = base_plan(sections=[
+            {"type": "projects", "heading": "Projects", "entries": [
+                {"source": "PRJ-WIDGET", "links": ["repo"], "bullets": [
+                    {"source": ["PRJ-WIDGET-01"], "text": "Wrote a tool."},
+                ]},
+            ]},
+        ])
+        out = self.render(plan)
+        self.assertIn(
+            r"\cvlinks{Git: \href{https://github.com/alexsample/widget_tool}"
+            r"{https://github.com/alexsample/widget\_tool}}",
+            out,
+        )
+
+    def test_a_link_the_plan_did_not_ask_for_is_left_out(self):
+        entry = {"demo": "https://demo.test", "repo": "https://repo.test"}
+        self.assertEqual(
+            render_cv.render_project_links(entry, ["demo"]),
+            [r"\cvlinks{Demo: \href{https://demo.test}{https://demo.test}}"],
+        )
+
+
+class Languages(unittest.TestCase):
+    def setUp(self):
+        self.profile = load_profile(FIXTURE)
+
+    def section(self, *ids):
+        return {"type": "languages", "heading": "Languages",
+                "entries": [{"source": i} for i in ids]}
+
+    def test_proficiency_and_descriptor_are_printed(self):
+        self.assertEqual(
+            render_cv.render_languages(self.profile, self.section("LANG-EN")),
+            [r"\cvskill{English}{Fluent (Works entirely in English)}"],
+        )
+
+    def test_an_unrecorded_descriptor_leaves_no_empty_parentheses(self):
+        self.assertEqual(
+            render_cv.render_languages(self.profile, self.section("LANG-XX")),
+            [r"\cvskill{Widgetish}{Basic}"],
+        )
+
+    def test_a_language_section_citing_a_certification_is_refused(self):
+        with self.assertRaisesRegex(render_cv.PlanError, "but a language was expected"):
+            render_cv.render_languages(self.profile, self.section("CERT-WIDGET"))
+
+    def test_the_plan_cannot_invent_a_proficiency(self):
+        plan = base_plan(sections=[self.section("LANG-EN")])
+        plan["sections"][0]["entries"][0]["proficiency"] = "Native"
+        self.assertNotIn("Native", render_cv.render_body(self.profile, plan))
+
+    def test_a_profile_without_the_file_still_loads(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            for f in FIXTURE.iterdir():
+                if f.name != "languages.md":
+                    (root / f.name).write_bytes(f.read_bytes())
+            self.assertEqual(load_profile(root)["languages"], [])
+
+
 class TwoColumnLayout(unittest.TestCase):
     SIDEBAR_TEMPLATE = (
         "%%PDFMETA%%\n"
@@ -405,6 +514,29 @@ class ReadingOrder(unittest.TestCase):
         problems = build_and_validate.check_reading_order(self.SOURCE, bad)
         self.assertTrue(problems)
         self.assertIn("wrong entry", problems[0])
+
+    def test_metadata_pushed_into_the_next_entry_is_caught(self):
+        # the quiet version of the same failure: no heading in between, but the
+        # date has still landed on somebody else's job
+        source = (
+            r"\cvsection{Experience}" "\n"
+            r"\cvitem{\textbf{Widget Engineer}, Acme}{Mar 2024 – Present}" "\n"
+            r"\cvitem{\textbf{Widget Intern}, Cogs}{Jan 2023 – Feb 2023}" "\n"
+        )
+        bad = (
+            "Experience Widget Engineer, Acme did things "
+            "Widget Intern, Cogs Mar 2024 – Present Jan 2023 – Feb 2023"
+        )
+        problems = build_and_validate.check_reading_order(source, bad)
+        self.assertTrue(problems)
+        self.assertIn("wrong entry", problems[0])
+
+    def test_an_entry_is_not_a_boundary_for_itself(self):
+        good = (
+            "Experience Widget Engineer, Acme Testville · Mar 2024 – Present "
+            "Education"
+        )
+        self.assertEqual(build_and_validate.check_reading_order(self.SOURCE, good), [])
 
     def test_missing_metadata_is_caught(self):
         problems = build_and_validate.check_reading_order(

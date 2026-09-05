@@ -1,0 +1,165 @@
+% blue-banner-photo — one column, blue identity band and circular portrait.
+% Named section markers fix the reading order; BODY preserves extra sections.
+% All content is supplied by scripts/render_cv.py from the validated profile.
+\documentclass[10pt,a4paper]{article}
+
+\usepackage[a4paper,top=1.05cm,bottom=1.05cm,left=1.65cm,right=1.65cm]{geometry}
+\usepackage{fontspec}
+\setmainfont{texgyreheros}[
+  Extension=.otf, UprightFont=*-regular, BoldFont=*-bold,
+  ItalicFont=*-italic, BoldItalicFont=*-bolditalic,
+]
+\usepackage{xcolor}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usepackage{enumitem}
+\usepackage{titlesec}
+\usepackage{microtype}
+\usepackage[normalem]{ulem}
+\usepackage{hyperref}
+
+\definecolor{bannerleft}{HTML}{124C80}
+\definecolor{bannerright}{HTML}{206EB0}
+\definecolor{accent}{HTML}{064B80}
+\definecolor{orange}{HTML}{F49B45}
+\definecolor{ink}{HTML}{172A3B}
+\definecolor{muted}{HTML}{526173}
+\definecolor{skillbg}{HTML}{EDF5FC}
+\hypersetup{colorlinks=true,urlcolor=accent,linkcolor=accent,breaklinks=true}
+\let\cvhref\href
+\renewcommand{\href}[2]{\cvhref{#1}{\uline{#2}}}
+
+\pagestyle{empty}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0pt}
+\linespread{1.04}
+\raggedbottom
+\raggedright
+\frenchspacing
+\hyphenpenalty=10000
+\exhyphenpenalty=10000
+\sloppy
+
+% Keep the heading with the first lines of its section on longer plans.
+\titleformat{\section}
+  {\normalfont\normalsize\bfseries\color{accent}}{}{0em}{\MakeUppercase}
+  [\vspace{-0.65em}{\color{orange}\rule{\linewidth}{0.6pt}}]
+\titlespacing*{\section}{0pt}{0.65em}{0.25em}
+\newcommand{\cvsection}[1]{\section*{#1}}
+
+% The portrait is clipped in LaTeX; the original photo remains intact.
+\newcommand{\cvphoto}[1]{%
+  \begin{tikzpicture}
+    \clip (0,0) circle (1.16cm);
+    \node[inner sep=0pt] at (0,-0.25cm) {\includegraphics[width=2.38cm]{#1}};
+    \draw[white,line width=1.5pt] (0,0) circle (1.13cm);
+  \end{tikzpicture}%
+}
+\newcommand{\cvbanner}[1]{%
+  \noindent\makebox[\textwidth][c]{%
+  \begin{tikzpicture}
+    \node[inner xsep=0.7cm,inner ysep=0.55cm,
+      left color=bannerleft,right color=bannerright] {%
+      \begin{minipage}{\dimexpr\textwidth-0.3cm\relax}
+        \color{white}\hypersetup{urlcolor=white,linkcolor=white}#1
+      \end{minipage}%
+    };
+  \end{tikzpicture}}\par\vspace{0.3em}%
+}
+\newcommand{\cvheaderwithphoto}[2]{\cvbanner{%
+  \begin{minipage}[c]{\dimexpr\linewidth-3.15cm\relax}#2\end{minipage}%
+  \hfill\begin{minipage}[c]{2.4cm}\centering\cvphoto{#1}\end{minipage}%
+}}
+\newcommand{\cvheaderplain}[1]{\cvbanner{#1}}
+\newcommand{\cvname}[1]{{\fontsize{22}{25}\selectfont\bfseries #1}\par\vspace{0.25em}}
+\newcommand{\cvheadline}[1]{{\fontsize{11}{14}\selectfont #1}\par\vspace{0.4em}}
+\newcommand{\cvcontact}[1]{{\small\raggedright #1\par}}
+\newcommand{\cvcontactline}[1]{{\small #1}\par}
+
+\newcommand{\cvsummary}[1]{#1\par}
+\newcommand{\cvfill}{\hskip 0pt plus 1fill\relax}
+\newcommand{\cvitem}[2]{%
+  \vspace{0.28em}#1\cvfill{\small\bfseries #2}\par\nopagebreak[4]%
+}
+\newcommand{\cvitemplain}[1]{\vspace{0.28em}#1\par\nopagebreak[4]}
+\newcommand{\cvsubline}[1]{#1\par\nopagebreak[3]}
+\newcommand{\cvsubnote}[1]{{\small\color{muted}#1}\par}
+\newcommand{\cvlocation}[1]{{\small\itshape\color{muted}#1}\par\nopagebreak[3]}
+\newcommand{\cvprojectrole}[1]{{\small\textbf{Role:} #1}\par\nopagebreak[3]}
+\newcommand{\cvmeta}[1]{{\small\color{muted}\textbf{Tech:} #1}\par\nopagebreak[3]}
+\newcommand{\cvlinks}[1]{{\small #1}\par\nopagebreak[3]}
+\newcommand{\cvplain}[1]{\vspace{0.1em}#1\par}
+
+\newlist{cvbullets}{itemize}{1}
+\setlist[cvbullets]{leftmargin=1.15em,labelsep=0.45em,itemsep=0.05em,
+  parsep=0pt,topsep=0.12em,partopsep=0pt,label=\textbullet}
+
+% A shaded group label followed by its skills, never an unlabelled tag cloud.
+\newcommand{\cvskill}[2]{%
+  \vspace{0.16em}{\setlength{\fboxsep}{2pt}%
+  \colorbox{skillbg}{\color{accent}\small\bfseries\strut #1}}\enspace #2\par%
+}
+\newcommand{\cvskilllabel}[1]{\vspace{0.2em}{\color{accent}\bfseries #1}\par}
+\newcommand{\cvskillitem}[1]{{\small #1}\par}
+
+\hypersetup{
+  pdftitle={Nguyen Thi Dieu Hang — CV},
+  pdfauthor={Nguyen Thi Dieu Hang},
+  pdfcreator={},
+}
+
+\begin{document}
+\color{ink}
+\cvheaderwithphoto{avatar.jpg}{\cvname{Nguyen Thi Dieu Hang}
+\cvheadline{Frontend Developer}
+\cvcontact{\href{mailto:ntdieuhang192@gmail.com}{ntdieuhang192@gmail.com} $\cdot$ +84 327 840 518 $\cdot$ \href{https://www.linkedin.com/in/hangnguyen118}{linkedin.com/in/hangnguyen118} $\cdot$ \href{https://github.com/hangnguyen118}{github.com/hangnguyen118} $\cdot$ \href{https://browsermind-profile.vercel.app}{browsermind-profile.vercel.app}}}
+\cvsection{Summary}
+\cvsummary{Frontend Developer and Information Technology graduate from Ho Chi Minh City University of Technology (HUTECH) with hands-on experience building responsive web and mobile applications using Next.js, React.js, and React Native.}
+\cvsection{Education}
+\cvitem{\textbf{Engineer's Degree, Information Technology}}{Jan 2025 $\cdot$ Ho Chi Minh City, Vietnam}
+\cvsubline{Ho Chi Minh City University of Technology (HUTECH) $\cdot$ GPA 3.35 / 4.0 $\cdot$ Very Good}
+\cvsection{Skill}
+\cvskill{Languages}{JavaScript, TypeScript, HTML5, CSS3}
+\cvskill{Frontend}{React.js, Next.js (App Router, Server Components), React Native}
+\cvskill{UI \& Data}{Tailwind CSS, shadcn/ui, TanStack Query, TanStack Table}
+\cvskill{Backend}{Node.js, REST API integration}
+\cvskill{Testing \& Tools}{Playwright (end-to-end), Git, Vercel}
+\cvskill{AI Workflows}{Claude / Claude Code, Spec-Driven Development, Playwright MCP}
+\cvsection{Certification}
+\cvplain{Microsoft Certified: Azure Fundamentals (AZ-900) $\cdot$ \href{https://learn.microsoft.com/api/credentials/share/vi-vn/hangnguyen1108/306DA7D144E07FF7?sharingId=C357452C5EB8224A}{Verify Credential}}
+\cvplain{English, CEFR level B1}
+\cvsection{Experience}
+\cvitem{\textbf{Frontend Developer}, VILIHA PTE. LTD.}{Jul 2026 – Present}
+\cvlocation{Ho Chi Minh City, Vietnam $\cdot$ Full-time}
+\begin{cvbullets}
+  \item Translate Figma designs into responsive, semantic frontend code and reusable UI components.
+  \item Build with Next.js App Router, Server Components, TanStack Query, Tailwind CSS, and shadcn/ui.
+\end{cvbullets}
+\cvitem{\textbf{Frontend Developer \& Testing}, Chip Nova}{Aug 2025 – Mar 2026}
+\cvlocation{Ho Chi Minh City, Vietnam}
+\begin{cvbullets}
+  \item Designed and shipped web and mobile interfaces, built the mobile app with React Native, and wrote Playwright end-to-end tests.
+\end{cvbullets}
+\cvitem{\textbf{Web Developer Intern}, Viet Japan Partner Company}{May 2024 – Jun 2024}
+\cvlocation{Ho Chi Minh City, Vietnam $\cdot$ Internship}
+\begin{cvbullets}
+  \item Developed web interfaces, integrated APIs, and collaborated on feature development and testing.
+\end{cvbullets}
+\cvsection{Project}
+\cvitem{\textbf{Portfolio Website (BrowserMind)}}{Jun 2026}
+\cvprojectrole{Frontend Developer \& Testing}
+\cvmeta{React.js, TypeScript, Vite, Tailwind CSS, AI bot, Claude, Claude Code, Playwright MCP, Spec-Driven Development}
+\cvlinks{\href{https://github.com/hangnguyen118/browsermind-profile}{GitHub} $\cdot$ \href{https://browsermind-profile.vercel.app}{Demo}}
+\begin{cvbullets}
+  \item Built a portfolio using Spec-Driven Development and Claude Code, with automated validation through Playwright MCP.
+\end{cvbullets}
+\cvitem{\textbf{Shopee UI Test Automation}}{Jul 2026}
+\cvprojectrole{Test Automation Engineer}
+\cvmeta{Playwright, Playwright Test, TypeScript, Node.js, Page Object Model (POM), fixtures, HTML + JUnit reporters}
+\cvlinks{\href{https://github.com/hangnguyen118/agentic-test-framework-playwright-ai}{GitHub} $\cdot$ \href{https://drive.google.com/file/d/1xEd1TGLR-qQI-rIlX9Uxb1QKpmFzpfDZ/view?usp=sharing}{Demo}}
+\begin{cvbullets}
+  \item Built a Playwright/TypeScript automation framework with Page Object Model, cross-browser execution, retries, and trace collection.
+\end{cvbullets}
+
+
+\end{document}

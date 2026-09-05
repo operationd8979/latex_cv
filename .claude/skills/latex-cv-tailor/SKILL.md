@@ -50,7 +50,9 @@ fewer.
 - **Never restate a missing requirement as if it were met.** A gap steers what
   you lead with; it never becomes a claim. Record it in the match report.
 - **Never edit `profile/`.** It is read-only to this skill. If you notice
-  something wrong or missing, say so in your report instead.
+  something wrong or missing, say so in your report instead. That includes
+  `languages.md`: a proficiency the profile does not record is not yours to
+  supply.
 - Company names, role titles, dates, GPA and credential URLs come from the
   profile verbatim — the renderer takes them from there and ignores anything
   you put in the plan.
@@ -105,6 +107,10 @@ Pick one summary variant marked `status: approved`; you may trim it to fit.
 Write `raw/plan.json`. Its schema, with a worked example, is in
 `references/plan-schema.md` — read that file before writing your first plan.
 
+Sections default to **summary, education, technical skills, certifications,
+languages, experience, projects**. Reorder when the posting gives you a reason
+to and say so in your report; do not reorder by habit.
+
 Every bullet cites the profile IDs it came from. The renderer rejects a bullet
 citing an ID that does not belong to its entry, so cite accurately rather than
 approximately.
@@ -139,8 +145,11 @@ python scripts/build_and_validate.py --dir <dir> --profile ./profile --target co
   not substitute a similar-sounding one that is also unsupported.
 - **"not evidence under <ID>"** — your citation is wrong. Find the bullet that
   actually says what you wrote, or rewrite the claim to match the evidence.
-- **"separated from it by the ... heading"** — a layout regression in the
-  template detached a date from its entry. Report it; do not paper over it.
+- **"is separated from it by ..."** — a layout regression detached a date from
+  its entry: PDF extraction read part of the page as a second column and moved
+  the date past a section heading or past the next entry. Usually a template
+  grew a second `\cvsubline` under a `\cvitem`, which is one more than the
+  layout survives. Report it; do not paper over it.
 - **Tectonic missing** — the error carries the install command. Relay it.
 
 A failed build deletes its PDF. Never report success without a passing

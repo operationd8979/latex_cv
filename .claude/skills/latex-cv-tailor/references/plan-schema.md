@@ -77,7 +77,9 @@ ignored — which is the point: a date cannot drift.
     { "type": "education", "heading": "Education",
       "entries": [{ "source": "EDU-HUTECH" }] },
     { "type": "certifications", "heading": "Certifications",
-      "entries": [{ "source": "CERT-AZ900" }] }
+      "entries": [{ "source": "CERT-AZ900" }] },
+    { "type": "languages", "heading": "Languages",
+      "entries": [{ "source": "LANG-EN" }, { "source": "LANG-VI" }] }
   ],
 
   "requirements": [
@@ -93,21 +95,34 @@ ignored — which is the point: a date cannot drift.
 
 ## Field notes
 
-- **`sections`** render in the order you list them. Put what the posting cares
-  about first. A section whose content renders empty is skipped.
+- **`sections`** render in the order you list them. A section whose content
+  renders empty is skipped.
+
+  The default order is **education, skills, certifications, languages,
+  experience, projects** — credentials first, then the narrative that backs
+  them. Depart from it when the posting gives you a reason to: lead with
+  `experience` for a role that asks for years in the stack, or with `projects`
+  when the posting is about shipped work and the candidate's employment is
+  short. Say which you chose, and why, in your report.
 - **`column`** is `"side"` or `"main"`, and applies only to a template with a
   sidebar (`two-column-photo`). Omit it and skills, education and
   certifications go to the sidebar while summary, experience and projects go to
   the main column. Single-column templates ignore it entirely.
 - **`type`** is one of `experience`, `projects`, `skills`, `education`,
-  `certifications`.
+  `certifications`, `languages`.
+- **`languages`** entries cite `LANG-` IDs from `profile/languages.md`. The
+  proficiency and its descriptor come from the profile; the plan chooses only
+  which languages appear and in what order. Do not also list a language
+  certification under `certifications` — the row would say the same thing
+  twice.
 - **`bullets[].source`** is a list because you may legitimately merge two
   profile bullets into one tighter line. Cite both.
 - **`bullets[].text`** is your wording. Rewrite freely for concision and the
   posting's vocabulary — but the meaning must survive unchanged, and any number
   in it must already exist in the profile.
 - **`links`** picks which of the project's URLs to print: `["repo"]`,
-  `["demo"]`, or both. Defaults to `["repo"]`.
+  `["demo"]`, or both. Defaults to `["repo"]`. Each one prints on its own line,
+  labelled `Demo:` or `Git:`, so two links cost two lines of the page budget.
 - **`show_tech`** prints the project's tech stack line. Defaults to `true`.
 - **`skills.groups[].label`** is yours to choose; group by what the posting
   emphasises rather than copying the profile's own categories.
@@ -122,6 +137,7 @@ ignored — which is the point: a date cannot drift.
 |---|---|
 | `source 'X' does not exist in the profile` | Typo, or you invented an ID |
 | `source 'X' is a project, but a experience was expected` | Wrong section type |
+| `LANG-XX has no proficiency to print` | The profile entry is incomplete |
 | `bullet cites 'X', which is not evidence under 'Y'` | Citation belongs to another entry |
 | `a bullet under 'Y' has no source` | Every claim needs a citation |
 | `these skills are not in skills.md` | You cannot add a skill via the plan |
