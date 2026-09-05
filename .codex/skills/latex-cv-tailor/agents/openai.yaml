@@ -1,0 +1,4 @@
+interface:
+  display_name: "LaTeX CV Tailor"
+  short_description: "Tailor evidence-backed LaTeX CVs for jobs"
+  default_prompt: "Use $latex-cv-tailor to tailor my English one-page CV to this job posting."
