@@ -4,7 +4,7 @@
   "headline": "Frontend Developer",
   "summary": {"source": "SUM-01", "text": "Frontend Developer and Information Technology graduate from Ho Chi Minh City University of Technology (HUTECH) with hands-on experience building responsive web and mobile applications using Next.js, React.js, and React Native."},
   "sections": [
-    {"type": "projects", "heading": "Selected Projects", "entries": [
+    {"type": "projects", "heading": "Projects", "entries": [
       {"source": "PRJ-BROWSERMIND", "links": ["demo", "repo"], "show_tech": false, "bullets": [
         {"source": ["PRJ-BROWSERMIND-01", "PRJ-BROWSERMIND-02"], "text": "Built a React/TypeScript portfolio with Spec-Driven Development and Claude Code; captured requirements in SPEC.md and developed 23 React components."},
         {"source": ["PRJ-BROWSERMIND-04"], "text": "Used AI-powered development and testing workflows with Playwright MCP for automated validation."}

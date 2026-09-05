@@ -20,11 +20,11 @@ Every line on the CV and the profile ID it came from.
 | Experience | Frontend Developer & Testing | EXP-CHIPNOVA |
 | Experience | Clarified product requirements, designed the user experience and implemented the fronte... | EXP-CHIPNOVA-01, EXP-CHIPNOVA-02, EXP-CHIPNOVA-04 |
 | Experience | Wrote end-to-end tests with Playwright to ensure product quality. | EXP-CHIPNOVA-03 |
-| Selected Projects | Portfolio Website (BrowserMind) | PRJ-BROWSERMIND |
-| Selected Projects | Used Spec-Driven Development to turn product requirements into a fully functional appli... | PRJ-BROWSERMIND-01 |
-| Selected Projects | Designed and built the interface with Claude Design and Claude Code, then verified the ... | PRJ-BROWSERMIND-02, PRJ-BROWSERMIND-04 |
-| Selected Projects | Shopee UI Test Automation | PRJ-SHOPEE-QA |
-| Selected Projects | Built a Playwright and TypeScript end-to-end UI framework on the Page Object Model, cov... | PRJ-SHOPEE-QA-01, PRJ-SHOPEE-QA-02, PRJ-SHOPEE-QA-05 |
+| Projects | Portfolio Website (BrowserMind) | PRJ-BROWSERMIND |
+| Projects | Used Spec-Driven Development to turn product requirements into a fully functional appli... | PRJ-BROWSERMIND-01 |
+| Projects | Designed and built the interface with Claude Design and Claude Code, then verified the ... | PRJ-BROWSERMIND-02, PRJ-BROWSERMIND-04 |
+| Projects | Shopee UI Test Automation | PRJ-SHOPEE-QA |
+| Projects | Built a Playwright and TypeScript end-to-end UI framework on the Page Object Model, cov... | PRJ-SHOPEE-QA-01, PRJ-SHOPEE-QA-02, PRJ-SHOPEE-QA-05 |
 | Technical Skills | HTML5 | EXP-VJP-01, PRJ-FLIPCARD |
 | Technical Skills | CSS3 | EXP-VJP-01, PRJ-FLIPCARD |
 | Technical Skills | JavaScript | EXP-CHIPNOVA, PRJ-SHOPEE-QA, PRJ-FRUIT, PRJ-FLIPCARD |

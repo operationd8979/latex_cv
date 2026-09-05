@@ -52,7 +52,7 @@ ignored — which is the point: a date cannot drift.
     },
     {
       "type": "projects",
-      "heading": "Selected Projects",
+      "heading": "Projects",
       "entries": [
         {
           "source": "PRJ-SHOPEE-QA",

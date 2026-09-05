@@ -12,11 +12,11 @@ Every line on the CV and the profile ID it came from.
 | Section | CV line | Source |
 |---|---|---|
 | Summary | Frontend Developer and Information Technology graduate from Ho Chi Minh City University... | SUM-01 |
-| Selected Projects | Portfolio Website (BrowserMind) | PRJ-BROWSERMIND |
-| Selected Projects | Built a React/TypeScript portfolio with Spec-Driven Development and Claude Code; captur... | PRJ-BROWSERMIND-01, PRJ-BROWSERMIND-02 |
-| Selected Projects | Used AI-powered development and testing workflows with Playwright MCP for automated val... | PRJ-BROWSERMIND-04 |
-| Selected Projects | Shopee UI Test Automation | PRJ-SHOPEE-QA |
-| Selected Projects | Built a Playwright/TypeScript framework with Page Object Model: 21 test cases across 4 ... | PRJ-SHOPEE-QA-01, PRJ-SHOPEE-QA-02, PRJ-SHOPEE-QA-05 |
+| Projects | Portfolio Website (BrowserMind) | PRJ-BROWSERMIND |
+| Projects | Built a React/TypeScript portfolio with Spec-Driven Development and Claude Code; captur... | PRJ-BROWSERMIND-01, PRJ-BROWSERMIND-02 |
+| Projects | Used AI-powered development and testing workflows with Playwright MCP for automated val... | PRJ-BROWSERMIND-04 |
+| Projects | Shopee UI Test Automation | PRJ-SHOPEE-QA |
+| Projects | Built a Playwright/TypeScript framework with Page Object Model: 21 test cases across 4 ... | PRJ-SHOPEE-QA-01, PRJ-SHOPEE-QA-02, PRJ-SHOPEE-QA-05 |
 | Experience | Frontend Developer | EXP-VILIHA |
 | Experience | Translate detailed Figma designs into responsive, semantic frontend code and reusable c... | EXP-VILIHA-02, EXP-VILIHA-03 |
 | Experience | Develop with Next.js App Router, Server Components, TanStack Query, Tailwind CSS, and s... | EXP-VILIHA-04 |
