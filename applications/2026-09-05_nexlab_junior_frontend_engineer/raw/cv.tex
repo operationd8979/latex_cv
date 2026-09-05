@@ -1,0 +1,158 @@
+% ats-single-column — a plain, single-column, ATS-safe CV.
+%
+% Compiles with Tectonic using bundled resources only: the font is TeX Gyre
+% Heros, loaded by file name so no system font install is required.
+%
+% The renderer substitutes %%PDFMETA%% and %%BODY%%. Everything else is design.
+% The macro contract this template must provide is in PLACEHOLDERS.md.
+
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[a4paper,top=1.1cm,bottom=1.1cm,left=1.4cm,right=1.4cm]{geometry}
+\usepackage{fontspec}
+\setmainfont{texgyreheros}[
+  Extension      = .otf,
+  UprightFont    = *-regular,
+  BoldFont       = *-bold,
+  ItalicFont     = *-italic,
+  BoldItalicFont = *-bolditalic,
+]
+\usepackage{xcolor}
+\usepackage{enumitem}
+\usepackage{titlesec}
+\usepackage{microtype}
+\usepackage[hidelinks]{hyperref}
+
+\definecolor{rulegray}{gray}{0.60}
+\definecolor{muted}{gray}{0.30}
+
+\pagestyle{empty}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0pt}
+\linespread{1.0}
+\raggedbottom
+
+% Ragged right, not justified: a CV column is narrow enough that justification
+% forces mid-word hyphenation ("main-tainability"), which reads badly and can
+% split a keyword an ATS is looking for. \sloppy keeps lines from overflowing
+% the margin now that they cannot be stretched.
+\raggedright
+\frenchspacing
+\hyphenpenalty=10000
+\exhyphenpenalty=10000
+\sloppy
+
+% --- section heading: bold, sentence case, thin rule underneath -------------
+\titleformat{\section}
+  {\normalfont\large\bfseries}{}{0em}{}
+  [\vspace{-0.55em}{\color{rulegray}\rule{\linewidth}{0.5pt}}]
+\titlespacing*{\section}{0pt}{0.55em}{0.25em}
+
+% ===========================================================================
+% Macro contract consumed by render_cv.py — see PLACEHOLDERS.md
+% ===========================================================================
+
+% Header
+\newcommand{\cvname}[1]{\begin{center}{\fontsize{18}{20}\selectfont\bfseries #1}\end{center}\vspace{0.1em}}
+\newcommand{\cvheadline}[1]{\begin{center}{\large #1}\end{center}\vspace{0.25em}}
+\newcommand{\cvcontact}[1]{\begin{center}{\small\color{muted}#1}\end{center}\vspace{0.1em}}
+
+% Sections
+\newcommand{\cvsection}[1]{\section*{#1}}
+\newcommand{\cvsummary}[1]{#1\par\vspace{0.1em}}
+
+% Every entry is laid out linearly: headline on one line, metadata on the next,
+% both flush left. Right-aligned dates via \hfill look tidier but land in a
+% separate column when a PDF's text is extracted, which detaches a date from
+% its job — measured, not assumed. Keep this linear.
+%
+% \cvitem{headline}{metadata}
+\newcommand{\cvitem}[2]{%
+  \vspace{0.3em}%
+  #1\par
+  {\small\color{muted}#2}\par
+}
+
+% \cvitemplain{headline} — same, for entries with no metadata line
+\newcommand{\cvitemplain}[1]{\vspace{0.3em}#1\par}
+
+% Italic metadata line (tech stack, etc.)
+\newcommand{\cvmeta}[1]{{\small\itshape #1}\par}
+
+% Small line of links, emitted only when links exist
+\newcommand{\cvlinks}[1]{{\small\color{muted}#1}\par\vspace{0.1em}}
+
+% Achievement bullets
+\newlist{cvbullets}{itemize}{1}
+\setlist[cvbullets]{
+  leftmargin = 1.15em,
+  labelsep   = 0.45em,
+  itemsep    = 0.05em,
+  parsep     = 0pt,
+  topsep     = 0.12em,
+  partopsep  = 0pt,
+  label      = \textbullet,
+}
+
+% Skills line: {group label}{comma-separated items}
+\newcommand{\cvskill}[2]{\vspace{0.08em}{\bfseries #1:} #2\par}
+
+% Narrow-column forms, part of the macro contract. This template has no
+% sidebar, so the renderer never emits them here.
+\newcommand{\cvskilllabel}[1]{\vspace{0.2em}{\bfseries #1}\par}
+\newcommand{\cvskillitem}[1]{{\small #1}\par}
+
+% Single-line row, flush left (see the note on \cvitem above)
+\newcommand{\cvplain}[1]{\vspace{0.1em}#1\par}
+
+\hypersetup{
+  pdftitle={Nguyen Thi Dieu Hang — CV — Junior Frontend Engineer},
+  pdfauthor={Nguyen Thi Dieu Hang},
+  pdfcreator={},
+}
+
+\begin{document}
+\cvname{Nguyen Thi Dieu Hang}
+\cvheadline{Frontend Developer}
+\cvcontact{\href{mailto:ntdieuhang192@gmail.com}{ntdieuhang192@gmail.com} $\cdot$ +84 327 840 518 $\cdot$ Ho Chi Minh City, Vietnam $\cdot$ \href{https://www.linkedin.com/in/hangnguyen118}{linkedin.com/in/hangnguyen118} $\cdot$ \href{https://github.com/hangnguyen118}{github.com/hangnguyen118} $\cdot$ \href{https://browsermind-profile.vercel.app}{browsermind-profile.vercel.app}}
+\cvsection{Summary}
+\cvsummary{Frontend Developer and Information Technology graduate from Ho Chi Minh City University of Technology (HUTECH) with hands-on experience building responsive web and mobile applications using Next.js, React.js, and React Native.}
+\cvsection{Selected Projects}
+\cvitem{\textbf{Portfolio Website (BrowserMind)}}{Frontend Developer \& Testing $\cdot$ Jun 2026}
+\cvlinks{\href{https://browsermind-profile.vercel.app}{browsermind-profile.vercel.app} $\cdot$ \href{https://github.com/hangnguyen118/browsermind-profile}{github.com/hangnguyen118/browsermind-profile}}
+\begin{cvbullets}
+  \item Built a React/TypeScript portfolio with Spec-Driven Development and Claude Code; captured requirements in SPEC.md and developed 23 React components.
+  \item Used AI-powered development and testing workflows with Playwright MCP for automated validation.
+\end{cvbullets}
+\cvitem{\textbf{Shopee UI Test Automation}}{Test Automation Engineer $\cdot$ Jul 2026}
+\cvlinks{\href{https://github.com/hangnguyen118/agentic-test-framework-playwright-ai}{github.com/hangnguyen118/agentic-test-framework-playwright-ai}}
+\begin{cvbullets}
+  \item Built a Playwright/TypeScript framework with Page Object Model: 21 test cases across 4 browser and device targets, with traces and screenshots for debugging.
+\end{cvbullets}
+\cvsection{Experience}
+\cvitem{\textbf{Frontend Developer}, VILIHA PTE. LTD.}{Ho Chi Minh City, Vietnam $\cdot$ Jul 2026 – Present $\cdot$ Full-time}
+\begin{cvbullets}
+  \item Translate detailed Figma designs into responsive, semantic frontend code and reusable components.
+  \item Develop with Next.js App Router, Server Components, TanStack Query, Tailwind CSS, and shadcn/ui.
+  \item Collaborate in Agile/Scrum and communicate in English with project stakeholders.
+\end{cvbullets}
+\cvitem{\textbf{Frontend Developer \& Testing}, Chip Nova}{Ho Chi Minh City, Vietnam $\cdot$ Aug 2025 – Mar 2026}
+\begin{cvbullets}
+  \item Clarified requirements, designed user experiences, and shipped frontend features across web and mobile.
+  \item Wrote Playwright end-to-end tests to verify product quality.
+\end{cvbullets}
+\cvitem{\textbf{Web Developer Intern}, Viet Japan Partner Company}{Ho Chi Minh City, Vietnam $\cdot$ May 2024 – Jun 2024 $\cdot$ Internship}
+\begin{cvbullets}
+  \item Developed web interfaces, integrated APIs, and collaborated on feature development and testing.
+\end{cvbullets}
+\cvsection{Technical Skills}
+\cvskill{Frontend}{React.js, TypeScript, JavaScript, HTML5, CSS3, Responsive design}
+\cvskill{AI workflows}{Claude / Claude Code, Spec-Driven Development, Playwright MCP}
+\cvskill{Data \& delivery}{TanStack Query, REST API integration, Git, Vercel}
+\cvsection{Education}
+\cvitem{\textbf{Engineer's Degree, Information Technology}, Ho Chi Minh City University of Technology (HUTECH)}{Jan 2025 $\cdot$ Ho Chi Minh City, Vietnam $\cdot$ GPA 3.35 / 4.0 $\cdot$ Very Good}
+\cvsection{Certifications}
+\cvplain{\href{https://learn.microsoft.com/api/credentials/share/vi-vn/hangnguyen1108/306DA7D144E07FF7?sharingId=C357452C5EB8224A}{Microsoft Certified: Azure Fundamentals (AZ-900)}}
+\cvplain{English, CEFR level B1}
+
+\end{document}
