@@ -11,7 +11,7 @@ Core Skills, Experience, and Projects. It uses `%%HEADER%%`, `%%SUMMARY%%`,
 `%%PROJECTS%%`, `%%LANGUAGES%%`, and `%%BODY%%`. Empty sections are omitted.
 Extra section types are appended at `%%BODY%%`.
 
-If `profile/personal.md` contains a valid `Photo` value, the renderer copies
+If the selected profile's `personal.md` contains a valid `Photo` value, the renderer copies
 that image beside `cv.tex` and uses it in the banner. If the photo field is
 missing, the same banner renders cleanly without an empty frame.
 

@@ -1,7 +1,8 @@
 # Workspace configuration for the latex-cv-tailor skill.
 # Paths are relative to this file.
 
-profile_root: ./profile
+# Default candidate; an explicitly selected profile path overrides this.
+profile_root: ./profile/hang
 template_root: ./templates
 default_template: ats-single-column
 output_root: ./applications

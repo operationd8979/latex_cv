@@ -6,7 +6,7 @@ from the profile, escapes LaTeX, and lays out paragraphs — so the contact bloc
 can never drift from `personal.md`.
 
 Usage:
-    python render_cover_letter.py --dir ./applications/<slug> --profile ./profile \
+    python render_cover_letter.py --dir ./applications/<slug> --profile ./profile/hang \
         --template-root ./templates [--template ats-single-column]
 """
 

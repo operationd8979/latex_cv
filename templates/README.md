@@ -12,7 +12,7 @@ with `scripts/render_cv.py`. The workspace default is `ats-single-column`.
 | `navy-header-photo` | Reference-inspired single column with a flat navy header, round photo and short orange section accents |
 
 The [blue banner example](blue-banner-photo/example-plan.json) is ready to render
-against `profile/`. It includes grouped skills and project role, tech stack,
+against the selected candidate profile. It includes grouped skills and project role, tech stack,
 GitHub and Demo links. See its [template contract](blue-banner-photo/PLACEHOLDERS.md)
 for build commands and behavior when optional profile fields are missing.
 

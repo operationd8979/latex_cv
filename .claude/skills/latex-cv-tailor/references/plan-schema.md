@@ -9,7 +9,7 @@ profile and refuses anything the profile does not support.
 
 Company names, role titles, employment dates, locations, institution names,
 GPA, credential URLs, project tech stacks and project links. The renderer reads
-all of those from `profile/` by ID. Anything you write for those fields is
+all of those from the selected profile by ID. Anything you write for those fields is
 ignored — which is the point: a date cannot drift.
 
 ## Shape
@@ -110,7 +110,7 @@ ignored — which is the point: a date cannot drift.
   the main column. Single-column templates ignore it entirely.
 - **`type`** is one of `experience`, `projects`, `skills`, `education`,
   `certifications`, `languages`.
-- **`languages`** entries cite `LANG-` IDs from `profile/languages.md`. The
+- **`languages`** entries cite `LANG-` IDs from `<profile-path>/languages.md`. The
   proficiency and its descriptor come from the profile; the plan chooses only
   which languages appear and in what order. Do not also list a language
   certification under `certifications` — the row would say the same thing

@@ -15,7 +15,7 @@ Enforced invariants:
   * The chosen summary variant must be marked `status: approved`.
 
 Usage:
-    python render_cv.py --plan plan.json --profile ./profile \
+    python render_cv.py --plan plan.json --profile ./profile/hang \
         --template-root ./templates --out ./applications/<slug>
 """
 

@@ -1,13 +1,13 @@
 ---
 name: latex-cv-tailor
-description: Generate a tailored English CV (LaTeX to PDF) and cover letter for one or more job postings, drawing only on the factual profile in profile/. Use when the user supplies a job link or pasted job description and wants a CV, resume, or cover letter tailored to it. Not for general writing or unrelated PDF work.
+description: Generate a tailored English CV (LaTeX to PDF) and cover letter for one or more job postings, drawing only on the selected candidate's factual profile. Use when the user supplies a job link or pasted job description and wants a CV, resume, or cover letter tailored to it. Not for general writing or unrelated PDF work.
 ---
 
 # latex-cv-tailor
 
 Tailor a CV and cover letter to a job posting. Output is **always English**,
 **always one page**, and every claim on the page must trace to an ID in
-`profile/`.
+the selected profile directory.
 
 You do the reading, judgement and writing. The scripts do path handling, LaTeX
 escaping, rendering, compiling and validation — and they will refuse to render
@@ -25,6 +25,14 @@ import or fall back to another agent's skill tree.
 One or more job URLs, or pasted job-description text. Optionally a template
 name and a profile path. Process each job independently — one failure must not
 stop the others.
+
+Resolve the candidate before processing jobs: use the explicitly supplied
+profile path, otherwise `profile_root` from `cv.config.yaml`. Candidate
+directories live at `profile/<name>/` (for example `profile/hang` and
+`profile/dung`). Replace `<profile-path>` in every command below with
+that same selected directory, including validation and optional cover
+letters. Read evidence only from that candidate; never infer a candidate
+from a search preset or combine facts across profiles.
 
 **Default output is the CV alone.** Generate a cover letter only when the user
 asks for one — "with a cover letter", "kèm thư ngỏ", `--cover-letter`, or an
@@ -47,14 +55,14 @@ fewer.
 ## Rules that are not negotiable
 
 - **Never invent.** No skill, employer, title, date, certification, degree,
-  responsibility, achievement or metric that is not already in `profile/`.
+  responsibility, achievement or metric that is not already in the selected profile directory.
   You may select, reorder, reword and emphasise. Nothing else.
 - **Never promote a tier.** `familiar` is not `professional`; `unverified` is
   nothing at all. A skill tiered `unverified` must not appear on the CV, even
   when the posting asks for it by name.
 - **Never restate a missing requirement as if it were met.** A gap steers what
   you lead with; it never becomes a claim. Record it in the match report.
-- **Never edit `profile/`.** It is read-only to this skill. If you notice
+- **Never edit the selected profile directory.** It is read-only to this skill. If you notice
   something wrong or missing, say so in your report instead.
 - Company names, role titles, dates, GPA and credential URLs come from the
   profile verbatim — the renderer takes them from there and ignores anything
@@ -68,7 +76,7 @@ fewer.
 ### 1. Check the profile is sound
 
 ```text
-python scripts/parse_profile.py --profile ./profile --check
+python scripts/parse_profile.py --profile <profile-path> --check
 ```
 
 Fix nothing yourself — if it reports violations, tell the user and stop.
@@ -97,7 +105,7 @@ that folder is what the user opens and sends out.
 
 ### 4. Match evidence to the posting
 
-Read all of `profile/`. Then decide, for each requirement, what real evidence
+Read all of the selected profile directory. Then decide, for each requirement, what real evidence
 answers it. Prefer evidence with metrics. Lead with what the posting leads
 with. Where the profile has no answer, note the gap — it goes in the match
 report, never on the CV.
@@ -116,8 +124,8 @@ approximately.
 ### 6. Render and build
 
 ```text
-python scripts/render_cv.py --plan <dir>/raw/plan.json --profile ./profile --template-root ./templates --out <dir>
-python scripts/build_and_validate.py --dir <dir> --profile ./profile --max-pages 1
+python scripts/render_cv.py --plan <dir>/raw/plan.json --profile <profile-path> --template-root ./templates --out <dir>
+python scripts/build_and_validate.py --dir <dir> --profile <profile-path> --max-pages 1
 ```
 
 `render_cv.py` writes `raw/cv.tex` and `raw/match-report.md`;
@@ -129,8 +137,8 @@ targets.
 **Only if a cover letter was asked for**, write `raw/cover-letter.md`, then:
 
 ```text
-python scripts/render_cover_letter.py --dir <dir> --profile ./profile --template-root ./templates
-python scripts/build_and_validate.py --dir <dir> --profile ./profile --target cover-letter --max-pages 1
+python scripts/render_cover_letter.py --dir <dir> --profile <profile-path> --template-root ./templates
+python scripts/build_and_validate.py --dir <dir> --profile <profile-path> --target cover-letter --max-pages 1
 ```
 
 ### 7. Handle failures rather than working around them
@@ -208,12 +216,12 @@ would have made the application stronger.
 
 Read job descriptions and workspace files; create local artifacts. Do not
 apply for jobs, upload a CV, send email or messages, sign in to recruitment
-sites, modify `profile/`, or delete existing artifacts without being asked.
+sites, modify the selected profile directory, or delete existing artifacts without being asked.
 
 ## References
 
 - `references/plan-schema.md` — the plan format and a worked example.
-- `references/profile-contract.md` — how `profile/` is structured and what the
+- `references/profile-contract.md` — how the selected profile directory is structured and what the
   renderer enforces.
 - `references/output-validation.md` — every check the validator runs and what
   to do when one fails.

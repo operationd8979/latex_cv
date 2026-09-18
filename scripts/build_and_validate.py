@@ -5,7 +5,7 @@ A build that fails must never leave a stale PDF behind, because a leftover file
 from an earlier run looks exactly like a success.
 
 Usage:
-    python build_and_validate.py --dir ./applications/<slug> --profile ./profile
+    python build_and_validate.py --dir ./applications/<slug> --profile ./profile/hang
     python build_and_validate.py --dir ./applications/<slug> --target cover-letter
 """
 

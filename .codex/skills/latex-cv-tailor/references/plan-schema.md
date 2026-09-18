@@ -9,7 +9,7 @@ profile and refuses anything the profile does not support.
 
 Company names, role titles, employment dates, locations, institution names,
 GPA, credential URLs, project tech stacks and project links. The renderer reads
-all of those from `profile/` by ID. Anything you write for those fields is
+all of those from the selected profile by ID. Anything you write for those fields is
 ignored — which is the point: a date cannot drift.
 
 ## Shape

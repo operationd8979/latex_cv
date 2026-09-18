@@ -5,8 +5,8 @@ The profile contract lives in profile/README.md. This parser is the only place
 that knows the file format; everything downstream consumes the JSON.
 
 Usage:
-    python parse_profile.py --profile ./profile              # emit JSON
-    python parse_profile.py --profile ./profile --check      # validate only
+    python parse_profile.py --profile ./profile/hang              # emit JSON
+    python parse_profile.py --profile ./profile/hang --check      # validate only
 """
 
 from __future__ import annotations

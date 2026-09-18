@@ -1,6 +1,7 @@
-# How `profile/` is structured and what is enforced
+# How each candidate profile is structured and what is enforced
 
-`profile/README.md` is the authoritative contract and is written for the person
+`profile/README.md` explains candidate selection; each candidate directory
+contains its own profile files. This contract is written for the person
 who edits the files. This page is the version you need when generating a CV.
 
 ## Files
@@ -83,7 +84,7 @@ citation must justify the whole sentence, not just its first half.
 ## Validating the profile
 
 ```bash
-python scripts/parse_profile.py --profile ./profile --check
+python scripts/parse_profile.py --profile <profile-path> --check
 ```
 
 Reports duplicate IDs, malformed dates, unknown tiers, evidence that resolves

@@ -2,7 +2,7 @@
 
 ```bash
 python scripts/build_and_validate.py \
-  --dir <job dir> --profile ./profile --max-pages 1
+  --dir <job dir> --profile <profile-path> --max-pages 1
 python scripts/build_and_validate.py \
   --dir <job dir> --target cover-letter --max-pages 1
 ```
