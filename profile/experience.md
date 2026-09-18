@@ -14,7 +14,7 @@ Ordered most recent first. Every bullet is addressable by its ID.
 - **Work model:** On-site
 - **Employment:** Full-time
 - **Start:** 2026-07
-- **End:** present
+- **End:** 2026-08
 - **Tech:** Next.js (App Router, Server Components), React.js, TypeScript, TanStack Query, TanStack Table, Tailwind CSS, shadcn/ui, Figma
 - **Metrics:** none recorded
   <!-- TODO — private repo, only you can supply these. Answer any you know:

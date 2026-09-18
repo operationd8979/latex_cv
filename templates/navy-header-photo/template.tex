@@ -1,0 +1,118 @@
+% navy-header-photo — compact one-column CV inspired by the supplied reference.
+% The portrait is optional: the renderer falls back to a text-only banner.
+\documentclass[10pt,a4paper]{article}
+
+\usepackage[a4paper,top=1.05cm,bottom=1.05cm,left=1.55cm,right=1.55cm]{geometry}
+\usepackage{fontspec}
+\setmainfont{texgyreheros}[
+  Extension=.otf, UprightFont=*-regular, BoldFont=*-bold,
+  ItalicFont=*-italic, BoldItalicFont=*-bolditalic,
+]
+\usepackage{xcolor}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usepackage{enumitem}
+\usepackage{titlesec}
+\usepackage{microtype}
+\usepackage[normalem]{ulem}
+\usepackage{hyperref}
+
+\definecolor{navy}{HTML}{123F69}
+\definecolor{accent}{HTML}{0E4775}
+\definecolor{orange}{HTML}{F5A15D}
+\definecolor{ink}{HTML}{30343A}
+\definecolor{muted}{HTML}{6A6D72}
+\hypersetup{colorlinks=true,urlcolor=accent,linkcolor=accent,breaklinks=true}
+\let\cvhref\href
+\renewcommand{\href}[2]{\cvhref{#1}{\uline{#2}}}
+
+\pagestyle{empty}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0pt}
+\linespread{1.01}
+\raggedright
+\raggedbottom
+\frenchspacing
+\hyphenpenalty=10000
+\exhyphenpenalty=10000
+\sloppy
+
+% Short orange underline, matching the visual rhythm of the reference image.
+\titleformat{\section}
+  {\normalfont\normalsize\bfseries\color{accent}}{}{0em}{\MakeUppercase}
+  [\vspace{-0.58em}{\color{orange}\rule{3.2em}{1pt}}]
+\titlespacing*{\section}{0pt}{0.58em}{0.28em}
+\newcommand{\cvsection}[1]{\section*{#1}}
+
+% Crop the supplied profile image without modifying the original file.
+\newcommand{\cvphoto}[1]{%
+  \begin{tikzpicture}[baseline=(current bounding box.center)]
+    \clip (0,0) circle (1.14cm);
+    \node[inner sep=0pt] at (0,-0.22cm) {\includegraphics[width=2.36cm]{#1}};
+    \draw[white,line width=1.4pt] (0,0) circle (1.11cm);
+  \end{tikzpicture}%
+}
+\newcommand{\cvbanner}[1]{%
+  \noindent\colorbox{navy}{%
+    \begin{minipage}[c][3.35cm][c]{\dimexpr\textwidth-2\fboxsep\relax}
+      \hspace{0.42cm}\begin{minipage}[c]{\dimexpr\linewidth-0.84cm\relax}
+        \color{white}\hypersetup{urlcolor=white,linkcolor=white}#1
+      \end{minipage}
+    \end{minipage}%
+  }\par\vspace{0.35em}%
+}
+\newcommand{\cvheaderwithphoto}[2]{\cvbanner{%
+  \begin{minipage}[c]{\dimexpr\linewidth-3.05cm\relax}#2\end{minipage}%
+  \hfill\begin{minipage}[c]{2.42cm}\centering\cvphoto{#1}\end{minipage}%
+}}
+\newcommand{\cvheaderplain}[1]{\cvbanner{#1}}
+\newcommand{\cvname}[1]{{\fontsize{22}{25}\selectfont\bfseries #1}\par\vspace{0.18em}}
+\newcommand{\cvheadline}[1]{{\fontsize{11}{13}\selectfont #1}\par\vspace{0.32em}}
+\newcommand{\cvcontact}[1]{{\small\raggedright #1\par}}
+\newcommand{\cvcontactline}[1]{{\small\raggedright #1\par}}
+
+\newcommand{\cvsummary}[1]{#1\par}
+\newcommand{\cvfill}{\hskip 0pt plus 1fill\relax}
+\newcommand{\cvitem}[2]{%
+  \vspace{0.22em}#1\cvfill{\small\bfseries #2}\par\nopagebreak[4]%
+}
+\newcommand{\cvitemplain}[1]{\vspace{0.22em}#1\par\nopagebreak[4]}
+\newcommand{\cvsubline}[1]{#1\par\nopagebreak[3]}
+\newcommand{\cvsubnote}[1]{{\small\color{muted}#1}\par}
+\newcommand{\cveducation}[5]{%
+  \vspace{0.16em}{\bfseries #2}\par\nopagebreak[4]%
+  #1 $\cdot$ \textbf{GPA:} #4 $\cdot$ \textbf{Graduated:} #3\par\nopagebreak[3]%
+}
+\newcommand{\cvlocation}[1]{{\small\itshape\color{muted}#1}\par\nopagebreak[3]}
+\newcommand{\cvprojectrole}[1]{{\small\textbf{Role:} #1}\par\nopagebreak[3]}
+\newcommand{\cvmeta}[1]{{\small\color{muted}\textbf{Tech:} #1}\par\nopagebreak[3]}
+\newcommand{\cvlinks}[1]{%
+  {\footnotesize\hangindent=1.2em\hangafter=1 #1\par}\nopagebreak[3]%
+}
+\newcommand{\cvplain}[1]{%
+  \vspace{0.1em}{\small\hangindent=1.2em\hangafter=1 #1\par}%
+}
+
+\newlist{cvbullets}{itemize}{1}
+\setlist[cvbullets]{leftmargin=1.12em,labelsep=0.42em,itemsep=0.04em,
+  parsep=0pt,topsep=0.10em,partopsep=0pt,label=\textbullet}
+
+% Bold inline categories recreate the compact Core Skills block in the sample.
+\newcommand{\cvskill}[2]{\vspace{0.12em}{\bfseries #1:} #2\par}
+\newcommand{\cvskilllabel}[1]{\vspace{0.18em}{\bfseries #1}\par}
+\newcommand{\cvskillitem}[1]{{\small #1}\par}
+
+%%PDFMETA%%
+
+\begin{document}
+\color{ink}
+%%HEADER%%
+%%SUMMARY%%
+%%EDUCATION%%
+%%CERTIFICATIONS%%
+%%SKILLS%%
+%%EXPERIENCE%%
+%%PROJECTS%%
+%%LANGUAGES%%
+%%BODY%%
+\end{document}

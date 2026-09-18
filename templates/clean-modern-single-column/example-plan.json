@@ -1,0 +1,13 @@
+{
+  "job": {"company": "Example Company", "title": "Frontend Developer", "job_id": "", "url": ""},
+  "template": "clean-modern-single-column",
+  "headline": "Frontend Developer | React · TypeScript · Next.js",
+  "summary": {"source": "SUM-01", "text": "Frontend Developer and Information Technology graduate with hands-on experience building responsive web and mobile applications using Next.js, React.js, and React Native."},
+  "sections": [
+    {"type": "skills", "heading": "Technical Skills", "groups": [{"label": "Frontend", "items": ["React.js", "Next.js (App Router, Server Components)", "TypeScript", "JavaScript", "Responsive design"]}]},
+    {"type": "experience", "heading": "WORK EXPERIENCE", "entries": [{"source": "EXP-VILIHA", "bullets": [{"source": ["EXP-VILIHA-01", "EXP-VILIHA-02"], "text": "Develop responsive, semantic web interfaces from detailed Figma designs and user and business requirements."}]}]},
+    {"type": "education", "heading": "Education", "entries": [{"source": "EDU-HUTECH"}]},
+    {"type": "certifications", "heading": "Certification", "entries": [{"source": "CERT-AZ900", "compact_link": true}, {"source": "CERT-ENG-B1", "display_title": "English B1 Certification"}]}
+  ],
+  "requirements": []
+}

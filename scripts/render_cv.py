@@ -37,6 +37,11 @@ MONTHS = {
     "05": "May", "06": "Jun", "07": "Jul", "08": "Aug",
     "09": "Sep", "10": "Oct", "11": "Nov", "12": "Dec",
 }
+MONTHS_LONG = {
+    "01": "January", "02": "February", "03": "March", "04": "April",
+    "05": "May", "06": "June", "07": "July", "08": "August",
+    "09": "September", "10": "October", "11": "November", "12": "December",
+}
 EMPTY_VALUES = {"", "unknown", "none recorded", "none", "n/a"}
 PLACEHOLDER_RE = re.compile(r"%%[A-Z_]+%%")
 TEX_COMMENT_RE = re.compile(r"(?<!\\)%.*$", re.MULTILINE)
@@ -150,6 +155,15 @@ def fmt_month(value: str) -> str:
 def fmt_range(start: str, end: str) -> str:
     left, right = fmt_month(start), fmt_month(end)
     return " – ".join(p for p in (left, right) if p)
+
+
+def fmt_month_long(value: str) -> str:
+    """`2025-01` -> `January 2025`; other values retain normal handling."""
+    if is_empty(value):
+        return ""
+    value = value.strip()
+    m = re.fullmatch(r"(\d{4})-(\d{2})", value)
+    return f"{MONTHS_LONG[m.group(2)]} {m.group(1)}" if m else fmt_month(value)
 
 
 def link(url: str, label: str | None = None) -> str:
@@ -294,7 +308,9 @@ def contact_bits(profile: dict) -> list[str]:
     return bits
 
 
-def render_header(profile: dict, plan: dict, stacked: bool = False) -> list[str]:
+def render_header(
+    profile: dict, plan: dict, stacked: bool = False, split_contacts: bool = False
+) -> list[str]:
     """`stacked` puts each contact detail on its own line, for a narrow column."""
     p = profile["personal"]
     out = [rf"\cvname{{{tex(p['full_name'])}}}"]
@@ -306,6 +322,10 @@ def render_header(profile: dict, plan: dict, stacked: bool = False) -> list[str]
     bits = contact_bits(profile)
     if stacked:
         out += [rf"\cvcontactline{{{bit}}}" for bit in bits]
+    elif split_contacts and len(bits) >= 2:
+        first = r" $\cdot$ ".join(bits[:2])
+        second = r" $\cdot$ ".join(bits[2:])
+        out.append(r"\cvcontactsplit{" + first + "}{" + second + "}")
     else:
         out.append(r"\cvcontact{" + r" $\cdot$ ".join(bits) + "}")
     return out
@@ -380,7 +400,7 @@ def render_projects(profile: dict, section: dict, *, separate_details: bool = Fa
 # One labelled line per URL rather than a run of bare domains. The label says
 # what is on the other end before the reader clicks; the address after it is
 # what a person retypes from a printed copy.
-PROJECT_LINKS = (("demo", "Demo"), ("repo", "GitHub"))
+PROJECT_LINKS = (("demo", "Demo"), ("repo", "Git"))
 
 
 def render_project_links(entry: dict, wanted: list[str] | None = None) -> list[str]:
@@ -421,7 +441,9 @@ def render_skills(profile: dict, section: dict, narrow: bool = False) -> list[st
     return out
 
 
-def render_education(profile: dict, section: dict) -> list[str]:
+def render_education(
+    profile: dict, section: dict, *, school_first: bool = False
+) -> list[str]:
     r"""The qualification, then the school and the grade it was earned at.
 
     Reading order matters more here than compactness: the degree is what a
@@ -436,6 +458,20 @@ def render_education(profile: dict, section: dict) -> list[str]:
     out = []
     for item in section.get("entries", []):
         e = _resolve(profile, item["source"], "education")
+        if school_first:
+            degree = " ".join(
+                part for part in (e.get("degree", ""), e.get("field", ""))
+                if not is_empty(part)
+            )
+            details = [
+                tex(e.get("institution", "")),
+                tex(degree),
+                tex(fmt_month_long(e.get("graduated", ""))),
+                tex(e.get("gpa", "")),
+                tex(e.get("classification", "")),
+            ]
+            out.append(r"\cveducation{%s}{%s}{%s}{%s}{%s}" % tuple(details))
+            continue
         out.append(cv_item(
             rf"\textbf{{{tex(e['title'])}}}",
             [fmt_month(e.get("graduated", "")), e.get("location", "")],
@@ -455,7 +491,7 @@ def render_certifications(profile: dict, section: dict) -> list[str]:
     out = []
     for item in section.get("entries", []):
         c = _resolve(profile, item["source"], "certification")
-        parts = [tex(c["title"])]
+        parts = [tex(item.get("display_title") or c["title"])]
         issuer = c.get("issuer", "")
         # "Microsoft Certified: Azure Fundamentals - Microsoft" reads badly;
         # skip the issuer when the certification name already carries it.
@@ -469,7 +505,10 @@ def render_certifications(profile: dict, section: dict) -> list[str]:
         # reader's only way to test it; hiding the address behind a label works
         # on screen and leaves a printed copy with an unverifiable claim.
         if not is_empty(c.get("credential_url")):
-            parts.append("Verify: " + url_link(c["credential_url"]))
+            if item.get("compact_link"):
+                parts.append(link(c["credential_url"], "Verify Credential"))
+            else:
+                parts.append("Verify: " + url_link(c["credential_url"]))
         out.append(r"\cvplain{%s}" % r" $\cdot$ ".join(parts))
     return out
 
@@ -551,6 +590,11 @@ def render_sections(
                 profile, section,
                 separate_details=r"\newcommand{\cvprojectrole}" in template_text,
             )
+        elif kind == "education":
+            lines = render_education(
+                profile, section,
+                school_first=r"\newcommand{\cveducation}" in template_text,
+            )
         else:
             lines = RENDERERS[kind](profile, section)
         if not lines:
@@ -576,9 +620,12 @@ def split_columns(plan: dict) -> tuple[list[dict], list[dict]]:
     return side, main
 
 
-def render_body(profile: dict, plan: dict) -> str:
+def render_body(profile: dict, plan: dict, *, template_text: str = "") -> str:
     """Single-column: header, summary and every section in one flow."""
-    out = render_header(profile, plan)
+    out = render_header(
+        profile, plan,
+        split_contacts=r"\newcommand{\cvcontactsplit}" in template_text,
+    )
     out += render_summary(profile, plan)
     out += render_sections(profile, plan.get("sections", []))
     return "\n".join(out) + "\n"
@@ -618,7 +665,10 @@ def render_marked(
             raise PlanError("named section slots cannot be combined with a sidebar")
         if has_header:
             values["%%HEADER%%"] = render_photo_header(profile, plan, photo)
-        body = [] if has_header else render_header(profile, plan)
+        body = [] if has_header else render_header(
+            profile, plan,
+            split_contacts=r"\newcommand{\cvcontactsplit}" in template_text,
+        )
         summary = render_summary(profile, plan)
         if has_summary_slot:
             values["%%SUMMARY%%"] = "\n".join(summary)
@@ -635,7 +685,7 @@ def render_marked(
         return values
 
     if not (has_header or has_sidebar):
-        values["%%BODY%%"] = render_body(profile, plan)
+        values["%%BODY%%"] = render_body(profile, plan, template_text=template_text)
         return values
 
     side_sections, main_sections = split_columns(plan)

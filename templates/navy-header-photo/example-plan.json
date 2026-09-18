@@ -1,0 +1,72 @@
+{
+  "template": "navy-header-photo",
+  "headline": "Frontend Engineer",
+  "summary": {
+    "source": "SUM-01",
+    "text": "Frontend Developer with hands-on experience building responsive web and mobile applications using React, TypeScript, Next.js, and React Native. Skilled in translating product and Figma requirements into reusable, maintainable UI components, integrating APIs, and delivering tested features in Agile teams."
+  },
+  "sections": [
+    {
+      "type": "education",
+      "heading": "Education",
+      "entries": [{ "source": "EDU-HUTECH" }]
+    },
+    {
+      "type": "certifications",
+      "heading": "Certification",
+      "entries": [
+        { "source": "CERT-AZ900", "compact_link": true },
+        { "source": "CERT-ENG-B1" }
+      ]
+    },
+    {
+      "type": "skills",
+      "heading": "Core Skills",
+      "groups": [
+        { "label": "Frontend", "items": ["React.js", "Next.js", "React Native", "JavaScript", "TypeScript", "HTML5", "CSS3"] },
+        { "label": "State, UI & Testing", "items": ["TanStack Query", "TanStack Table", "Tailwind CSS", "shadcn/ui", "Playwright (end-to-end)"] },
+        { "label": "Delivery", "items": ["REST API integration", "Git", "Vercel"] }
+      ]
+    },
+    {
+      "type": "experience",
+      "heading": "Experience",
+      "entries": [
+        {
+          "source": "EXP-VILIHA",
+          "bullets": [
+            { "source": ["EXP-VILIHA-02", "EXP-VILIHA-03"], "text": "Develop responsive web interfaces from user, business, and detailed Figma requirements." },
+            { "source": ["EXP-VILIHA-04"], "text": "Build reusable components with Next.js App Router, Server Components, TanStack Query, Tailwind CSS, and shadcn/ui." }
+          ]
+        },
+        {
+          "source": "EXP-CHIPNOVA",
+          "bullets": [
+            { "source": ["EXP-CHIPNOVA-01", "EXP-CHIPNOVA-02", "EXP-CHIPNOVA-03"], "text": "Designed and shipped web and mobile interfaces, built the mobile app with React Native, and wrote Playwright end-to-end tests." }
+          ]
+        },
+        {
+          "source": "EXP-VJP",
+          "bullets": [
+            { "source": ["EXP-VJP-01", "EXP-VJP-02"], "text": "Developed web interfaces, integrated APIs, and collaborated on feature development and testing." }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "projects",
+      "heading": "Projects",
+      "entries": [
+        {
+          "source": "PRJ-BROWSERMIND",
+          "links": ["repo", "demo"],
+          "show_tech": true,
+          "bullets": [
+            { "source": ["PRJ-BROWSERMIND-01", "PRJ-BROWSERMIND-02", "PRJ-BROWSERMIND-04"], "text": "Built a modern React and Tailwind CSS portfolio using specification-driven development and automated validation with Playwright MCP." }
+          ]
+        }
+      ]
+    }
+  ],
+  "requirements": []
+}

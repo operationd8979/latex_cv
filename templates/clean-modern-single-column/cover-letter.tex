@@ -1,0 +1,44 @@
+% Clean Modern Single Column — matching cover-letter template.
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[a4paper,top=1.8cm,bottom=1.8cm,left=1.9cm,right=1.9cm]{geometry}
+\usepackage{fontspec}
+\setmainfont{texgyreheros}[
+  Extension=.otf,
+  UprightFont=*-regular,
+  BoldFont=*-bold,
+  ItalicFont=*-italic,
+  BoldItalicFont=*-bolditalic,
+]
+\usepackage{xcolor}
+\usepackage{microtype}
+\usepackage{hyperref}
+
+\definecolor{ink}{HTML}{000000}
+\definecolor{accent}{HTML}{000000}
+\definecolor{muted}{HTML}{666666}
+\definecolor{rulegray}{HTML}{C8C8C8}
+
+\hypersetup{colorlinks=true,urlcolor=muted,linkcolor=muted,breaklinks=true}
+\pagestyle{empty}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.75em}
+\linespread{1.08}
+\raggedright
+\frenchspacing
+\hyphenpenalty=10000
+\exhyphenpenalty=10000
+\sloppy
+\color{ink}
+
+\newcommand{\clname}[1]{{\centering\fontsize{18}{21}\selectfont\bfseries #1\par}\vspace{0.08em}}
+\newcommand{\clcontact}[1]{{\centering\small\color{muted}#1\par}\vspace{0.25em}{\color{rulegray}\rule{\linewidth}{0.6pt}}\par}
+\newcommand{\cldate}[1]{{\small\color{muted}#1}\par}
+
+%%PDFMETA%%
+
+\begin{document}
+%%HEADER%%
+
+%%BODY%%
+\end{document}

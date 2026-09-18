@@ -18,7 +18,7 @@ claimed. Upgrade a tier only by adding real evidence to `experience.md` or
 ## Frontend
 
 - **React.js** — professional — evidence: EXP-VILIHA, EXP-CHIPNOVA, PRJ-BROWSERMIND, PRJ-ESME, PRJ-FLIPCARD
-- **Next.js (App Router, Server Components)** — professional — evidence: EXP-VILIHA-04
+- **Next.js** — professional — evidence: EXP-VILIHA-04
 - **React Native** — working — evidence: EXP-CHIPNOVA-02
 - **HTML5** — working — evidence: EXP-VJP-01, PRJ-FLIPCARD
 - **CSS3** — working — evidence: EXP-VJP-01, PRJ-FLIPCARD

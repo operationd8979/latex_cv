@@ -86,22 +86,14 @@
 
 % \cvitem{headline}{metadata}
 %
-% Dates and location sit at the right margin on the SAME line as the headline.
-% That is one paragraph, not a second column, and the distinction is the whole
-% point: a real column (minipage, tabular, paracol) is emitted as its own text
-% block, and PDF extraction then reattaches a date to the wrong entry. Inside
-% one line box the extractor reads "headline ... metadata" in order.
-% build_and_validate.py re-checks that on every build.
-%
-% The metadata is boxed, so it is this or nothing: where the pair does not fit
-% on one line TeX breaks at \cvfill and the whole of it drops to the next line
-% flush left — the old layout, still correct. Left unboxed it would instead
-% break wherever it ran out of room, stranding half a date range on a line of
-% its own. \footnotesize buys the width that keeps the longest rows out of
-% that fallback in the first place.
+% Metadata sits on a dedicated continuation line. This preserves the PDF text
+% order for long role and company names: headline first, then dates/location.
+% Keeping both paragraphs together also prevents an ATS from attaching the
+% metadata to the following entry at a page break.
 \newcommand{\cvitem}[2]{%
   \vspace{0.3em}%
-  #1\cvfill\mbox{\footnotesize\color{muted}#2}\par
+  #1\par\nopagebreak[4]%
+  {\footnotesize\color{muted}#2}\par\nopagebreak[3]%
 }
 
 % \cvitemplain{headline} — same, for entries with no metadata line

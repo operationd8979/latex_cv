@@ -6,8 +6,10 @@ with `scripts/render_cv.py`. The workspace default is `ats-single-column`.
 | Template | Layout |
 |---|---|
 | `ats-single-column` | Plain single column, without a photo |
+| `clean-modern-single-column` | Polished monochrome single column with centered header, without a photo |
 | `two-column-photo` | Full-width identity/photo header, sidebar and main column |
 | `blue-banner-photo` | Blue banner and round photo; Summary → Education → Skill → Certification → Experience → Project |
+| `navy-header-photo` | Reference-inspired single column with a flat navy header, round photo and short orange section accents |
 
 The [blue banner example](blue-banner-photo/example-plan.json) is ready to render
 against `profile/`. It includes grouped skills and project role, tech stack,

@@ -2,8 +2,8 @@
 
 ## EDU-HUTECH — Engineer's Degree, Information Technology
 
-- **Institution:** Ho Chi Minh City University of Technology (HUTECH)
-- **Degree:** Engineer's Degree
+- **Institution:** Ho Chi Minh City University Of Technology(HUTECH)
+- **Degree:** Engineer
 - **Field:** Information Technology
 - **Location:** Ho Chi Minh City, Vietnam
 - **Graduated:** 2025-01

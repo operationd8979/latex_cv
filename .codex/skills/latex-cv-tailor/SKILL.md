@@ -35,6 +35,7 @@ equivalent request. Do not produce one just because the posting mentions it.
 | Template | Use it when |
 |---|---|
 | `ats-single-column` *(default)* | The CV goes through an applicant portal or a large company's ATS. One column, no photo, maximum parseability. |
+| `clean-modern-single-column` | The user wants a polished monochrome one-column CV with a centered header, ATS-safe structure and no photo. |
 | `two-column-photo` | A person reads it first: a small company, a direct email, a referral, or a Vietnamese employer expecting an ID photo. Sidebar plus photo. |
 
 Pick `ats-single-column` unless the user asks otherwise or the posting is
