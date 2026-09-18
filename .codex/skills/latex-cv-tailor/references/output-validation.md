@@ -1,7 +1,7 @@
 # What the build checks, and what to do when it fails
 
 ```text
-python scripts/build_and_validate.py --dir <job dir> --profile <profile-path> --max-pages 1
+python scripts/build_and_validate.py --dir <job dir> --profile <profile-path>
 python scripts/build_and_validate.py --dir <job dir> --target cover-letter --max-pages 1
 ```
 
@@ -21,7 +21,7 @@ one. Never claim a CV is ready without a passing run.
 | Compilation | Tectonic exits non-zero; the last 15 log lines are shown |
 | PDF exists | No file, or zero bytes |
 | Text layer | Under 200 extractable characters — the PDF is not ATS-readable |
-| Page count | More pages than `--max-pages` |
+| Page count | Only checked when an explicit `--max-pages` is supplied; CVs have no default cap |
 | Placeholders | A `%%MARKER%%` survived into the rendered text |
 | Section headings | A heading in `cv.tex` is unreadable in the PDF |
 | Contact details | Name, email or phone unreadable in the text layer |
@@ -35,11 +35,10 @@ naively makes a check pass without testing anything.
 
 ## Fixing each failure
 
-**`is N pages; the limit is 1`** — cut content and re-render. Drop the weakest
-bullet, merge two related ones, or drop the least relevant project. Do **not**
-shrink margins, reduce the font, or raise `--max-pages` to force a fit: the
-template's spacing is already tuned, and a cramped CV reads worse than a
-shorter one.
+CVs have no page limit: omit `--max-pages`. Preserve useful supported content,
+readable fonts and comfortable spacing across pages. Do not drop a project to
+fit a page. The optional flag remains available for an explicitly requested
+limit, such as a one-page cover letter.
 
 **`entry '...': its 'Jan 2025' is separated from it by the 'Education'
 heading`** — this is the right-aligned-dates regression. PDF text extraction

@@ -16,9 +16,13 @@ against the selected candidate profile. It includes grouped skills and project r
 GitHub and Demo links. See its [template contract](blue-banner-photo/PLACEHOLDERS.md)
 for build commands and behavior when optional profile fields are missing.
 
-All three print addresses in full — a project's `Demo:` and `GitHub:` lines and
+All templates print addresses in full — a project's `Demo:` and `GitHub:` lines and
 a certification's `Verify:` line show the whole URL as visible text, not a
 one-word label over a hidden link, so a printed copy stays as useful as the
 clickable one. Projects are dated `Start: – End:` from the profile, like every
-other entry. Both cost vertical space: a plan that used to fit a page may need
-one bullet fewer, and `build_and_validate.py` is what tells you.
+other entry. Longer content flows across pages without a page cap.
+
+All CV templates use 12pt body text, approximately 11pt supporting details
+(including contact information, dates and links), and 1.08 line spacing. Keep
+at least two distinct factual projects and retain useful evidence instead of
+shrinking typography or squeezing the plan onto one page.

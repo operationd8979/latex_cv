@@ -5,9 +5,10 @@ description: Generate a tailored English CV (LaTeX to PDF) and cover letter for 
 
 # latex-cv-tailor
 
-Tailor a CV and cover letter to a job posting. Output is **always English**,
-**always one page**, and every claim on the page must trace to an ID in
-the selected profile directory.
+Tailor a CV and cover letter to a job posting. Output is **always English**.
+CVs have **no page limit**: preserve readable type, comfortable line spacing
+and useful supported detail. Every claim must trace to an ID in the selected
+profile directory.
 
 You do the reading, judgement and writing. The scripts do path handling, LaTeX
 escaping, rendering, compiling and validation — and they will refuse to render
@@ -45,12 +46,13 @@ equivalent request. Do not produce one just because the posting mentions it.
 | `ats-single-column` *(default)* | The CV goes through an applicant portal or a large company's ATS. One column, no photo, maximum parseability. |
 | `clean-modern-single-column` | The user wants a polished monochrome one-column CV with a centered header, ATS-safe structure and no photo. |
 | `two-column-photo` | A person reads it first: a small company, a direct email, a referral, or a Vietnamese employer expecting an ID photo. Sidebar plus photo. |
+| `blue-banner-photo` | A single-column CV with a blue banner and optional round photo. |
+| `navy-header-photo` | A single-column CV with a navy identity header and optional round photo. |
 
 Pick `ats-single-column` unless the user asks otherwise or the posting is
 clearly a direct-to-human application. If you choose `two-column-photo`, say in
-your report that it parses less reliably in automated screening. Its main
-column holds roughly 15% less than the single-column one, so budget a bullet
-fewer.
+your report that it parses less reliably in automated screening. Its narrower main column may require more pages; preserve useful
+evidence rather than trimming to the single-column page count.
 
 ## Rules that are not negotiable
 
@@ -110,12 +112,21 @@ answers it. Prefer evidence with metrics. Lead with what the posting leads
 with. Where the profile has no answer, note the gap — it goes in the match
 report, never on the CV.
 
-Pick one summary variant marked `status: approved`; you may trim it to fit.
+Pick one summary variant marked `status: approved`; tailor it for relevance
+without omitting useful context to meet a page count.
 
 ### 5. Write the plan
 
 Write `raw/plan.json`. Its schema, with a worked example, is in
 `references/plan-schema.md` — read that file before writing your first plan.
+
+Include **at least two distinct projects** from the selected profile. Lead
+with direct matches; if only one matches directly, add the strongest project
+showing transferable engineering or testing skills. Explain actual work, not
+an invented match. Include useful responsibilities, tools and outcomes, usually
+two to four evidence-backed bullets per project when the profile supports them.
+Do not repeat a project to meet the count. If the profile has fewer than two
+projects, report the gap and ask the user to add factual evidence; never invent.
 
 Every bullet cites the profile IDs it came from. The renderer rejects a bullet
 citing an ID that does not belong to its entry, so cite accurately rather than
@@ -125,7 +136,7 @@ approximately.
 
 ```text
 python scripts/render_cv.py --plan <dir>/raw/plan.json --profile <profile-path> --template-root ./templates --out <dir>
-python scripts/build_and_validate.py --dir <dir> --profile <profile-path> --max-pages 1
+python scripts/build_and_validate.py --dir <dir> --profile <profile-path>
 ```
 
 `render_cv.py` writes `raw/cv.tex` and `raw/match-report.md`;
@@ -143,9 +154,11 @@ python scripts/build_and_validate.py --dir <dir> --profile <profile-path> --targ
 
 ### 7. Handle failures rather than working around them
 
-- **"is 2 pages; the limit is 1"** — cut content and re-render. Drop the
-  weakest bullet, merge two related bullets, or drop the least relevant
-  project. Never shrink the template's margins or font to force a fit.
+- **Page count** — build CVs without `--max-pages`. Let content flow naturally
+  across pages; never shrink fonts, margins or line spacing, or drop useful
+  evidence just to fit a page. Review page breaks and avoid isolated headings.
+- **"at least 2 distinct projects are required"** — select another real project
+  from the profile, or report that the profile needs more factual project data.
 - **"tiered 'unverified' and must never reach a CV"** — remove that skill. Do
   not substitute a similar-sounding one that is also unsupported.
 - **"not evidence under <ID>"** — your citation is wrong. Find the bullet that

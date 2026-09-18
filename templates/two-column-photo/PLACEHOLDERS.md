@@ -70,10 +70,8 @@ A plan that wants the old placement can still ask for it with
 
 ## Capacity
 
-The main column is about 64% of the text width, so it holds roughly 15% less
-than `ats-single-column` at the same page count. A plan tuned for the
-single-column template usually needs one bullet removed here.
-
-Spelling URLs out costs height that a `Demo` label did not — one extra line per
-project, plus one for a credential URL. `\cvlinks` and `\cvplain` are set at
-`\footnotesize` to pay part of that back; the rest comes out of the plan.
+The narrower main column may use more pages than a single-column template.
+Keep the same useful evidence and at least two distinct factual projects.
+Body text is 12pt; contact details, metadata and URLs are approximately 11pt.
+The columns can flow across pages; do not shrink type or remove content to
+match a one-page layout.

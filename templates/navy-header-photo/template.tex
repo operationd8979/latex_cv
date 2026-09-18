@@ -1,8 +1,8 @@
-% navy-header-photo — compact one-column CV inspired by the supplied reference.
+% navy-header-photo — readable one-column CV inspired by the supplied reference.
 % The portrait is optional: the renderer falls back to a text-only banner.
-\documentclass[10pt,a4paper]{article}
+\documentclass[12pt,a4paper]{article}
 
-\usepackage[a4paper,top=1.05cm,bottom=1.05cm,left=1.55cm,right=1.55cm]{geometry}
+\usepackage[a4paper,top=1.5cm,bottom=1.5cm,left=1.55cm,right=1.55cm]{geometry}
 \usepackage{fontspec}
 \setmainfont{texgyreheros}[
   Extension=.otf, UprightFont=*-regular, BoldFont=*-bold,
@@ -13,6 +13,7 @@
 \usepackage{tikz}
 \usepackage{enumitem}
 \usepackage{titlesec}
+\usepackage{needspace}
 \usepackage{microtype}
 \usepackage[normalem]{ulem}
 \usepackage{hyperref}
@@ -29,20 +30,22 @@
 \pagestyle{empty}
 \setlength{\parindent}{0pt}
 \setlength{\parskip}{0pt}
-\linespread{1.01}
+\linespread{1.08}
 \raggedright
 \raggedbottom
 \frenchspacing
 \hyphenpenalty=10000
 \exhyphenpenalty=10000
 \sloppy
+\clubpenalty=10000
+\widowpenalty=10000
 
 % Short orange underline, matching the visual rhythm of the reference image.
 \titleformat{\section}
   {\normalfont\normalsize\bfseries\color{accent}}{}{0em}{\MakeUppercase}
   [\vspace{-0.58em}{\color{orange}\rule{3.2em}{1pt}}]
-\titlespacing*{\section}{0pt}{0.58em}{0.28em}
-\newcommand{\cvsection}[1]{\section*{#1}}
+\titlespacing*{\section}{0pt}{0.95em}{0.4em}
+\newcommand{\cvsection}[1]{\Needspace{5\baselineskip}\section*{#1}}
 
 % Crop the supplied profile image without modifying the original file.
 \newcommand{\cvphoto}[1]{%
@@ -54,10 +57,11 @@
 }
 \newcommand{\cvbanner}[1]{%
   \noindent\colorbox{navy}{%
-    \begin{minipage}[c][3.35cm][c]{\dimexpr\textwidth-2\fboxsep\relax}
+    \begin{minipage}[c]{\dimexpr\textwidth-2\fboxsep\relax}
+      \vspace{0.45cm}
       \hspace{0.42cm}\begin{minipage}[c]{\dimexpr\linewidth-0.84cm\relax}
         \color{white}\hypersetup{urlcolor=white,linkcolor=white}#1
-      \end{minipage}
+      \end{minipage}\par\vspace{0.45cm}
     \end{minipage}%
   }\par\vspace{0.35em}%
 }
@@ -67,16 +71,16 @@
 }}
 \newcommand{\cvheaderplain}[1]{\cvbanner{#1}}
 \newcommand{\cvname}[1]{{\fontsize{22}{25}\selectfont\bfseries #1}\par\vspace{0.18em}}
-\newcommand{\cvheadline}[1]{{\fontsize{11}{13}\selectfont #1}\par\vspace{0.32em}}
+\newcommand{\cvheadline}[1]{{\fontsize{13}{16}\selectfont #1}\par\vspace{0.32em}}
 \newcommand{\cvcontact}[1]{{\small\raggedright #1\par}}
 \newcommand{\cvcontactline}[1]{{\small\raggedright #1\par}}
 
 \newcommand{\cvsummary}[1]{#1\par}
 \newcommand{\cvfill}{\hskip 0pt plus 1fill\relax}
 \newcommand{\cvitem}[2]{%
-  \vspace{0.22em}#1\cvfill{\small\bfseries #2}\par\nopagebreak[4]%
+  \vspace{0.4em}#1\cvfill{\small\bfseries #2}\par\nopagebreak[4]%
 }
-\newcommand{\cvitemplain}[1]{\vspace{0.22em}#1\par\nopagebreak[4]}
+\newcommand{\cvitemplain}[1]{\vspace{0.4em}#1\par\nopagebreak[4]}
 \newcommand{\cvsubline}[1]{#1\par\nopagebreak[3]}
 \newcommand{\cvsubnote}[1]{{\small\color{muted}#1}\par}
 \newcommand{\cveducation}[5]{%
@@ -87,15 +91,15 @@
 \newcommand{\cvprojectrole}[1]{{\small\textbf{Role:} #1}\par\nopagebreak[3]}
 \newcommand{\cvmeta}[1]{{\small\color{muted}\textbf{Tech:} #1}\par\nopagebreak[3]}
 \newcommand{\cvlinks}[1]{%
-  {\footnotesize\hangindent=1.2em\hangafter=1 #1\par}\nopagebreak[3]%
+  {\small\hangindent=1.2em\hangafter=1 #1\par}\nopagebreak[3]%
 }
 \newcommand{\cvplain}[1]{%
   \vspace{0.1em}{\small\hangindent=1.2em\hangafter=1 #1\par}%
 }
 
 \newlist{cvbullets}{itemize}{1}
-\setlist[cvbullets]{leftmargin=1.12em,labelsep=0.42em,itemsep=0.04em,
-  parsep=0pt,topsep=0.10em,partopsep=0pt,label=\textbullet}
+\setlist[cvbullets]{leftmargin=1.12em,labelsep=0.42em,itemsep=0.18em,
+  parsep=0pt,topsep=0.25em,partopsep=0pt,label=\textbullet}
 
 % Bold inline categories recreate the compact Core Skills block in the sample.
 \newcommand{\cvskill}[2]{\vspace{0.12em}{\bfseries #1:} #2\par}

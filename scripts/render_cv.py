@@ -13,6 +13,7 @@ Enforced invariants:
   * Every listed skill exists in skills.md, and no `unverified` skill is
     allowed onto the page.
   * The chosen summary variant must be marked `status: approved`.
+  * A complete CV plan selects at least two distinct projects from the profile.
 
 Usage:
     python render_cv.py --plan plan.json --profile ./profile/hang \
@@ -810,6 +811,23 @@ def build_match_report(profile: dict, plan: dict) -> str:
 
 # --------------------------------------------------------------------------
 
+def check_project_selection(profile: dict, plan: dict) -> None:
+    """Require two real projects without fabricating or duplicating evidence."""
+    selected = []
+    for section in plan.get("sections", []):
+        if section.get("type") == "projects":
+            for item in section.get("entries", []):
+                selected.append(_resolve(profile, item["source"], "project")["id"])
+    if len(selected) != len(set(selected)):
+        raise PlanError("duplicate project entries; select distinct projects")
+    if len(selected) < 2:
+        if len(profile.get("projects", [])) < 2:
+            raise PlanError("at least 2 distinct projects are required; the selected profile "
+                            "needs another factual project before generating a CV")
+        raise PlanError("at least 2 distinct projects are required; select the strongest "
+                        "relevant or transferable projects from the selected profile")
+
+
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--plan", required=True, type=Path)
@@ -821,6 +839,7 @@ def main() -> int:
     try:
         profile = load_profile(args.profile)
         plan = json.loads(args.plan.read_text(encoding="utf-8"))
+        check_project_selection(profile, plan)
 
         name = plan.get("template", "ats-single-column")
         template_file = args.template_root / name / "template.tex"

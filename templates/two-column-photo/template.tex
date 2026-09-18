@@ -15,9 +15,9 @@
 % Markers: PDFMETA in the preamble, SIDEBAR and BODY inside the document.
 % Macro contract: see PLACEHOLDERS.md.
 
-\documentclass[11pt,a4paper]{article}
+\documentclass[12pt,a4paper]{article}
 
-\usepackage[a4paper,top=1.1cm,bottom=1.1cm,left=1.2cm,right=1.2cm]{geometry}
+\usepackage[a4paper,top=1.5cm,bottom=1.5cm,left=1.2cm,right=1.2cm]{geometry}
 \usepackage{fontspec}
 \setmainfont{texgyreheros}[
   Extension      = .otf,
@@ -29,6 +29,7 @@
 \usepackage{xcolor}
 \usepackage{enumitem}
 \usepackage{titlesec}
+\usepackage{needspace}
 \usepackage{graphicx}
 \usepackage{paracol}
 \usepackage{microtype}
@@ -55,12 +56,14 @@
 \pagestyle{empty}
 \setlength{\parindent}{0pt}
 \setlength{\parskip}{0pt}
-\linespread{1.0}
+\linespread{1.08}
 \raggedright
 \frenchspacing
 \hyphenpenalty=10000
 \exhyphenpenalty=10000
 \sloppy
+\clubpenalty=10000
+\widowpenalty=10000
 \raggedbottom
 
 % paracol rather than two minipages: a minipage cannot break, so content one
@@ -75,7 +78,7 @@
 \titleformat{\section}
   {\normalfont\large\bfseries\color{accent}}{}{0em}{}
   [\vspace{-0.5em}{\color{rulegray}\rule{\linewidth}{0.5pt}}]
-\titlespacing*{\section}{0pt}{0.6em}{0.3em}
+\titlespacing*{\section}{0pt}{0.95em}{0.4em}
 
 % ===========================================================================
 % Macro contract consumed by render_cv.py — see PLACEHOLDERS.md
@@ -95,22 +98,22 @@
 
 \newcommand{\cvname}[1]{{\fontsize{19}{21}\selectfont\bfseries #1}\par\vspace{0.15em}}
 \newcommand{\cvheadline}[1]{{\large\color{accent}#1}\par\vspace{0.35em}}
-\newcommand{\cvcontact}[1]{{\footnotesize\color{muted}#1}\par}
+\newcommand{\cvcontact}[1]{{\small\raggedright\color{muted}#1\par}}
 
 % Present so a plan written for a sidebar-identity template still renders.
-\newcommand{\cvcontactline}[1]{{\footnotesize\color{muted}#1}\par\vspace{0.15em}}
+\newcommand{\cvcontactline}[1]{{\small\raggedright\color{muted}#1\par}\vspace{0.15em}}
 
-\newcommand{\cvsection}[1]{\section*{#1}}
+\newcommand{\cvsection}[1]{\Needspace{5\baselineskip}\section*{#1}}
 \newcommand{\cvsummary}[1]{#1\par\vspace{0.1em}}
 
 % \cvitem{headline}{metadata} — flush left, metadata on its own line, so PDF
 % text extraction cannot detach a date from its entry.
 \newcommand{\cvitem}[2]{%
-  \vspace{0.24em}%
-  #1\par
-  {\small\color{muted}#2}\par
+  \vspace{0.4em}%
+  #1\par\nopagebreak[4]
+  {\small\color{muted}#2}\par\nopagebreak[3]
 }
-\newcommand{\cvitemplain}[1]{\vspace{0.24em}#1\par}
+\newcommand{\cvitemplain}[1]{\vspace{0.4em}#1\par}
 
 % \cvsubline{text} — one continuation line under an entry headline. One is
 % the limit; see the note on \cvsubline in ats-single-column/template.tex.
@@ -124,23 +127,18 @@
 % the address rather than flush with the label, where it would read as a
 % separate field.
 %
-% \footnotesize, a step below everything around it: two spelled-out addresses
-% per project is where this layout's page budget went, and a URL is the one
-% thing on a CV nobody reads through — it is looked at once, by someone who
-% has already decided to follow it.
-% No trailing gap: the links now stack, one address per line, and a space
-% between them only makes two lines of the same field look like two fields.
+% Keep URLs readable and let long addresses wrap naturally.
 \newcommand{\cvlinks}[1]{%
-  {\footnotesize\color{muted}\hangindent=1.2em\hangafter=1 #1\par}%
+  {\small\color{muted}\hangindent=1.2em\hangafter=1 #1\par}%
 }
 
 \newlist{cvbullets}{itemize}{1}
 \setlist[cvbullets]{
   leftmargin = 1.15em,
   labelsep   = 0.45em,
-  itemsep    = 0.05em,
+  itemsep    = 0.18em,
   parsep     = 0pt,
-  topsep     = 0.12em,
+  topsep     = 0.25em,
   partopsep  = 0pt,
   label      = \textbullet,
 }
@@ -151,22 +149,13 @@
 % Narrow-column form: label, then one item per line. Stacking keeps each
 % keyword whole when the PDF's text is extracted.
 %
-% The gaps around a group label are tighter than they look like they should
-% be, and deliberately: the sidebar is the tall column, so it decides where
-% the page breaks. A six-group skill list spends more height on the space
-% around its labels than a spelled-out credential URL does on its own text,
-% and that space is the cheapest thing on the page to give back.
-\newcommand{\cvskilllabel}[1]{\vspace{0.22em}{\bfseries #1}\par\vspace{0.06em}}
+% Group spacing stays comfortable even on multi-page CVs.
+\newcommand{\cvskilllabel}[1]{\vspace{0.4em}{\bfseries #1}\par\vspace{0.06em}}
 \newcommand{\cvskillitem}[1]{{\small #1}\par}
 
-% Certifications land in the sidebar, where a full verification URL wraps over
-% several lines — a 118-character credential link is six of them at 5.9cm.
-% \footnotesize is what keeps that from costing the page: it fits half again
-% as many characters per line, and it keeps the longest unbreakable run (a
-% credential hash) inside the column. The hanging indent marks where one row
-% ends and the next begins.
+% Credential URLs may wrap; preserve readable type and the hanging indent.
 \newcommand{\cvplain}[1]{%
-  \vspace{0.15em}{\footnotesize\hangindent=0.9em\hangafter=1 #1\par}%
+  \vspace{0.15em}{\small\hangindent=0.9em\hangafter=1 #1\par}%
 }
 
 %%PDFMETA%%
@@ -180,8 +169,10 @@
 \vspace{0.35em}
 
 \begin{paracol}{2}
+\raggedright
 %%SIDEBAR%%
 \switchcolumn
+\raggedright
 %%BODY%%
 \end{paracol}
 \end{document}

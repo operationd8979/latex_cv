@@ -9,23 +9,59 @@
     {
       "type": "education",
       "heading": "Education",
-      "entries": [{ "source": "EDU-HUTECH" }]
+      "entries": [
+        {
+          "source": "EDU-HUTECH"
+        }
+      ]
     },
     {
       "type": "certifications",
       "heading": "Certification",
       "entries": [
-        { "source": "CERT-AZ900", "compact_link": true },
-        { "source": "CERT-ENG-B1" }
+        {
+          "source": "CERT-AZ900",
+          "compact_link": true
+        },
+        {
+          "source": "CERT-ENG-B1"
+        }
       ]
     },
     {
       "type": "skills",
       "heading": "Core Skills",
       "groups": [
-        { "label": "Frontend", "items": ["React.js", "Next.js", "React Native", "JavaScript", "TypeScript", "HTML5", "CSS3"] },
-        { "label": "State, UI & Testing", "items": ["TanStack Query", "TanStack Table", "Tailwind CSS", "shadcn/ui", "Playwright (end-to-end)"] },
-        { "label": "Delivery", "items": ["REST API integration", "Git", "Vercel"] }
+        {
+          "label": "Frontend",
+          "items": [
+            "React.js",
+            "Next.js",
+            "React Native",
+            "JavaScript",
+            "TypeScript",
+            "HTML5",
+            "CSS3"
+          ]
+        },
+        {
+          "label": "State, UI & Testing",
+          "items": [
+            "TanStack Query",
+            "TanStack Table",
+            "Tailwind CSS",
+            "shadcn/ui",
+            "Playwright (end-to-end)"
+          ]
+        },
+        {
+          "label": "Delivery",
+          "items": [
+            "REST API integration",
+            "Git",
+            "Vercel"
+          ]
+        }
       ]
     },
     {
@@ -35,20 +71,44 @@
         {
           "source": "EXP-VILIHA",
           "bullets": [
-            { "source": ["EXP-VILIHA-02", "EXP-VILIHA-03"], "text": "Develop responsive web interfaces from user, business, and detailed Figma requirements." },
-            { "source": ["EXP-VILIHA-04"], "text": "Build reusable components with Next.js App Router, Server Components, TanStack Query, Tailwind CSS, and shadcn/ui." }
+            {
+              "source": [
+                "EXP-VILIHA-02",
+                "EXP-VILIHA-03"
+              ],
+              "text": "Develop responsive web interfaces from user, business, and detailed Figma requirements."
+            },
+            {
+              "source": [
+                "EXP-VILIHA-04"
+              ],
+              "text": "Build reusable components with Next.js App Router, Server Components, TanStack Query, Tailwind CSS, and shadcn/ui."
+            }
           ]
         },
         {
           "source": "EXP-CHIPNOVA",
           "bullets": [
-            { "source": ["EXP-CHIPNOVA-01", "EXP-CHIPNOVA-02", "EXP-CHIPNOVA-03"], "text": "Designed and shipped web and mobile interfaces, built the mobile app with React Native, and wrote Playwright end-to-end tests." }
+            {
+              "source": [
+                "EXP-CHIPNOVA-01",
+                "EXP-CHIPNOVA-02",
+                "EXP-CHIPNOVA-03"
+              ],
+              "text": "Designed and shipped web and mobile interfaces, built the mobile app with React Native, and wrote Playwright end-to-end tests."
+            }
           ]
         },
         {
           "source": "EXP-VJP",
           "bullets": [
-            { "source": ["EXP-VJP-01", "EXP-VJP-02"], "text": "Developed web interfaces, integrated APIs, and collaborated on feature development and testing." }
+            {
+              "source": [
+                "EXP-VJP-01",
+                "EXP-VJP-02"
+              ],
+              "text": "Developed web interfaces, integrated APIs, and collaborated on feature development and testing."
+            }
           ]
         }
       ]
@@ -59,10 +119,43 @@
       "entries": [
         {
           "source": "PRJ-BROWSERMIND",
-          "links": ["repo", "demo"],
+          "links": [
+            "repo",
+            "demo"
+          ],
           "show_tech": true,
           "bullets": [
-            { "source": ["PRJ-BROWSERMIND-01", "PRJ-BROWSERMIND-02", "PRJ-BROWSERMIND-04"], "text": "Built a modern React and Tailwind CSS portfolio using specification-driven development and automated validation with Playwright MCP." }
+            {
+              "source": [
+                "PRJ-BROWSERMIND-01",
+                "PRJ-BROWSERMIND-02",
+                "PRJ-BROWSERMIND-04"
+              ],
+              "text": "Built a modern React and Tailwind CSS portfolio using specification-driven development and automated validation with Playwright MCP."
+            }
+          ]
+        },
+        {
+          "source": "PRJ-SHOPEE-QA",
+          "links": [
+            "repo",
+            "demo"
+          ],
+          "show_tech": true,
+          "bullets": [
+            {
+              "source": [
+                "PRJ-SHOPEE-QA-01"
+              ],
+              "text": "Built an end-to-end UI automation framework for Shopee authentication flows using Playwright and TypeScript."
+            },
+            {
+              "source": [
+                "PRJ-SHOPEE-QA-02",
+                "PRJ-SHOPEE-QA-03"
+              ],
+              "text": "Applied Page Object Model architecture with reusable fixtures and utility modules for maintainable tests."
+            }
           ]
         }
       ]

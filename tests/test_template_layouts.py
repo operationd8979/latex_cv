@@ -39,7 +39,7 @@ class BlueBannerLayout(unittest.TestCase):
         self.assertEqual(re.findall(r"\\cvsection\{([^}]+)\}", doc), [
             "Summary", "Education", "Skills", "Certifications", "Experience", "Projects",
         ])
-        for fact in ("Test University", "GPA 3.9 / 4.0", "Verify: ",
+        for fact in ("Test University", r"\cveducation{Test University}{}{January 2024}{3.9 / 4.0}{}", "Verify: ",
                      r"\cvskill{Core}{C\#, Python}", "Acme",
                      # A project is dated by a range, like every other entry.
                      r"\cvitem{\textbf{Widget\_Tool}}{Apr 2025 – Sep 2025}"):
@@ -54,7 +54,7 @@ class BlueBannerLayout(unittest.TestCase):
         # target survives only as a PDF link annotation. Printed, a label is a
         # dead end, so what is typeset has to be the whole URL.
         self.assertIn(
-            r"\cvlinks{GitHub: \href{https://github.com/alexsample/widget_tool}"
+            r"\cvlinks{Git: \href{https://github.com/alexsample/widget_tool}"
             r"{https://\allowbreak{}github.\allowbreak{}com/\allowbreak{}alexsample"
             r"/\allowbreak{}widget\_\allowbreak{}tool}}",
             doc,
@@ -70,7 +70,7 @@ class BlueBannerLayout(unittest.TestCase):
         doc = self.render()
         self.assertNotIn("Demo: ", doc)
         self.assertNotIn(r"\cvprojectrole{", doc)
-        self.assertIn("GitHub: ", doc)
+        self.assertIn("Git: ", doc)
 
     def test_show_tech_false_is_respected(self):
         self.plan["sections"][0]["entries"][0]["show_tech"] = False
@@ -108,7 +108,7 @@ class BlueBannerLayout(unittest.TestCase):
                 # The plan names only `repo`, so the demo stays off the page —
                 # an explicit narrowing still wins over "show what exists".
                 self.assertNotIn("Demo: ", body)
-                self.assertIn(r"\cvlinks{GitHub: \href{https://github.com/alexsample/widget_tool}", body)
+                self.assertIn(r"\cvlinks{Git: \href{https://github.com/alexsample/widget_tool}", body)
                 self.assertNotIn(r"\cvprojectrole{", body)
                 self.assertIn("Developer", body)
 
@@ -127,7 +127,7 @@ class BlueBannerLayout(unittest.TestCase):
                     r"\&\allowbreak{}y=\allowbreak{}2}}",
                     doc,
                 )
-                self.assertIn("GitHub: ", doc)
+                self.assertIn("Git: ", doc)
 
     def test_a_project_without_start_and_end_still_renders_its_legacy_month(self):
         project = self.profile["projects"][0]

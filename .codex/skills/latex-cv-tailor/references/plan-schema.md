@@ -64,6 +64,15 @@ ignored — which is the point: a date cannot drift.
               "text": "Built a Playwright framework covering 21 test cases across 4 targets."
             }
           ]
+        },
+        {
+          "source": "PRJ-BROWSERMIND",
+          "bullets": [
+            {
+              "source": ["PRJ-BROWSERMIND-01"],
+              "text": "Used Spec-Driven Development to turn product requirements into an application with clear specifications and automated validation."
+            }
+          ]
         }
       ]
     },
@@ -90,6 +99,14 @@ ignored — which is the point: a date cannot drift.
   ]
 }
 ```
+
+## Project selection
+
+Every complete CV plan must select at least two distinct project IDs from the
+selected profile. Prefer direct matches, then transferable skills; keep claims
+faithful to the evidence. If fewer than two projects exist in the profile, stop
+and report the missing factual data. Repeating an ID does not satisfy the rule.
+There is no page cap; include useful supported detail without compressing type.
 
 ## Field notes
 

@@ -33,10 +33,8 @@ links or roles are omitted, with no placeholder or fabricated value. In the
 current profile, Esme Chatbot has no demo URL; the example uses BrowserMind and
 Shopee UI Test Automation, which each have both destinations.
 
-A spelled-out URL costs height a label did not — two lines per project, and a
-second line for the Azure credential. `\cvlinks` is set at `\footnotesize`,
-`\cvplain` at `\small`, and the leading and section spacing are a little
-tighter than they were, which is what keeps `example-plan.json` on one page.
+Body text is 12pt, supporting details and URLs are approximately 11pt,
+and line spacing is 1.08. Section and bullet gaps allow longer CVs to breathe.
 
 ## Markers
 
@@ -71,16 +69,16 @@ These options are detected by the shared renderer for named-section templates.
 
 Fonts and LaTeX packages come from the Tectonic bundle. Text remains selectable,
 and the regular build validator checks section visibility and metadata order.
-Longer plans can flow onto another page; the one-page limit remains enforced by
-the build command, so adjust selected content when needed.
+Longer plans flow onto another page without a page cap. Preserve readable type
+and useful supported detail; keep at least two distinct projects.
 
 ## Build the example
 
 From the workspace root:
 
 ```powershell
-python scripts/render_cv.py --plan templates/blue-banner-photo/example-plan.json --profile profile --template-root templates --out applications/blue-banner-photo-preview
-python scripts/build_and_validate.py --dir applications/blue-banner-photo-preview --profile profile --max-pages 1
+python scripts/render_cv.py --plan templates/blue-banner-photo/example-plan.json --profile profile/hang --template-root templates --out applications/blue-banner-photo-preview
+python scripts/build_and_validate.py --dir applications/blue-banner-photo-preview --profile profile/hang
 ```
 
 The example references this workspace's profile IDs. For another profile,

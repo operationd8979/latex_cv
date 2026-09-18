@@ -314,7 +314,8 @@ class EntryLayout(unittest.TestCase):
              "entries": [{"source": "CERT-WIDGET"}]},
         ])
         out = self.render(plan)
-        self.assertIn(r"{Verify Credential}", out)
+        self.assertIn(r"Verify: \href{https://example.com/cred?id=1&x=2}", out)
+        self.assertIn(r"{https://\allowbreak{}example.\allowbreak{}com/\allowbreak{}cred?", out)
         # the name must stay plain text, not become the link
         self.assertIn(r"\cvplain{Certified Widget Pro $\cdot$", out)
 
@@ -329,7 +330,7 @@ class EntryLayout(unittest.TestCase):
         out = self.render(plan)
         self.assertIn(
             r"\cvlinks{Git: \href{https://github.com/alexsample/widget_tool}"
-            r"{https://github.com/alexsample/widget\_tool}}",
+            r"{https://\allowbreak{}github.\allowbreak{}com/\allowbreak{}alexsample/\allowbreak{}widget\_\allowbreak{}tool}}",
             out,
         )
 
@@ -337,7 +338,7 @@ class EntryLayout(unittest.TestCase):
         entry = {"demo": "https://demo.test", "repo": "https://repo.test"}
         self.assertEqual(
             render_cv.render_project_links(entry, ["demo"]),
-            [r"\cvlinks{Demo: \href{https://demo.test}{https://demo.test}}"],
+            [r"\cvlinks{Demo: \href{https://demo.test}{https://\allowbreak{}demo.\allowbreak{}test}}"],
         )
 
 

@@ -6,9 +6,9 @@
 % The renderer substitutes %%PDFMETA%% and %%BODY%%. Everything else is design.
 % The macro contract this template must provide is in PLACEHOLDERS.md.
 
-\documentclass[11pt,a4paper]{article}
+\documentclass[12pt,a4paper]{article}
 
-\usepackage[a4paper,top=1.1cm,bottom=1.1cm,left=1.4cm,right=1.4cm]{geometry}
+\usepackage[a4paper,top=1.5cm,bottom=1.5cm,left=1.4cm,right=1.4cm]{geometry}
 \usepackage{fontspec}
 \setmainfont{texgyreheros}[
   Extension      = .otf,
@@ -20,6 +20,7 @@
 \usepackage{xcolor}
 \usepackage{enumitem}
 \usepackage{titlesec}
+\usepackage{needspace}
 \usepackage{microtype}
 \usepackage[normalem]{ulem}
 \usepackage{hyperref}
@@ -46,7 +47,7 @@
 \pagestyle{empty}
 \setlength{\parindent}{0pt}
 \setlength{\parskip}{0pt}
-\linespread{1.0}
+\linespread{1.08}
 \raggedbottom
 
 % Ragged right, not justified: a CV column is narrow enough that justification
@@ -58,12 +59,14 @@
 \hyphenpenalty=10000
 \exhyphenpenalty=10000
 \sloppy
+\clubpenalty=10000
+\widowpenalty=10000
 
 % --- section heading: bold, sentence case, thin rule underneath -------------
 \titleformat{\section}
   {\normalfont\large\bfseries}{}{0em}{}
   [\vspace{-0.55em}{\color{rulegray}\rule{\linewidth}{0.5pt}}]
-\titlespacing*{\section}{0pt}{0.55em}{0.25em}
+\titlespacing*{\section}{0pt}{0.95em}{0.4em}
 
 % ===========================================================================
 % Macro contract consumed by render_cv.py — see PLACEHOLDERS.md
@@ -76,7 +79,7 @@
 \newcommand{\cvcontact}[1]{{\centering\small\color{muted}#1\par}\vspace{0.15em}}
 
 % Sections
-\newcommand{\cvsection}[1]{\section*{#1}}
+\newcommand{\cvsection}[1]{\Needspace{5\baselineskip}\section*{#1}}
 \newcommand{\cvsummary}[1]{#1\par\vspace{0.1em}}
 
 % \raggedright leaves \rightskip at 0pt plus 1fil, so a plain \hfill would
@@ -91,13 +94,13 @@
 % Keeping both paragraphs together also prevents an ATS from attaching the
 % metadata to the following entry at a page break.
 \newcommand{\cvitem}[2]{%
-  \vspace{0.3em}%
+  \vspace{0.4em}%
   #1\par\nopagebreak[4]%
-  {\footnotesize\color{muted}#2}\par\nopagebreak[3]%
+  {\small\color{muted}#2}\par\nopagebreak[3]%
 }
 
 % \cvitemplain{headline} — same, for entries with no metadata line
-\newcommand{\cvitemplain}[1]{\vspace{0.3em}#1\par}
+\newcommand{\cvitemplain}[1]{\vspace{0.4em}#1\par}
 
 % \cvsubline{text} — ONE continuation line under an entry headline, for a
 % fact that belongs to the entry but not on its headline (an institution and
@@ -131,9 +134,9 @@
 \setlist[cvbullets]{
   leftmargin = 1.15em,
   labelsep   = 0.45em,
-  itemsep    = 0.05em,
+  itemsep    = 0.18em,
   parsep     = 0pt,
-  topsep     = 0.12em,
+  topsep     = 0.25em,
   partopsep  = 0pt,
   label      = \textbullet,
 }

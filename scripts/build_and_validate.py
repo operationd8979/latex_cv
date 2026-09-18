@@ -215,7 +215,7 @@ def check_reading_order(source: str, text: str) -> list[str]:
 
 
 def validate(
-    tex_path: Path, pdf: Path, log: str, profile: dict | None, max_pages: int
+    tex_path: Path, pdf: Path, log: str, profile: dict | None, max_pages: int | None = None
 ) -> tuple[list[str], list[str]]:
     errors: list[str] = []
     warnings: list[str] = []
@@ -234,7 +234,7 @@ def validate(
         )
 
     pages = text.count("\f") or 1
-    if pages > max_pages:
+    if max_pages is not None and pages > max_pages:
         errors.append(f"{pdf.name} is {pages} pages; the limit is {max_pages}")
 
     leftover = set(PLACEHOLDER_RE.findall(text))
@@ -287,8 +287,11 @@ def main() -> int:
              "contact fields the CV build verifies",
     )
     ap.add_argument("--engine", default="tectonic")
-    ap.add_argument("--max-pages", type=int, default=1)
+    ap.add_argument("--max-pages", type=int, default=None,
+                    help="optional page limit; omitted means no limit")
     args = ap.parse_args()
+    if args.max_pages is not None and args.max_pages < 1:
+        ap.error("--max-pages must be a positive integer")
 
     tex_path = args.dir / "raw" / f"{args.target}.tex"
     # Tectonic names its output after the .tex stem; the deliverable is renamed
