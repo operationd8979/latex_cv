@@ -112,6 +112,15 @@ answers it. Prefer evidence with metrics. Lead with what the posting leads
 with. Where the profile has no answer, note the gap — it goes in the match
 report, never on the CV.
 
+Set `plan.job.title` to the posting's exact job title. Write one short
+`plan.headline` naming the corresponding role: for a frontend posting use
+`Frontend Developer`; for a Tester/QA posting use `Software Tester`, `QA
+Engineer`, or the posting's testing role. Do not copy a default role from the
+profile when it differs from the job. Do not put technology tags or a second
+role after `|`. Use a combined headline only when the job title explicitly
+names both roles. Skills that transfer across roles belong in the summary,
+skills and project evidence.
+
 Pick one summary variant marked `status: approved`; tailor it for relevance
 without omitting useful context to meet a page count.
 

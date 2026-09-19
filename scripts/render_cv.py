@@ -14,6 +14,7 @@ Enforced invariants:
     allowed onto the page.
   * The chosen summary variant must be marked `status: approved`.
   * A complete CV plan selects at least two distinct projects from the profile.
+  * The CV headline names the job's role, without unrelated second roles.
 
 Usage:
     python render_cv.py --plan plan.json --profile ./profile/hang \
@@ -828,9 +829,37 @@ def check_project_selection(profile: dict, plan: dict) -> None:
                         "relevant or transferable projects from the selected profile")
 
 
+ROLE_PATTERNS = {
+    "frontend": re.compile(r"\b(?:front[ -]?end|react (?:developer|engineer)|angular (?:developer|engineer)|ui developer)\b", re.I),
+    "testing": re.compile(r"\b(?:qa|qc|tester|testing|test automation|test engineer|quality assurance|sdet|kiểm thử)\b", re.I),
+    "fullstack": re.compile(r"\bfull[ -]?stack\b", re.I),
+    "devops": re.compile(r"\b(?:dev[ -]?ops|site reliability|sre)\b", re.I),
+}
+
+
+def check_headline_for_job(plan: dict, job_title: str | None = None) -> None:
+    """Reject a headline that adds a role the posting does not advertise."""
+    job = plan.get("job") or {}
+    title = str(job_title if job_title is not None else job.get("title") or "").strip()
+    headline = plan.get("headline")
+    if not isinstance(headline, str) or not headline.strip():
+        if title:
+            raise PlanError("a job-specific headline is required in the CV plan")
+        return  # Older standalone plans may still use the profile's default.
+    headline = headline.strip()
+    requested = {role for role, pattern in ROLE_PATTERNS.items() if pattern.search(title)}
+    displayed = {role for role, pattern in ROLE_PATTERNS.items() if pattern.search(headline)}
+    dual_job = len(requested) > 1
+    if not dual_job and ("|" in headline or len(displayed) > 1):
+        raise PlanError("headline lists multiple roles or a tagline; use one role matching the job")
+    if len(requested) == 1 and not requested.issubset(displayed):
+        raise PlanError(f"headline role does not match the job title {title!r}")
+
+
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--plan", required=True, type=Path)
+    ap.add_argument("--job-title", help="approved posting title; overrides the plan's shortened title for headline validation")
     ap.add_argument("--profile", required=True, type=Path)
     ap.add_argument("--template-root", required=True, type=Path)
     ap.add_argument("--out", required=True, type=Path)
@@ -840,6 +869,7 @@ def main() -> int:
         profile = load_profile(args.profile)
         plan = json.loads(args.plan.read_text(encoding="utf-8"))
         check_project_selection(profile, plan)
+        check_headline_for_job(plan, args.job_title)
 
         name = plan.get("template", "ats-single-column")
         template_file = args.template_root / name / "template.tex"

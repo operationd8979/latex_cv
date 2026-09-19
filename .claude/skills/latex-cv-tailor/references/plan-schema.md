@@ -102,6 +102,18 @@ ignored — which is the point: a date cannot drift.
 }
 ```
 
+## Job-specific headline
+
+Copy `job.title` from the actual posting. `headline` is a single role aligned
+with that title, such as `Frontend Developer` for frontend work or `Software
+Tester` for a Tester/QA role. The renderer rejects a missing headline, an
+unrelated role, and a `|` tagline on a single-role job. A combined frontend
+and testing headline is allowed only when the job title explicitly names both.
+Do not use the candidate's broader target-role list as the printed headline.
+Put matching technologies and transferable experience in other sections.
+When seek_job launches the renderer, it passes `--job-title` from the approved
+job snapshot; that title is authoritative even if `plan.job.title` is shortened.
+
 ## Project selection
 
 Every complete CV plan must select at least two distinct project IDs from the

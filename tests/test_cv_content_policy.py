@@ -46,7 +46,9 @@ class ContentPolicy(unittest.TestCase):
 
     def test_two_distinct_projects_render_through_cli(self):
         plan = self.root / "plan.json"
-        plan.write_text(json.dumps(self.plan(["PRJ-WIDGET", "PRJ-API"])), encoding="utf-8")
+        contents = self.plan(["PRJ-WIDGET", "PRJ-API"])
+        contents.update(job={"title": "Tester Intern"}, headline="Software Tester")
+        plan.write_text(json.dumps(contents), encoding="utf-8")
         args = ["render_cv.py", "--profile", str(self.profile_path), "--plan", str(plan),
                 "--template-root", str(ROOT / "templates"), "--out", str(self.root / "job")]
         with patch.object(sys, "argv", args), contextlib.redirect_stdout(io.StringIO()):
@@ -54,6 +56,7 @@ class ContentPolicy(unittest.TestCase):
         doc = (self.root / "job/raw/cv.tex").read_text(encoding="utf-8")
         self.assertIn("Widget\\_Tool", doc)
         self.assertIn("Synthetic API", doc)
+        self.assertIn(r"\cvheadline{Software Tester}", doc)
 
     def test_zero_or_one_project_is_rejected(self):
         for ids in ([], ["PRJ-WIDGET"]):
@@ -84,6 +87,50 @@ class ContentPolicy(unittest.TestCase):
         with patch.object(sys, "argv", args), contextlib.redirect_stderr(io.StringIO()):
             self.assertEqual(render_cv.main(), 1)
         self.assertFalse((self.root / "job/raw/cv.tex").exists())
+
+    def test_headline_matches_frontend_or_testing_job(self):
+        cases = [
+            ("Junior Frontend Developer (React)", "Frontend Developer"),
+            ("Manual Tester - Banking UAT", "Software Tester"),
+            ("QC Automation Tester", "QA Automation Engineer"),
+            ("Software Engineer Intern - QA", "QA Engineer"),
+            ("DevOps Engineer", "DevOps Engineer"),
+        ]
+        for title, headline in cases:
+            with self.subTest(title=title):
+                render_cv.check_headline_for_job({"job": {"title": title}, "headline": headline})
+
+    def test_headline_rejects_wrong_or_multiple_roles(self):
+        cases = [
+            ("Manual Tester - Banking UAT", "Frontend Developer | Software Testing"),
+            ("QA Automation Engineer", "Frontend Developer"),
+            ("Frontend Developer", "Software Tester"),
+            ("Frontend Developer", "Frontend Developer | React and TypeScript"),
+            ("Tester Intern", "Frontend Developer & QA Engineer"),
+        ]
+        for title, headline in cases:
+            with self.subTest(title=title, headline=headline), self.assertRaises(render_cv.PlanError):
+                render_cv.check_headline_for_job({"job": {"title": title}, "headline": headline})
+
+    def test_two_roles_allowed_only_for_explicitly_combined_job_title(self):
+        render_cv.check_headline_for_job({"job": {"title": "Frontend Developer & QA Tester"},
+                                          "headline": "Frontend Developer | QA Tester"})
+        with self.assertRaises(render_cv.PlanError):
+            render_cv.check_headline_for_job({"job": {"title": "Frontend Developer"},
+                                              "headline": "Frontend Developer | QA Tester"})
+
+    def test_approved_title_overrides_a_shortened_or_misleading_plan_title(self):
+        plan = {"job": {"title": "Frontend Developer & QA Tester"},
+                "headline": "Frontend Developer | QA Tester"}
+        with self.assertRaises(render_cv.PlanError):
+            render_cv.check_headline_for_job(plan, "Manual Tester - Banking UAT")
+        render_cv.check_headline_for_job({"job": {"title": "Shortened title"},
+                                          "headline": "Software Tester"},
+                                         "Manual Tester - Banking UAT")
+
+    def test_job_plan_requires_an_explicit_headline(self):
+        with self.assertRaisesRegex(render_cv.PlanError, "job-specific headline"):
+            render_cv.check_headline_for_job({"job": {"title": "Manual Tester"}})
 
     def test_build_cli_accepts_multiple_pages_unless_limit_is_explicit(self):
         out = self.root / "job"
