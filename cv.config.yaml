@@ -4,7 +4,7 @@
 # Default candidate; an explicitly selected profile path overrides this.
 profile_root: ./profile/hang
 template_root: ./templates
-default_template: ats-single-column
+default_template: navy-header-photo
 output_root: ./applications
 
 language: en

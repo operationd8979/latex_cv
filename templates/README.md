@@ -1,7 +1,7 @@
 # CV templates
 
 Select a template with the `template` field in a content plan, then render it
-with `scripts/render_cv.py`. The workspace default is `ats-single-column`.
+with `scripts/render_cv.py`. The workspace default is `navy-header-photo`.
 
 | Template | Layout |
 |---|---|

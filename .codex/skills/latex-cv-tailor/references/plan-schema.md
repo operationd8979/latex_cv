@@ -22,7 +22,7 @@ ignored — which is the point: a date cannot drift.
     "job_id": "NW-114",
     "url": "https://example.test/jobs/nw-114"
   },
-  "template": "ats-single-column",
+  "template": "navy-header-photo",
   "headline": "Frontend Developer",
 
   "summary": {

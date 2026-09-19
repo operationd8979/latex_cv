@@ -43,14 +43,14 @@ equivalent request. Do not produce one just because the posting mentions it.
 
 | Template | Use it when |
 |---|---|
-| `ats-single-column` *(default)* | The CV goes through an applicant portal or a large company's ATS. One column, no photo, maximum parseability. |
+| `ats-single-column` | The user requests a one-column, photo-free CV for maximum ATS parseability. |
 | `clean-modern-single-column` | The user wants a polished monochrome one-column CV with a centered header, ATS-safe structure and no photo. |
 | `two-column-photo` | A person reads it first: a small company, a direct email, a referral, or a Vietnamese employer expecting an ID photo. Sidebar plus photo. |
 | `blue-banner-photo` | A single-column CV with a blue banner and optional round photo. |
-| `navy-header-photo` | A single-column CV with a navy identity header and optional round photo. |
+| `navy-header-photo` *(default)* | A single-column CV with a navy identity header and optional round photo. |
 
-Pick `ats-single-column` unless the user asks otherwise or the posting is
-clearly a direct-to-human application. If you choose `two-column-photo`, say in
+Use `default_template` from `cv.config.yaml` unless the user requests another
+template. If you choose `two-column-photo`, say in
 your report that it parses less reliably in automated screening. Its narrower main column needs more concise content to stay within two pages;
 keep readable typography and at least two distinct projects.
 

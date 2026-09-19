@@ -820,7 +820,7 @@ def main() -> int:
         check_project_selection(profile, plan)
         check_headline_for_job(plan, args.job_title)
 
-        name = plan.get("template", "ats-single-column")
+        name = plan.get("template", "navy-header-photo")
         template_file = args.template_root / name / "template.tex"
         if not template_file.exists():
             raise PlanError(
