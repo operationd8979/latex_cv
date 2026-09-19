@@ -138,6 +138,10 @@ an invented match. Include useful responsibilities, tools and outcomes, usually
 two to four evidence-backed bullets per project when the profile supports them.
 Start with the two strongest projects. Add more only if the CV stays within two
 pages. Use short clickable link labels, preserving complete destination URLs.
+For each selected project, always include its Demo when the profile records one,
+including a video or Google Drive demo. Do not omit it to save space. Label the
+repository link GitHub. Omit `links` to show all available destinations; never
+invent a missing link. The renderer retains Demo even in legacy repo-only plans.
 Do not repeat a project to meet the count. If the profile has fewer than two
 projects, report the gap and ask the user to add factual evidence; never invent.
 

@@ -58,7 +58,7 @@ extra goes on that same line, not on another one.
 an entry's metadata drifts past a section heading **or** past the next entry.
 
 **Links use short clickable labels.** Project destinations share one `\cvlinks`
-line (Demo / Repository). Certifications show Verify Credential. The renderer
+line (Demo / GitHub). Certifications show Verify Credential. The renderer
 preserves full destination URLs; templates must keep hyperlinks active.
 CVs must be at most two pages, with at least two distinct projects and readable type.
 

@@ -366,13 +366,17 @@ def render_projects(profile: dict, section: dict, *, separate_details: bool = Fa
 
 
 # Compact labels retain complete PDF hyperlink targets across every template.
-PROJECT_LINKS = (("demo", "Demo"), ("repo", "Repository"))
+PROJECT_LINKS = (("demo", "Demo"), ("repo", "GitHub"))
 
 
 def render_project_links(entry: dict, wanted: list[str] | None = None) -> list[str]:
-    """Show available destinations on one line, unless the plan narrows them."""
+    """Always retain a recorded demo, including for legacy repo-only plans.
+
+    The plan may select the optional repository; it cannot suppress a demo
+    supplied by the profile. Missing destinations are never invented.
+    """
     links = [link(entry[key], label) for key, label in PROJECT_LINKS
-             if (wanted is None or key in wanted) and not is_empty(entry.get(key))]
+             if (key == "demo" or wanted is None or key in wanted) and not is_empty(entry.get(key))]
     return [r"\cvlinks{%s}" % r" $\cdot$ ".join(links)] if links else []
 
 

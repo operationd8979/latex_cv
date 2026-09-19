@@ -25,7 +25,7 @@ selected bullets.
 
 Projects are dated by a range — `Start:` to `End:` from the profile — like every
 other entry on the page, and show every destination they record. Each address
-uses a short clickable label (Demo or Repository), sharing one line. The full
+uses a short clickable label (Demo or GitHub), sharing one line. The full
 destination URL is preserved in the hyperlink. Role appears
 on its own labelled line. `show_tech` still controls the tech stack. Missing
 links or roles are omitted, with no placeholder or fabricated value. In the

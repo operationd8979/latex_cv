@@ -56,7 +56,7 @@ ignored — which is the point: a date cannot drift.
       "entries": [
         {
           "source": "PRJ-SHOPEE-QA",
-          "links": ["repo"],
+          "links": ["repo", "demo"],
           "show_tech": true,
           "bullets": [
             {
@@ -136,9 +136,11 @@ relevant bullets; keep readable type and use short clickable link labels.
 - **`bullets[].text`** is your wording. Rewrite freely for concision and the
   posting's vocabulary — but the meaning must survive unchanged, and any number
   in it must already exist in the profile.
-- **`links`** picks which of the project's URLs to print: `["repo"]`,
-  `["demo"]`, or both. By default all available destinations appear as short
-  clickable labels on one line, preserving the complete destination URLs.
+- **`links`** may select the optional repository; omitting it shows all available
+  destinations. A Demo recorded in the profile is always shown, even with
+  `"links": ["repo"]` or `"links": []`. Do not omit a demo to save space, and
+  never invent missing URLs. Short clickable labels `Demo` and `GitHub` share
+  one line; full destination URLs, including query parameters, are preserved.
 - **`show_tech`** prints the project's tech stack line. Defaults to `true`.
 - **`skills.groups[].label`** is yours to choose; group by what the posting
   emphasises rather than copying the profile's own categories.

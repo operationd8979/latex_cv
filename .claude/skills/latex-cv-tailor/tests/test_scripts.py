@@ -329,7 +329,7 @@ class EntryLayout(unittest.TestCase):
         ])
         out = self.render(plan)
         self.assertIn(
-            r"\cvlinks{\href{https://github.com/alexsample/widget_tool}{Repository}}",
+            r"\cvlinks{\href{https://github.com/alexsample/widget_tool}{GitHub}}",
             out,
         )
 

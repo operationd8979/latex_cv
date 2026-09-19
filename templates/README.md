@@ -17,9 +17,11 @@ GitHub and Demo links. See its [template contract](blue-banner-photo/PLACEHOLDER
 for build commands and behavior when optional profile fields are missing.
 
 All templates show short clickable labels: LinkedIn, GitHub and Portfolio in
-contacts; Demo and Repository on one project line; Verify Credential for
+contacts; Demo and GitHub on one project line; Verify Credential for
 certifications. Complete destination URLs, including query parameters, remain
-in the PDF hyperlinks. Project dates still come from the factual profile.
+in the PDF hyperlinks. A Demo recorded in the profile is always displayed,
+even if an older plan lists only `"links": ["repo"]` or an empty list. Missing
+demos are never invented. Project dates still come from the factual profile.
 
 All CV templates use 12pt body text, approximately 11pt supporting details
 (including contact information, dates and links), and 1.08 line spacing. Keep
