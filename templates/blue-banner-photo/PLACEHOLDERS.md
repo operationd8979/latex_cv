@@ -19,15 +19,14 @@ Headings may still be customized through the plan's `heading` field.
 
 Education retains the degree, institution, graduation date, location, GPA and
 classification. Certifications retain issuer/date when known, and end in the
-credential's verification address written out in full after `Verify:`. Jobs
+short clickable `Verify Credential` label. Jobs
 retain title, employer, dates, location, employment type when recorded, and
 selected bullets.
 
 Projects are dated by a range — `Start:` to `End:` from the profile — like every
 other entry on the page, and show every destination they record. Each address
-gets its own line, labelled **Demo:** or **GitHub:**, with the whole URL as the
-visible text rather than a one-word label over a hidden link: printed, a label
-tells the reader a demo exists and gives them no way to reach it. Role appears
+uses a short clickable label (Demo or Repository), sharing one line. The full
+destination URL is preserved in the hyperlink. Role appears
 on its own labelled line. `show_tech` still controls the tech stack. Missing
 links or roles are omitted, with no placeholder or fabricated value. In the
 current profile, Esme Chatbot has no demo URL; the example uses BrowserMind and
@@ -69,8 +68,8 @@ These options are detected by the shared renderer for named-section templates.
 
 Fonts and LaTeX packages come from the Tectonic bundle. Text remains selectable,
 and the regular build validator checks section visibility and metadata order.
-Longer plans flow onto another page without a page cap. Preserve readable type
-and useful supported detail; keep at least two distinct projects.
+CVs must fit within two pages. Preserve readable type and at least two distinct
+projects; shorten repetitive or less relevant content before rebuilding.
 
 ## Build the example
 

@@ -173,40 +173,6 @@ def link(url: str, label: str | None = None) -> str:
     return rf"\href{{{tex_url(url)}}}{{{tex(shown)}}}"
 
 
-# Where a long address may break across lines. A printed CV shows the whole
-# URL, and a 118-character credential link has to wrap somewhere: with no
-# breakpoint at all TeX cannot break it and it runs straight into the margin.
-# ':' is excluded so a line never ends on a bare "https:".
-_URL_BREAK_AFTER = "/-.?&=_+,;"
-
-
-def url_text(url: str) -> str:
-    """The address as visible text: escaped, with break opportunities added.
-
-    No break is offered before another separator, so `https://` never splits
-    down the middle of its own `//` and a line never ends on a lone slash.
-    """
-    out = []
-    for i, ch in enumerate(url):
-        out.append(tex(ch))
-        following = url[i + 1] if i + 1 < len(url) else ""
-        if ch in _URL_BREAK_AFTER and following not in _URL_BREAK_AFTER + ":":
-            out.append(r"\allowbreak{}")
-    return "".join(out)
-
-
-def url_link(url: str) -> str:
-    r"""A link whose visible words ARE the address, scheme included.
-
-    A one-word label like "Demo" is a dead end on paper: printed, it says a
-    demo exists and gives the reader no way to reach it, because the target
-    lives only in the PDF's link annotation. The full address is longer, but
-    it is the only form that works in both media - clickable on screen, and
-    typeable from a sheet of paper.
-    """
-    return rf"\href{{{tex_url(url)}}}{{{url_text(url)}}}"
-
-
 # --------------------------------------------------------------------------
 # validation
 # --------------------------------------------------------------------------
@@ -306,7 +272,7 @@ def contact_bits(profile: dict) -> list[str]:
         bits.append(tex(p["phone"]))
     for key in ("linkedin", "github", "portfolio"):
         if not is_empty(p.get(key)):
-            bits.append(link(p[key]))
+            bits.append(link(p[key], {"linkedin": "LinkedIn", "github": "GitHub", "portfolio": "Portfolio"}[key]))
     return bits
 
 
@@ -399,25 +365,15 @@ def render_projects(profile: dict, section: dict, *, separate_details: bool = Fa
     return out
 
 
-# One labelled line per URL rather than a run of bare domains. The label says
-# what is on the other end before the reader clicks; the address after it is
-# what a person retypes from a printed copy.
-PROJECT_LINKS = (("demo", "Demo"), ("repo", "Git"))
+# Compact labels retain complete PDF hyperlink targets across every template.
+PROJECT_LINKS = (("demo", "Demo"), ("repo", "Repository"))
 
 
 def render_project_links(entry: dict, wanted: list[str] | None = None) -> list[str]:
-    """Every destination the project records, unless the plan narrows it.
-
-    `wanted` omitted means "everything this project actually has". A plan can
-    still pass `"links": ["repo"]` to drop one deliberately, but it can no
-    longer hide a destination by staying silent: a demo the profile records is
-    a fact the reader is entitled to, and it used to vanish by default.
-    """
-    return [
-        r"\cvlinks{%s: %s}" % (label, url_link(entry[key]))
-        for key, label in PROJECT_LINKS
-        if (wanted is None or key in wanted) and not is_empty(entry.get(key))
-    ]
+    """Show available destinations on one line, unless the plan narrows them."""
+    links = [link(entry[key], label) for key, label in PROJECT_LINKS
+             if (wanted is None or key in wanted) and not is_empty(entry.get(key))]
+    return [r"\cvlinks{%s}" % r" $\cdot$ ".join(links)] if links else []
 
 
 def render_skills(profile: dict, section: dict, narrow: bool = False) -> list[str]:
@@ -502,15 +458,8 @@ def render_certifications(profile: dict, section: dict) -> list[str]:
         issued = fmt_month(c.get("issued", ""))
         if issued:
             parts.append(tex(issued))
-        # The whole address, not the words "Verify Credential" over a hidden
-        # href. A certification is a claim, and the verification link is the
-        # reader's only way to test it; hiding the address behind a label works
-        # on screen and leaves a printed copy with an unverifiable claim.
         if not is_empty(c.get("credential_url")):
-            if item.get("compact_link"):
-                parts.append(link(c["credential_url"], "Verify Credential"))
-            else:
-                parts.append("Verify: " + url_link(c["credential_url"]))
+            parts.append(link(c["credential_url"], "Verify Credential"))
         out.append(r"\cvplain{%s}" % r" $\cdot$ ".join(parts))
     return out
 
@@ -550,12 +499,8 @@ RENDERERS = {
 # otherwise: they are short, self-contained lists rather than narrative.
 # Override per section with "column": "side" or "main".
 #
-# Certifications used to be here and are not any more. Now that a credential
-# row carries its verification address in full, it is the longest unbroken
-# string on the page — 118 characters for the Azure one — and a 5.9cm column
-# spends six lines on it. That is the wrong column for it, and the sidebar is
-# the taller of the two, so those lines cost the whole page. A plan that wants
-# the old placement can still say "column": "side".
+# Certifications remain in the main column by default; an explicit column
+# selection in the plan can override their placement.
 SIDEBAR_TYPES = ("skills", "education", "languages")
 
 

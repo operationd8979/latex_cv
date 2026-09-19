@@ -27,3 +27,9 @@ Use it in a plan with:
 ```json
 "template": "clean-modern-single-column"
 ```
+
+## Content limits
+
+At most two pages, at least two distinct factual projects, and readable 12pt body
+text. Use concise relevant bullets. Links display short clickable labels with
+full destination URLs preserved. Build with `--max-pages 2`.

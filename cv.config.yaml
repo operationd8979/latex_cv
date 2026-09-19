@@ -9,8 +9,8 @@ output_root: ./applications
 
 language: en
 latex_engine: tectonic
-# No CV page cap. Preserve readable type, spacing and supported detail.
-max_pages: null
+# Maximum two pages. Keep readable type and at least two distinct projects.
+max_pages: 2
 overwrite_policy: create-new-version
 
 # A cover letter is generated ONLY when the user asks for one. Default is the

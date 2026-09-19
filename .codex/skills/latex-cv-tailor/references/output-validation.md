@@ -21,7 +21,7 @@ one. Never claim a CV is ready without a passing run.
 | Compilation | Tectonic exits non-zero; the last 15 log lines are shown |
 | PDF exists | No file, or zero bytes |
 | Text layer | Under 200 extractable characters — the PDF is not ATS-readable |
-| Page count | Only checked when an explicit `--max-pages` is supplied; CVs have no default cap |
+| Page count | CVs exceeding two pages fail by default; use `--max-pages 2` explicitly |
 | Placeholders | A `%%MARKER%%` survived into the rendered text |
 | Section headings | A heading in `cv.tex` is unreadable in the PDF |
 | Contact details | Name, email or phone unreadable in the text layer |
@@ -35,10 +35,11 @@ naively makes a check pass without testing anything.
 
 ## Fixing each failure
 
-CVs have no page limit: omit `--max-pages`. Preserve useful supported content,
-readable fonts and comfortable spacing across pages. Do not drop a project to
-fit a page. The optional flag remains available for an explicitly requested
-limit, such as a one-page cover letter.
+CVs have a two-page maximum: use `--max-pages 2`. Remove repetition and less
+relevant detail in the plan, then render and build again. Keep at least two
+distinct factual projects, readable fonts and comfortable spacing. Do not
+truncate the PDF or shrink typography. Stop after three unsuccessful revisions
+and report the overflow. Cover letters use `--max-pages 1`.
 
 **`entry '...': its 'Jan 2025' is separated from it by the 'Education'
 heading`** — this is the right-aligned-dates regression. PDF text extraction

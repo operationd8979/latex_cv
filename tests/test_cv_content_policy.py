@@ -132,7 +132,7 @@ class ContentPolicy(unittest.TestCase):
         with self.assertRaisesRegex(render_cv.PlanError, "job-specific headline"):
             render_cv.check_headline_for_job({"job": {"title": "Manual Tester"}})
 
-    def test_build_cli_accepts_multiple_pages_unless_limit_is_explicit(self):
+    def test_build_cli_accepts_two_pages_but_rejects_three_by_default(self):
         out = self.root / "job"
         (out / "raw").mkdir(parents=True)
         (out / "raw/cv.tex").write_text("Synthetic CV", encoding="utf-8")
@@ -153,6 +153,10 @@ class ContentPolicy(unittest.TestCase):
                 self.assertEqual(build_and_validate.main(), 0)
             self.assertTrue(pdf.exists())
             with patch.object(sys, "argv", args + ["--max-pages", "1"]):
+                self.assertEqual(build_and_validate.main(), 1)
+            self.assertFalse(pdf.exists())
+            with patch("build_and_validate.pdf_text", return_value=text + "Third page.\f"), \
+                 patch.object(sys, "argv", args):
                 self.assertEqual(build_and_validate.main(), 1)
             self.assertFalse(pdf.exists())
 

@@ -39,7 +39,7 @@ class BlueBannerLayout(unittest.TestCase):
         self.assertEqual(re.findall(r"\\cvsection\{([^}]+)\}", doc), [
             "Summary", "Education", "Skills", "Certifications", "Experience", "Projects",
         ])
-        for fact in ("Test University", r"\cveducation{Test University}{}{January 2024}{3.9 / 4.0}{}", "Verify: ",
+        for fact in ("Test University", r"\cveducation{Test University}{}{January 2024}{3.9 / 4.0}{}", "Verify Credential",
                      r"\cvskill{Core}{C\#, Python}", "Acme",
                      # A project is dated by a range, like every other entry.
                      r"\cvitem{\textbf{Widget\_Tool}}{Apr 2025 – Sep 2025}"):
@@ -50,27 +50,18 @@ class BlueBannerLayout(unittest.TestCase):
         doc = self.render()
         self.assertIn(r"\cvprojectrole{Developer}", doc)
         self.assertIn(r"\cvmeta{Python, C++}", doc)
-        # The address is the visible text, not a "GitHub"/"Demo" label whose
-        # target survives only as a PDF link annotation. Printed, a label is a
-        # dead end, so what is typeset has to be the whole URL.
         self.assertIn(
-            r"\cvlinks{Git: \href{https://github.com/alexsample/widget_tool}"
-            r"{https://\allowbreak{}github.\allowbreak{}com/\allowbreak{}alexsample"
-            r"/\allowbreak{}widget\_\allowbreak{}tool}}",
-            doc,
-        )
-        # `//` is never split down the middle, and `&`/`_` stay escaped in the
-        # visible text while the href argument keeps them raw.
-        self.assertNotIn(r"https:/\allowbreak{}/", doc)
+            r"\cvlinks{\href{https://github.com/alexsample/widget_tool}{Repository}}", doc)
+        self.assertNotIn(r"\allowbreak{}", doc)
 
     def test_missing_optional_project_fields_are_not_invented(self):
         project = self.profile["projects"][0]
         project.pop("demo")
         project.pop("role")
         doc = self.render()
-        self.assertNotIn("Demo: ", doc)
+        self.assertNotIn("{Demo}", doc)
         self.assertNotIn(r"\cvprojectrole{", doc)
-        self.assertIn("Git: ", doc)
+        self.assertIn("{Repository}", doc)
 
     def test_show_tech_false_is_respected(self):
         self.plan["sections"][0]["entries"][0]["show_tech"] = False
@@ -107,27 +98,23 @@ class BlueBannerLayout(unittest.TestCase):
                 self.assertLess(body.index(r"\cvsection{Projects}"), body.index(r"\cvsection{Experience}"))
                 # The plan names only `repo`, so the demo stays off the page —
                 # an explicit narrowing still wins over "show what exists".
-                self.assertNotIn("Demo: ", body)
-                self.assertIn(r"\cvlinks{Git: \href{https://github.com/alexsample/widget_tool}", body)
+                self.assertNotIn("{Demo}", body)
+                self.assertIn(r"\cvlinks{\href{https://github.com/alexsample/widget_tool}", body)
                 self.assertNotIn(r"\cvprojectrole{", body)
                 self.assertIn("Developer", body)
 
     def test_a_silent_plan_shows_every_destination_the_project_records(self):
         self.plan["sections"][0]["entries"][0].pop("links", None)
-        for name in ("ats-single-column", "two-column-photo", "blue-banner-photo"):
+        for name in ("ats-single-column", "two-column-photo", "blue-banner-photo", "clean-modern-single-column", "navy-header-photo"):
             with self.subTest(template=name):
                 template = (ROOT / f"templates/{name}/template.tex").read_text(encoding="utf-8")
                 doc = substitute_markers(
                     template, render_marked(self.profile, self.plan, template, None)
                 )
                 self.assertIn(
-                    r"\cvlinks{Demo: \href{https://example.test/widget?x=1&y=2}"
-                    r"{https://\allowbreak{}example.\allowbreak{}test"
-                    r"/\allowbreak{}widget?\allowbreak{}x=\allowbreak{}1"
-                    r"\&\allowbreak{}y=\allowbreak{}2}}",
-                    doc,
-                )
-                self.assertIn("Git: ", doc)
+                    r"\cvlinks{\href{https://example.test/widget?x=1&y=2}{Demo}"
+                    r" $\cdot$ \href{https://github.com/alexsample/widget_tool}{Repository}}", doc)
+                self.assertNotIn(r"\allowbreak{}", doc)
 
     def test_a_project_without_start_and_end_still_renders_its_legacy_month(self):
         project = self.profile["projects"][0]

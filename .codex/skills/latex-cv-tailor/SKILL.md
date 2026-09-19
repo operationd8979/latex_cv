@@ -6,7 +6,7 @@ description: Generate a tailored English CV (LaTeX to PDF) and cover letter for 
 # latex-cv-tailor
 
 Tailor a CV and cover letter to a job posting. Output is **always English**.
-CVs have **no page limit**: preserve readable type, comfortable line spacing
+CVs must fit **at most two pages**: preserve readable type, comfortable line spacing
 and useful supported detail. Every claim must trace to an ID in the selected
 profile directory.
 
@@ -51,8 +51,8 @@ equivalent request. Do not produce one just because the posting mentions it.
 
 Pick `ats-single-column` unless the user asks otherwise or the posting is
 clearly a direct-to-human application. If you choose `two-column-photo`, say in
-your report that it parses less reliably in automated screening. Its narrower main column may require more pages; preserve useful
-evidence rather than trimming to the single-column page count.
+your report that it parses less reliably in automated screening. Its narrower main column needs more concise content to stay within two pages;
+keep readable typography and at least two distinct projects.
 
 ## Rules that are not negotiable
 
@@ -122,7 +122,7 @@ names both roles. Skills that transfer across roles belong in the summary,
 skills and project evidence.
 
 Pick one summary variant marked `status: approved`; tailor it for relevance
-without omitting useful context to meet a page count.
+with concise, supported wording appropriate to a two-page CV.
 
 ### 5. Write the plan
 
@@ -134,6 +134,8 @@ with direct matches; if only one matches directly, add the strongest project
 showing transferable engineering or testing skills. Explain actual work, not
 an invented match. Include useful responsibilities, tools and outcomes, usually
 two to four evidence-backed bullets per project when the profile supports them.
+Start with the two strongest projects. Add more only if the CV stays within two
+pages. Use short clickable link labels, preserving complete destination URLs.
 Do not repeat a project to meet the count. If the profile has fewer than two
 projects, report the gap and ask the user to add factual evidence; never invent.
 
@@ -145,7 +147,7 @@ approximately.
 
 ```text
 python scripts/render_cv.py --plan <dir>/raw/plan.json --profile <profile-path> --template-root ./templates --out <dir>
-python scripts/build_and_validate.py --dir <dir> --profile <profile-path>
+python scripts/build_and_validate.py --dir <dir> --profile <profile-path> --max-pages 2
 ```
 
 `render_cv.py` writes `raw/cv.tex` and `raw/match-report.md`;
@@ -163,9 +165,12 @@ python scripts/build_and_validate.py --dir <dir> --profile <profile-path> --targ
 
 ### 7. Handle failures rather than working around them
 
-- **Page count** — build CVs without `--max-pages`. Let content flow naturally
-  across pages; never shrink fonts, margins or line spacing, or drop useful
-  evidence just to fit a page. Review page breaks and avoid isolated headings.
+- **Page count** — build CVs with `--max-pages 2`. If the PDF exceeds two
+  pages, revise the plan to remove repetition, less relevant bullets or extra
+  projects while keeping at least two distinct projects. Render and build again.
+  Never shrink fonts, margins or line spacing, truncate pages, or bypass validation.
+  After three revision attempts, report the unresolved overflow instead of claiming success.
+  Review page breaks and avoid isolated headings.
 - **"at least 2 distinct projects are required"** — select another real project
   from the profile, or report that the profile needs more factual project data.
 - **"tiered 'unverified' and must never reach a CV"** — remove that skill. Do

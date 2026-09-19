@@ -60,18 +60,11 @@ one holding only the header. paracol fills page one and breaks normally. It
 also fixed a fragmentation problem the minipage version had, where sidebar
 entries extracted a word or two per line.
 
-**Certifications belong in the main column.** They used to sit in the sidebar,
-and stopped fitting there the moment a credential row began printing its
-verification address in full: the Azure URL is 118 characters, which is six
-lines at 5.9cm, and the sidebar is the taller of the two columns, so those
-lines decided where the page broke. In the main column the same row takes two.
-A plan that wants the old placement can still ask for it with
-`"column": "side"`.
+**Certifications belong in the main column.** Verification links use the short
+clickable label Verify Credential. A plan can still use `"column": "side"`.
 
 ## Capacity
 
-The narrower main column may use more pages than a single-column template.
-Keep the same useful evidence and at least two distinct factual projects.
-Body text is 12pt; contact details, metadata and URLs are approximately 11pt.
-The columns can flow across pages; do not shrink type or remove content to
-match a one-page layout.
+Keep at most two pages, at least two distinct factual projects, and concise
+relevant bullets. Body text is 12pt; supporting details are approximately 11pt.
+The columns flow across pages. Do not shrink typography to pass the page limit.

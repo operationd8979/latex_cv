@@ -118,7 +118,8 @@ Every complete CV plan must select at least two distinct project IDs from the
 selected profile. Prefer direct matches, then transferable skills; keep claims
 faithful to the evidence. If fewer than two projects exist in the profile, stop
 and report the missing factual data. Repeating an ID does not satisfy the rule.
-There is no page cap; include useful supported detail without compressing type.
+The CV must fit within two pages. Start with two distinct projects and concise,
+relevant bullets; keep readable type and use short clickable link labels.
 
 ## Field notes
 
@@ -136,7 +137,8 @@ There is no page cap; include useful supported detail without compressing type.
   posting's vocabulary — but the meaning must survive unchanged, and any number
   in it must already exist in the profile.
 - **`links`** picks which of the project's URLs to print: `["repo"]`,
-  `["demo"]`, or both. Defaults to `["repo"]`.
+  `["demo"]`, or both. By default all available destinations appear as short
+  clickable labels on one line, preserving the complete destination URLs.
 - **`show_tech`** prints the project's tech stack line. Defaults to `true`.
 - **`skills.groups[].label`** is yours to choose; group by what the posting
   emphasises rather than copying the profile's own categories.

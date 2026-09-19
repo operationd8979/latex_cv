@@ -117,14 +117,7 @@
 % Italic metadata line (tech stack, etc.)
 \newcommand{\cvmeta}[1]{{\small\itshape #1}\par}
 
-% One project URL, already labelled by the renderer ("Demo: ...",
-% "GitHub: ..."). Emitted once per link, so each gets its own line.
-%
-% The renderer prints the whole address rather than the word "Demo" over a
-% hidden href, because a printed CV keeps only what is visible. A full URL is
-% long enough to wrap, so the continuation is indented past the label: without
-% that, the tail of a wrapped address starts flush left and reads as a new
-% field of its own.
+% Compact clickable project labels, sharing one readable line.
 \newcommand{\cvlinks}[1]{%
   {\small\color{muted}\hangindent=1.2em\hangafter=1 #1\par}%
 }

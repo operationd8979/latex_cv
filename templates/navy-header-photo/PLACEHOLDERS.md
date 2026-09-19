@@ -21,3 +21,9 @@ Build the included example from the repository root:
 python scripts/render_cv.py --plan templates/navy-header-photo/example-plan.json --profile profile/hang --template-root templates --out applications/navy-header-photo-preview
 python scripts/build_and_validate.py --dir applications/navy-header-photo-preview --profile profile/hang
 ```
+
+## Content limits
+
+At most two pages, at least two distinct factual projects, and readable 12pt body
+text. Use concise relevant bullets. Links display short clickable labels with
+full destination URLs preserved. Build with `--max-pages 2`.

@@ -215,7 +215,7 @@ def check_reading_order(source: str, text: str) -> list[str]:
 
 
 def validate(
-    tex_path: Path, pdf: Path, log: str, profile: dict | None, max_pages: int | None = None
+    tex_path: Path, pdf: Path, log: str, profile: dict | None, max_pages: int | None = 2
 ) -> tuple[list[str], list[str]]:
     errors: list[str] = []
     warnings: list[str] = []
@@ -287,8 +287,8 @@ def main() -> int:
              "contact fields the CV build verifies",
     )
     ap.add_argument("--engine", default="tectonic")
-    ap.add_argument("--max-pages", type=int, default=None,
-                    help="optional page limit; omitted means no limit")
+    ap.add_argument("--max-pages", type=int, default=2,
+                    help="maximum pages (default: 2 for CVs)")
     args = ap.parse_args()
     if args.max_pages is not None and args.max_pages < 1:
         ap.error("--max-pages must be a positive integer")

@@ -16,13 +16,13 @@ against the selected candidate profile. It includes grouped skills and project r
 GitHub and Demo links. See its [template contract](blue-banner-photo/PLACEHOLDERS.md)
 for build commands and behavior when optional profile fields are missing.
 
-All templates print addresses in full — a project's `Demo:` and `GitHub:` lines and
-a certification's `Verify:` line show the whole URL as visible text, not a
-one-word label over a hidden link, so a printed copy stays as useful as the
-clickable one. Projects are dated `Start: – End:` from the profile, like every
-other entry. Longer content flows across pages without a page cap.
+All templates show short clickable labels: LinkedIn, GitHub and Portfolio in
+contacts; Demo and Repository on one project line; Verify Credential for
+certifications. Complete destination URLs, including query parameters, remain
+in the PDF hyperlinks. Project dates still come from the factual profile.
 
 All CV templates use 12pt body text, approximately 11pt supporting details
 (including contact information, dates and links), and 1.08 line spacing. Keep
-at least two distinct factual projects and retain useful evidence instead of
-shrinking typography or squeezing the plan onto one page.
+at least two distinct factual projects within a maximum of two pages. Select
+concise relevant evidence; never shrink typography. Build validation rejects
+PDFs over two pages. Revise the content plan and build again.
